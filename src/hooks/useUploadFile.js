@@ -31,7 +31,7 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
   const finalFileExt = useMemo(() => {
     return fileExtensions;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fileExtensions?.length]);
+  }, []);
 
   // Debug
   //console.log("Debug useUploadFile: ");
