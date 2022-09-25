@@ -80,6 +80,7 @@ export const appRegex = {
   digitsOnly: /^[0-9]+$/,
   cannotStartWithZero: /^(?:[1-9]\d*|0)$/,
   url: /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+  url2: /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/,
 };
 
 // API ROUTES
@@ -231,6 +232,9 @@ export const copyrightLinks = [
   { id: "456", title: "Terms", link: "/terms" },
   { id: "789", title: "Contact", link: "/contact" },
 ];
+
+// STATUS LIST
+export const statusList = ["Active", "Inactive"];
 
 /************************
   CMS DATA

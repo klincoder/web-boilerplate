@@ -11,11 +11,23 @@ import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomTextInputForm from "./CustomTextInputForm";
+import { useAuthContext } from "../context/AuthContext";
+import { collection, fireDB, doc, setDoc } from "../config/firebase";
+import FormFeedback from "./FormFeedback";
 
 // Component
-const FormBlank = ({ isQuery }) => {
+const FormBlank = ({ isQuery, rowData }) => {
+  // Define auth context
+  const { user } = useAuthContext();
+  const userID = user?.id;
+  const username = user?.username;
+  const userEmail = user?.email;
+
+  // Define rowData info
+  const rowID = rowData?.id;
+
   // Define state
-  const [showState, setShowState] = useState(false);
+  const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
   const { todaysDate } = useAppSettings();
@@ -41,9 +53,24 @@ const FormBlank = ({ isQuery }) => {
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values, { setSubmitting }) => {
     // Define variables
-    const finalUsername = values.username?.trim()?.toLowerCase();
+    //const finalUsername = values.username?.trim()?.toLowerCase();
+
     // Debug
-    console.log("Debug submitForm: ", finalUsername);
+    console.log("Debug submitForm: ", values);
+
+    // Try catch
+    try {
+      // Add to db
+      const docRef = doc(collection(fireDB, "appSettings"));
+      await setDoc(docRef, {
+        id: docRef?.id,
+        dateCreated: todaysDate,
+        dateUpdated: todaysDate,
+      });
+    } catch (err) {
+      setFormMsg({ type: "err", msg: err.message });
+      //console.log("Debug submitForm: ", err.message)
+    } // close try catch
     // Set submitting
     setSubmitting(false);
   }; // close fxn
@@ -55,27 +82,36 @@ const FormBlank = ({ isQuery }) => {
       validationSchema={validate}
       onSubmit={handleSubmitForm}
     >
-      {({ values, errors, isValid, isSubmitting }) => (
-        <Form autoComplete="off">
-          {/** Debug */}
-          {/* {console.log("Debug formValues:", } */}
+      {({ values, errors, isValid, isSubmitting }) => {
+        // Define variables
+        const testVar = "";
 
-          {/** Username */}
-          <CustomTextInputForm name="username" label="Username or email" />
+        // Return form
+        return (
+          <Form autoComplete="off">
+            {/** Debug */}
+            {/* {console.log("Debug formValues:", } */}
 
-          {/** Button */}
-          <div className="text-center">
-            <CustomButton
-              isNormal
-              type="submit"
-              disabled={!isValid || isSubmitting}
-            >
-              Submit
-              {isSubmitting && <CustomSpinner />}
-            </CustomButton>
-          </div>
-        </Form>
-      )}
+            {/** Form feedback */}
+            <FormFeedback data={formMsg} />
+
+            {/** Username */}
+            <CustomTextInputForm name="username" label="Username or email" />
+
+            {/** Button */}
+            <div className="text-center">
+              <CustomButton
+                isNormal
+                type="submit"
+                disabled={!isValid || isSubmitting}
+              >
+                Submit
+                {isSubmitting && <CustomSpinner />}
+              </CustomButton>
+            </div>
+          </Form>
+        ); // close return
+      }}
     </Formik>
   ); // close return
 }; // close component

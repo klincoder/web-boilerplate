@@ -1,5 +1,5 @@
 // Import resources
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useFormikContext } from "formik";
 import StarterKit from "@tiptap/starter-kit";
@@ -19,8 +19,7 @@ const TiptapEditorForm = ({ name, label, excerptName, helperText }) => {
 
   // Define editor state
   const editor = useEditor({
-    // <p>Hello World! 🌎️</p>
-    content: values[name] || "",
+    content: values[name],
     extensions: [
       StarterKit,
       Underline,
@@ -45,7 +44,7 @@ const TiptapEditorForm = ({ name, label, excerptName, helperText }) => {
   });
 
   // Debug
-  //console.log("Debug tiptapEditorForm: ");
+  //console.log("Debug tiptapEditorForm: ", values[name]);
 
   // Return component
   return (

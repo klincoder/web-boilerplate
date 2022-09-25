@@ -60,13 +60,13 @@ const CustomModal = ({
             {/** Footer */}
             <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
               {/** Cancel button */}
-              <CustomButton
+              {/* <CustomButton
                 isNormal
                 data-bs-dismiss="modal"
                 btnClass={tw?.btnDanger}
               >
                 {cancelText || "Cancel"}
-              </CustomButton>
+              </CustomButton> */}
 
               {/** Confirm button */}
               {showConfirm && (

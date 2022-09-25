@@ -8,8 +8,6 @@ import {
   FaListUl,
   FaListOl,
   FaQuoteLeft,
-  FaParagraph,
-  FaHeading,
   FaUndo,
   FaRedo,
   FaUnderline,
@@ -22,7 +20,7 @@ import tw from "../styles/twStyles";
 import CustomButton from "./CustomButton";
 
 // Component
-function TiptapMenu({ editor, divClass }) {
+const TiptapMenu = ({ editor, divClass }) => {
   // Define left menu array
   const leftMenuArr = [
     {
@@ -220,7 +218,7 @@ function TiptapMenu({ editor, divClass }) {
       </div>
     </div>
   ); // close return
-} // close component
+}; // close component
 
 // Export
 export default TiptapMenu;

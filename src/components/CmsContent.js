@@ -8,8 +8,10 @@ import CmsFooter from "./CmsFooter";
 import CmsSidebar from "./CmsSidebar";
 import useAppSettings from "../hooks/useAppSettings";
 import LogoutModal from "./LogoutModal";
-import LibraryShowcaseModal from "./LibraryShowcaseModal";
 import VerifyPageAccess from "./VerifyPageAccess";
+import CustomModal from "./CustomModal";
+import LibraryShowcase from "./LibraryShowcase";
+import FormBlogCategory from "./FormBlogCategory";
 import { useAuthContext } from "../context/AuthContext";
 
 // Component
@@ -53,8 +55,24 @@ const CmsContent = ({ title, pageAccess, children }) => {
       {/** MODALS */}
       {/** Logout modal */}
       <LogoutModal />
+
       {/** Library showcase modal */}
-      <LibraryShowcaseModal />
+      <CustomModal
+        title="Library"
+        modalID="libraryShowcaseModal"
+        dialogDivClass="modal-lg"
+      >
+        <LibraryShowcase />
+      </CustomModal>
+
+      {/** Blog category modal */}
+      <CustomModal
+        title="Blog Category"
+        modalID="blogCategoryModal"
+        dialogDivClass="modal-md"
+      >
+        <FormBlogCategory isModal />
+      </CustomModal>
     </div>
   ); // close return
 }; // close component

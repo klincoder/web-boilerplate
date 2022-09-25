@@ -31,13 +31,13 @@ const CustomAlertMsg = ({
         <div
           role="alert"
           className={`
-          alert alert-dismissible py-5 px-6 mb-6 flex flex-row justify-between rounded-lg fade show
-          ${divClass}
-          ${type === "primary" && "bg-blue-100 text-primary font-bold"}
-          ${type === "success" && "bg-green-100 text-green-700 font-bold"}
-          ${type === "warning" && "bg-yellow-100 text-yellow-700 font-bold"}
-          ${type === "danger" && "bg-red-100 text-red-700 font-bold"}
-        `}
+            alert alert-dismissible py-5 px-6 mb-6 flex flex-row justify-between rounded-lg fade show
+            ${divClass}
+            ${type === "primary" && "bg-blue-100 text-primary font-bold"}
+            ${type === "success" && "bg-green-100 text-green-700 font-bold"}
+            ${type === "warning" && "bg-yellow-100 text-yellow-700 font-bold"}
+            ${type === "danger" && "bg-red-100 text-red-700 font-bold"}
+          `}
         >
           {/** Children */}
           <div>{children}</div>

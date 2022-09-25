@@ -2,8 +2,8 @@
 import moment from "moment";
 
 // Import custom files
-import TableActionsBtn from "../components/TableActionsBtn";
 import tw from "../styles/twStyles";
+import TableActionsBtn from "../components/TableActionsBtn";
 import { handleFormatDate, handleStatusColor } from "./functions";
 
 // Export

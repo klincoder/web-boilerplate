@@ -34,10 +34,10 @@ const CustomTextareaForm = ({
           <div className={`mb-4 xl:w-96 ${divClass}`} {...field}>
             {/** Label */}
             {label && (
-              <div>
+              <div className="flex items-center gap-1 mb-1">
                 <label
                   htmlFor={name}
-                  className="form-label inline-block text-sm font-bold mb-1"
+                  className="form-label inline-block text-sm font-bold"
                 >
                   {label}
                   {isRequired && (
@@ -45,7 +45,7 @@ const CustomTextareaForm = ({
                   )}
                 </label>
                 {/** Label right */}
-                {labelRight && labelRight}
+                {labelRight && <>{labelRight}</>}
               </div>
             )}
 

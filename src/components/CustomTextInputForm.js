@@ -34,7 +34,7 @@ const CustomTextInputForm = ({
           <div className={`mb-4 xl:w-96 ${divClass}`} {...field}>
             {/** Label */}
             {label && (
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex items-center gap-1 mb-1">
                 <label
                   htmlFor={name}
                   className="form-label inline-block text-sm font-bold"
@@ -45,13 +45,14 @@ const CustomTextInputForm = ({
                   )}
                 </label>
                 {/** Label right */}
-                {labelRight && <div className="self-center">{labelRight}</div>}
+                {labelRight && <>{labelRight}</>}
               </div>
             )}
 
             {/** Input */}
             <input
               {...rest}
+              id={name}
               name={name}
               type={type || "text"}
               value={value || field.value}

@@ -50,6 +50,24 @@ export const handleSendEmail = async (
   });
 }; // close fxn
 
+// HANDLE IS VALID URL
+export const handleIsValidUrl = (str) => {
+  // If empty args, return
+  if (!str) return false;
+  // Define regex pattern
+  const pattern = RegExp(
+    "^(https?:\\/\\/)?" + // protocol
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+      "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$", // fragment locator
+    "i"
+  );
+  // Return
+  return pattern.test(str);
+}; // close fxn
+
 // HANDLE UPPERCASE FIRST
 export const handleUppercaseFirst = (stringInput) => {
   // If stringInput is not a string
@@ -472,7 +490,7 @@ export const handleGenBlogSlug = (val) => {
   // If empty args, return
   if (!val) return "";
   // Define variables
-  val = val?.toLowerCase()?.replace(/ /g, "-");
+  val = val?.trim()?.toLowerCase()?.replace(/ /g, "-");
   // Remove special characters
   //const removeSpecialChar = val?.replace(/[^a-zA-Z0-9 ]/g, "");
   //const result = removeSpecialChar?.replace(/ /g, "-");
@@ -650,4 +668,38 @@ export const handleGetProductInfo = (prodArr, rowID) => {
   if (!prodArr || !rowID) return;
   // Return result
   return prodArr?.find((item) => item?.id === rowID);
+}; // close fxn
+
+// HANDLE CATEGORY EXIST
+export const handleCategoryExist = (objArr, str) => {
+  // If empty args, return
+  if (!objArr || !str) return;
+  // Filter objArr
+  const filterObjArr = objArr?.filter((item) => item?.category === str);
+  const isValid = filterObjArr?.length > 0;
+  const data = filterObjArr[0];
+  return { isValid, data };
+}; // close fxn
+
+// HANDLE SLUG EXIST
+export const handleSlugExist = (objArr, str) => {
+  // If empty args, return
+  if (!objArr || !str) return;
+  // Filter objArr
+  const filterObjArr = objArr?.filter((item) => item?.slug === str);
+  const isValid = filterObjArr?.length > 0;
+  const data = filterObjArr[0];
+  return { isValid, data };
+}; // close fxn
+
+// HANDLE TITLE SELECT
+export const handleTitleSelect = (objArr) => {
+  // If empty args, return
+  if (!objArr) return;
+  // Convert locations to string array
+  const result = objArr?.map((item) => {
+    return item?.title;
+  });
+  // Return
+  return result;
 }; // close fxn
