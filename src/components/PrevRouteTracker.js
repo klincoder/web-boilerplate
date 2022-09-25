@@ -30,7 +30,7 @@ const PrevRouteTracker = () => {
     refPrevRoute.current = routerAsPath;
     // Set atom
     setPrevRouteAtom(refPrevRoute.current);
-  }, [routerAsPath]);
+  }, [routerAsPath, setPrevRouteAtom]);
 
   // Return component
   return null;

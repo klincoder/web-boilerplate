@@ -345,12 +345,11 @@ export const handleTranxEmailMsg = (
   }; // close return
 }; // close fxn
 
-// HANDLE FIND STRING IN ARRAY
-export const handleFindStringInArr = (haystack, string) => {
-  // If empty args, return null
-  if (!haystack || !string) return null;
-  // Find string in haystack
-  return haystack?.includes(string);
+// HANDLE STRING IN ARRAY
+export const handleStringInArr = (arr, str) => {
+  // If empty args, return
+  if (!arr || !str) return false;
+  return arr?.includes(str);
 }; // close fxn
 
 // HANDLE FILES TO ACCEPT
@@ -369,7 +368,7 @@ export const handleFileValidation = (fileInput, prefix) => {
   const fileName = fileInput?.name;
   const fileSize = fileInput?.size;
   const fileType = fileInput?.type?.split("/").pop();
-  const fileTypeIsValid = handleFindStringInArr(fileExtensions, fileType);
+  const fileTypeIsValid = handleStringInArr(fileExtensions, fileType);
   const newFileName = prefix + "-" + randomCode4 + "." + fileType;
   // Validations
   if (!fileName) {

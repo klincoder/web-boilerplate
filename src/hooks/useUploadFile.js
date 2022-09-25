@@ -3,10 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAlert } from "react-alert";
 
 // Import custom files
-import {
-  handleFilesToAccept,
-  handleFindStringInArr,
-} from "../config/functions";
+import { handleFilesToAccept, handleStringInArr } from "../config/functions";
 import {
   fireStorage,
   getDownloadURL,
@@ -31,8 +28,10 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
   const isMaxFileCount = fileInputLen > maxFileCount;
   const selectedFilesLen = selectedFiles?.length;
   const isAllowUpload = allowUpload === true && selectedFilesLen > 0;
-  const fileExt = useMemo(() => fileExtensions, [fileExtensions]);
-  const finalFileExt = useMemo(() => fileExtensions, [fileExtensions]);
+  const finalFileExt = useMemo(() => {
+    return fileExtensions;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fileExtensions?.length]);
 
   // Debug
   //console.log("Debug useUploadFile: ");
@@ -87,14 +86,14 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
     // HANDLE SINGLE FILE VALIDATION
     const handleSingleFileValidation = (file, prefix) => {
       // If empty args, return null
-      if (!file || !prefix || !finalFileExt) return null;
+      if (!file || !prefix || !finalFileExt) return;
       // Define variabless
       let isValid, msg;
       const randomCode = Math.floor(Math.random() * 9999 + 1);
       const fileName = file?.name;
       const fileSize = file?.size;
       const fileType = file?.type?.split("/").pop();
-      const fileTypeIsValid = handleFindStringInArr(finalFileExt, fileType);
+      const fileTypeIsValid = handleStringInArr(finalFileExt, fileType);
       const newFileName = prefix + "-" + randomCode + "." + fileType;
       // Validations
       if (!fileName) {
@@ -109,7 +108,7 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
       } else {
         isValid = true;
         msg = "Valid file";
-      } // close if fileName
+      } // close if
       // Return
       return { isValid, msg, newFileName };
     }; // close fxn
@@ -159,15 +158,11 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
         // Set state
         setSelectedFiles(newFilesArr);
         setAllowUpload(isAllowUpload);
-        // Return
-        //return { newFilesArr, isAllowUpload, errMsg };
-        // Debug
-        //console.log("Debug useUploadFile: ", { newFilesArr, isAllowUpload });
       } // close if
     }; // close fxn
-    // Call handleBulkFileValidation
+    // Call fxn
     handleBulkFileValidation();
-  }, [fileInput, fileInputLen, username, alert, isMaxFileCount]);
+  }, [fileInput, fileInputLen, alert, isMaxFileCount, finalFileExt, username]);
 
   // Return component
   return {

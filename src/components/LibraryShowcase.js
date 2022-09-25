@@ -24,15 +24,7 @@ import CustomModal from "./CustomModal";
 import { useAuthContext } from "../context/AuthContext";
 import { appLibraryAtom } from "../recoil/atoms";
 import { alertMsg } from "../config/data";
-import {
-  fireDB,
-  collection,
-  doc,
-  setDoc,
-  deleteDoc,
-  updateProfile,
-  fireAuth,
-} from "../config/firebase";
+import { fireDB, collection, doc, setDoc, deleteDoc } from "../config/firebase";
 
 // Component
 const LibraryShowcase = () => {
@@ -71,7 +63,7 @@ const LibraryShowcase = () => {
   const alert = useAlert();
 
   // Debug
-  //console.log("Debug libraryShowcase: ", { selectedFiles });
+  //console.log("Debug libraryShowcase 1: ", selectedFiles );
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM

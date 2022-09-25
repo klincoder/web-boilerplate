@@ -4,8 +4,8 @@ import axios from "axios";
 // Import custom files
 import { baseUrl, mailjetEmail } from "../../src/config/data";
 
-// EXPORT HANDLER
-const handler = (req, res) => {
+// Handler
+const handler = async (req, res) => {
   // POST REQUEST
   if (req.method === "POST") {
     // Get request data from body

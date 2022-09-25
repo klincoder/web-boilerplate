@@ -6,7 +6,7 @@ import tw from "../../src/styles/twStyles";
 import PageContent from "../../src/components/PageContent";
 import BlogItem from "../../src/components/BlogItem";
 import CustomPagination from "../../src/components/CustomPagination";
-import CustomNotFoundMsg from "../../src/components/CustomNotFoundMsg";
+import CustomAlertMsg from "../../src/components/CustomAlertMsg";
 import CustomDivider from "../../src/components/CustomDivider";
 import { handleArrPaginator } from "../../src/config/functions";
 import {
@@ -93,7 +93,7 @@ const Blog = ({ pageDetails, activePosts, ...rest }) => {
               </>
             ) : (
               <div className="flex flex-col items-center justify-center">
-                <CustomNotFoundMsg title="No post found" />
+                <CustomAlertMsg title="No post found" />
               </div>
             )}
           </div>

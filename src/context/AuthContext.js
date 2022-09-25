@@ -49,6 +49,7 @@ export const AuthContextProvider = ({ children }) => {
   const alert = useAlert();
 
   // Define variables
+  const fireUserID = fireAuth?.currentUser?.uid;
   const actionCodeSettings = {
     url: baseUrl,
   };
@@ -194,7 +195,7 @@ export const AuthContextProvider = ({ children }) => {
     });
     // Clean up
     return unsubscribe();
-  }, [fireAuth?.currentUser?.uid]);
+  }, [fireUserID]);
 
   // Return provider
   return (

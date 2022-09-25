@@ -1,12 +1,12 @@
 // Import resources
+
 // Import custom files
 import { baseUrl, mailjetEmail } from "../../src/config/data";
 
-// EXPORT HANDLER
-export default async function handler(req, res) {
-  // If req.method === POST
+// Handler
+const handler = async (req, res) => {
+  // HANDLE POST REQUEST
   if (req.method === "POST") {
-    // HANDLE POST REQUEST
     // Get request data from body
     const reqData = req.body;
     const reqToName = reqData?.toName;
@@ -70,4 +70,7 @@ export default async function handler(req, res) {
     // HANDLE GET REQUEST
     res.send("GET request works!");
   } // close if reqMethod
-} // close handler
+}; // close handler
+
+// Export
+export default handler;

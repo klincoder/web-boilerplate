@@ -99,7 +99,7 @@ const AuthActions = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [routerQuery]);
+  }, [routerQuery, handleVerifyEmail]);
 
   // Return component
   return (
