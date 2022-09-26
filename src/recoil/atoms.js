@@ -17,9 +17,9 @@ export const appLibraryAtom = atom({
   default: null,
 });
 
-/***** 
+/**********************
   ALL 
-*****/
+**********************/
 // ALL USERS ATOM
 export const allUsersAtom = atom({
   key: "allUsersAtom",
@@ -52,9 +52,9 @@ export const activeFaqsAtom = atom({
   default: [],
 });
 
-/*******
+/**********************
   USER
-*******/
+**********************/
 // USER ATOM
 export const userAtom = atom({
   key: "userAtom",
@@ -77,7 +77,9 @@ export const userBlogCatAtom = atom({
   default: [],
 });
 
-/***** OTHERS *****/
+/**********************
+  OTHERS
+**********************/
 // TOGGLE CMS MENU ATOM
 export const toggleCmsMenuAtom = atom({
   key: "toggleCmsMenuAtom",

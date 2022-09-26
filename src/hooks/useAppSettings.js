@@ -7,7 +7,6 @@ import { useRecoilValue } from "recoil";
 // Import custom files
 import { handleFormatDate } from "../config/functions";
 import { appSettingsAtom } from "../recoil/atoms";
-import { serverTimestamp } from "../config/firebase";
 
 // Compnent
 const useAppSettings = () => {
@@ -29,7 +28,6 @@ const useAppSettings = () => {
   const todaysDate = moment.utc().format();
   const todaysDate1 = handleFormatDate(todaysDate, 1);
   const todaysDate2 = handleFormatDate(todaysDate, 2);
-  const serverTime = serverTimestamp();
 
   // Define site info
   const siteInfo = {
@@ -58,7 +56,8 @@ const useAppSettings = () => {
     todaysDate,
     todaysDate1,
     todaysDate2,
-    serverTime,
+    router,
+    alert,
   }; // close return
 }; // close component
 

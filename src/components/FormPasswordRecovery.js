@@ -2,9 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
-import { writeStorage } from "@rehooks/local-storage";
 
 // Import custom files
 import CustomSpinner from "./CustomSpinner";
@@ -25,13 +22,7 @@ const FormPasswordRecovery = () => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { todaysDate, todaysDate1 } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
+  const { alert } = useAppSettings();
 
   // Debug
   //console.log("Debug formPassRecovery: ",);
@@ -53,11 +44,6 @@ const FormPasswordRecovery = () => {
     // Define variables
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const emailExist = handleEmailExist(finalEmail);
-    const userInfo = emailExist?.data;
-    const storageData = {
-      email: userInfo?.emailAddress,
-      username: userInfo?.username,
-    };
 
     // If !emailExist
     if (!emailExist?.isValid) {
@@ -68,7 +54,6 @@ const FormPasswordRecovery = () => {
 
     // Debug
     // console.log("Debug submitForm: ", values);
-    // setSubmitting(false);
 
     // Try catch
     try {
@@ -77,7 +62,6 @@ const FormPasswordRecovery = () => {
       // Reset form
       resetForm();
       setFormMsg({ type: "succ", msg: alertMsg?.linkSentSucc });
-      writeStorage("userStorage", storageData);
     } catch (err) {
       setFormMsg({ type: "err", msg: err.message });
       //console.log("Debug submitForm: ", err.message);

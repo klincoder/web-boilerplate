@@ -72,10 +72,7 @@ const firebaseConfig = isProdEnv ? firebaseProd : firebaseDev;
 // Check app initialzation
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseDev);
 
-// Debug
-//console.log("Firebase: ", app.options);
-
-// DEFINE FIREBASE SERVICES
+// Define firebase services
 const fireDB = getFirestore(app);
 const fireAuth = getAuth(app);
 const fireStorage = getStorage(app);

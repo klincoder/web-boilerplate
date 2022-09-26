@@ -1,14 +1,12 @@
 // Import resources
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import { useAlert } from "react-alert";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
-import { handleFormatDate } from "../config/functions";
+import { handleFormatDate, handleSendEmail } from "../config/functions";
 import { allUsersAtom } from "../recoil/atoms";
-import { alertMsg, baseUrl } from "../config/data";
+import { alertMsg, apiRoutes, baseUrl } from "../config/data";
 import {
   createUserWithEmailAndPassword,
   doc,
@@ -35,18 +33,12 @@ export const useAuthContext = () => useContext(AuthContext);
 // Create context provider
 export const AuthContextProvider = ({ children }) => {
   // Define state
+  const allUsers = useRecoilValue(allUsersAtom);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const allUsers = useRecoilValue(allUsersAtom);
 
   // Define app settings
-  const { todaysDate1 } = useAppSettings();
-
-  // Define router
-  const router = useRouter();
-
-  // Define alert
-  const alert = useAlert();
+  const { todaysDate2, router, alert } = useAppSettings();
 
   // Define variables
   const fireUserID = fireAuth?.currentUser?.uid;
@@ -145,10 +137,24 @@ export const AuthContextProvider = ({ children }) => {
     // Verify the password reset code is valid
     return await verifyPasswordResetCode(fireAuth, actionCode).then(
       async (email) => {
+        // Define variables
+        const emailExist = handleEmailExist(email);
+        const userInfo = emailExist?.data;
         // Confirm new password (save to firebase auth)
-        await confirmPasswordReset(fireAuth, actionCode, newPass);
+        await confirmPasswordReset(fireAuth, actionCode, newPass).then(
+          async () => {
+            // Send pass change alert
+            await handleSendEmail(
+              "user",
+              userInfo?.username,
+              userInfo?.email,
+              todaysDate2,
+              apiRoutes?.passChange
+            );
+          }
+        );
       }
-    );
+    ); // close return
   }; // close fxn
 
   // HANDLE IS SUPER ADMIN

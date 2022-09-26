@@ -69,6 +69,9 @@ const FormLogin = () => {
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
 
+    // Debug
+    //console.log("Debug submitForm: ",);
+
     // Try catch
     try {
       // Login user

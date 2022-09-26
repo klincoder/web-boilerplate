@@ -2,9 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
-import { useLocalStorage, deleteFromStorage } from "@rehooks/local-storage";
 
 // Import custom files
 import CustomSpinner from "./CustomSpinner";
@@ -13,8 +10,6 @@ import CustomPasswordForm from "./CustomPasswordForm";
 import CustomButton from "./CustomButton";
 import FormFeedback from "./FormFeedback";
 import { useAuthContext } from "../context/AuthContext";
-import { handleSendEmail } from "../config/functions";
-import { apiRoutes } from "../config/data";
 
 // Component
 const FormResetPassword = ({ actionCode }) => {
@@ -26,16 +21,7 @@ const FormResetPassword = ({ actionCode }) => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { todaysDate2 } = useAppSettings();
-
-  // Define local storage
-  const [userInfo] = useLocalStorage("userStorage");
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
+  const { alert, router } = useAppSettings();
 
   // Debug
   //console.log("Debug formResetPass: ", userInfo);
@@ -57,28 +43,21 @@ const FormResetPassword = ({ actionCode }) => {
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM
-  const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
+  const handleSubmitForm = async (values, { setSubmitting }) => {
     // Define variables
     const finalNewPass = values.newPass?.trim();
+
     // Debug
     //console.log("Debug submitForm: ", actionCode);
+
     // Try catch
     try {
       // Create user
       await handleResetPassword(actionCode, finalNewPass);
-      // Send pass change alert
-      await handleSendEmail(
-        "user",
-        userInfo?.username,
-        userInfo?.email,
-        todaysDate2,
-        apiRoutes?.passChange
-      );
       // Login user
       //await handleLogin(email, newPass);
       // Alert succ
       alert.success("Password reset successful");
-      deleteFromStorage("userStorage");
       router.push("/login");
     } catch (err) {
       setFormMsg({ type: "err", msg: err.message });

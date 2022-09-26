@@ -42,20 +42,16 @@ const GetDatabaseContent = () => {
   const currUserID = user?.id;
 
   // Define state
-  // All
-  const setAllUsersAtom = useSetRecoilState(allUsersAtom);
+  const setAllUsersAtom = useSetRecoilState(allUsersAtom); // All
   const setAllBlogAtom = useSetRecoilState(allBlogAtom);
   const setActiveBlogAtom = useSetRecoilState(activeBlogAtom);
   const setAllBlogCatAtom = useSetRecoilState(allBlogCatAtom);
   const setAllFaqsAtom = useSetRecoilState(allFaqsAtom);
   const setActiveFaqsAtom = useSetRecoilState(activeFaqsAtom);
-  // User
-  const setUserAtom = useSetRecoilState(userAtom);
-  const setUserBlogAtom = useSetRecoilState(userBlogAtom);
+  const setUserBlogAtom = useSetRecoilState(userBlogAtom); // User
   const setUserActiveBlogAtom = useSetRecoilState(userActiveBlogAtom);
   const setUserBlogCatAtom = useSetRecoilState(userBlogCatAtom);
-  // Others
-  const setAppSettingsAtom = useSetRecoilState(appSettingsAtom);
+  const setAppSettingsAtom = useSetRecoilState(appSettingsAtom); // Others
   const setAppLibraryAtom = useSetRecoilState(appLibraryAtom);
 
   // Debug
@@ -83,6 +79,7 @@ const GetDatabaseContent = () => {
   useEffect(() => {
     // On mount
     isMounted.current = true;
+
     // LISTEN TO APP SETTINGS
     const appSettingsRef = collection(fireDB, "appSettings");
     // Snapshot
@@ -206,7 +203,6 @@ const GetDatabaseContent = () => {
     setAllBlogCatAtom,
     setAllFaqsAtom,
     setActiveFaqsAtom,
-    setUserAtom,
     setUserBlogAtom,
     setUserActiveBlogAtom,
     setUserBlogCatAtom,
