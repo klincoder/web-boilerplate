@@ -32,13 +32,9 @@ const Faqs = ({ pageDetails }) => {
       <section id="faqs" className="pt-14 pb-24 bg-white">
         {/** HEADING */}
         <div className="container mx-auto px-6 mb-4 md:px-24">
-          <CustomAlertMsg isNormal type="warning">
+          {/* <CustomAlertMsg isNormal type="warning">
             <h6>{introInfo?.heading}</h6>
-          </CustomAlertMsg>
-          {/** TEST BTN */}
-          <CustomButton isLink href="/login">
-            <a>TEST BUTTON</a>
-          </CustomButton>
+          </CustomAlertMsg> */}
         </div>
 
         {/** MAIN CONTAINER */}

@@ -25,7 +25,7 @@ const Settings = () => {
         </div>
 
         {/** COL 2 - BODY */}
-        <div className="flex flex-col mb-6">
+        <div className="flex flex-col p-4 mb-6 rounded-lg bg-white">
           {/** Content */}
           <p>Content goes here...</p>
         </div>

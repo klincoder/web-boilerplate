@@ -26,7 +26,7 @@ const AllLibrary = () => {
         </div>
 
         {/** COL 2 - BODY */}
-        <div className="flex flex-col mb-6">
+        <div className="flex flex-col p-6 mb-6 bg-white">
           {/** Library showcase */}
           <LibraryShowcase />
         </div>

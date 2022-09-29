@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useAlert } from "react-alert";
 
 // Import custom files
-import { handleFilesToAccept, handleStringInArr } from "../config/functions";
+import { useAuthContext } from "../context/AuthContext";
+import { handleFilesToAccept } from "../config/functions";
 import {
   fireStorage,
   getDownloadURL,
@@ -12,7 +13,11 @@ import {
 } from "../config/firebase";
 
 // Component
-const useUploadFile = (username, maxFileCount, fileExtensions) => {
+const useUploadFile = (maxFileCount, fileExtensions) => {
+  // Define auth context
+  const { user } = useAuthContext();
+  const username = user?.username;
+
   // Define state
   const [loading, setLoading] = useState(false);
   const [fileInput, setFileInput] = useState([]);
@@ -69,13 +74,16 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
   const handleFileUpload = async (fileInput, newFileName, folder) => {
     // If empty args, return null
     if (!fileInput || !newFileName) return null;
-    // Define variables
+    // Define file validations
     folder = folder || username;
+    // Upload file
     // Create storage ref
     const storageRef = ref(fireStorage, `/${folder}/${newFileName}`);
     const uploadTask = await uploadBytesResumable(storageRef, fileInput);
     const url = await getDownloadURL(uploadTask.ref);
+    // Debug
     //console.log("Debug fxnUploadUrl: ", url);
+    // Return
     return url;
   }; // close fxn
 
@@ -86,14 +94,14 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
     // HANDLE SINGLE FILE VALIDATION
     const handleSingleFileValidation = (file, prefix) => {
       // If empty args, return null
-      if (!file || !prefix || !finalFileExt) return;
-      // Define variabless
+      if (!file || !prefix || !finalFileExt) return null;
+      // Define variables
       let isValid, msg;
-      const randomCode = Math.floor(Math.random() * 9999 + 1);
+      const randomCode = Math.floor(Math.random() * 999999 + 1);
       const fileName = file?.name;
       const fileSize = file?.size;
       const fileType = file?.type?.split("/").pop();
-      const fileTypeIsValid = handleStringInArr(finalFileExt, fileType);
+      const fileTypeIsValid = finalFileExt?.includes(fileType);
       const newFileName = prefix + "-" + randomCode + "." + fileType;
       // Validations
       if (!fileName) {
@@ -108,7 +116,7 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
       } else {
         isValid = true;
         msg = "Valid file";
-      } // close if
+      } // close if fileName
       // Return
       return { isValid, msg, newFileName };
     }; // close fxn
@@ -158,9 +166,13 @@ const useUploadFile = (username, maxFileCount, fileExtensions) => {
         // Set state
         setSelectedFiles(newFilesArr);
         setAllowUpload(isAllowUpload);
+        // Return
+        //return { newFilesArr, isAllowUpload, errMsg };
+        // Debug
+        //console.log("Debug useUploadFile: ", { newFilesArr, isAllowUpload });
       } // close if
     }; // close fxn
-    // Call fxn
+    // Call handleBulkFileValidation
     handleBulkFileValidation();
   }, [fileInput, fileInputLen, alert, isMaxFileCount, finalFileExt, username]);
 

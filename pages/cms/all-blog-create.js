@@ -1,5 +1,6 @@
 // Import resources
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getSession } from "next-auth/react";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -11,24 +12,32 @@ import CustomButton from "../../src/components/CustomButton";
 import PostEditor from "../../src/components/PostEditor";
 import { appImages, baseUrl } from "../../src/config/data";
 import { userBlogAtom } from "../../src/recoil/atoms";
-import { handleGetPostInfo } from "../../src/config/functions";
+import { handleGetInfoById } from "../../src/config/functions";
 
 // Component
-const AllBlogCreate = () => {
-  // Define page details
-  const pageTitle = "Create Post";
-
-  // Define atom
+function AllBlogCreate({ currSession }) {
+  // Define state
+  const [pageTitle, setPageTitle] = useState("");
   const myPosts = useRecoilValue(userBlogAtom);
-  const myPostsLen = myPosts?.length;
 
   // Define router
   const router = useRouter();
   const rowID = router.query?.id;
-  const rowData = handleGetPostInfo(myPosts, rowID);
+  const rowData = handleGetInfoById(myPosts, rowID);
 
   // Debug
   //console.log("Debug AllBlogcreate: ", { rowID, rowData});
+
+  // SIDE EFFECTS
+  // LISTEN TO PAGE TITLE
+  useEffect(() => {
+    // If rowID
+    if (rowID) {
+      setPageTitle("Edit Post");
+    } else {
+      setPageTitle("Create Post");
+    } // close if
+  }, [rowID]);
 
   // Return component
   return (
@@ -51,9 +60,32 @@ const AllBlogCreate = () => {
           <PostEditor rowData={rowData} />
         </div>
       </div>
+      {/* </VerifyPageAccess> */}
     </CmsContent>
   ); // close return
-}; // close component
+} // close component
 
 // Export
 export default AllBlogCreate;
+
+// GET SEVER SIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const session = await getSession(context);
+  // If no session, redirect
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=${baseUrl}/cms`,
+        permanent: false,
+      }, // close redirect
+    }; // close return
+  } // close if !session
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session?.user : null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

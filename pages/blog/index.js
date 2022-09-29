@@ -8,7 +8,7 @@ import BlogItem from "../../src/components/BlogItem";
 import CustomPagination from "../../src/components/CustomPagination";
 import CustomAlertMsg from "../../src/components/CustomAlertMsg";
 import CustomDivider from "../../src/components/CustomDivider";
-import { handleArrPaginator } from "../../src/config/functions";
+import { handlePaginateArr } from "../../src/config/functions";
 import {
   fireDB,
   query,
@@ -37,7 +37,7 @@ const Blog = ({ pageDetails, activePosts, ...rest }) => {
     // If empty args, return
     if (activePosts?.length < 1) return;
     // Define get pagination
-    const getPagination = handleArrPaginator(activePosts);
+    const getPagination = handlePaginateArr(activePosts);
     // Set state
     setPaginatedPosts(getPagination);
   }, [activePosts, setPaginatedPosts]);
@@ -73,7 +73,7 @@ const Blog = ({ pageDetails, activePosts, ...rest }) => {
                   data={paginatedPosts}
                   onPrevPage={() => {
                     // Get pagination
-                    const getPagination = handleArrPaginator(
+                    const getPagination = handlePaginateArr(
                       activePosts,
                       paginatedPosts?.prevPage
                     );
@@ -82,7 +82,7 @@ const Blog = ({ pageDetails, activePosts, ...rest }) => {
                   }}
                   onNextPage={() => {
                     // Get pagination
-                    const getPagination = handleArrPaginator(
+                    const getPagination = handlePaginateArr(
                       activePosts,
                       paginatedPosts?.nextPage
                     );

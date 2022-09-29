@@ -54,7 +54,7 @@ const LibraryShowcase = () => {
     handleRemoveFile,
     handleFileUpload,
     handleResetFileInput,
-  } = useUploadFile(username, maxFileCount, fileExtensions);
+  } = useUploadFile(maxFileCount, fileExtensions);
 
   // Define app settings
   const { todaysDate } = useAppSettings();

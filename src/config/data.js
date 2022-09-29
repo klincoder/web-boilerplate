@@ -2,7 +2,12 @@
 import Mailjet from "node-mailjet";
 import moment from "moment";
 import { FiUsers } from "react-icons/fi";
-import { AiOutlineEdit, AiOutlineShoppingCart } from "react-icons/ai";
+import { BsFolder2Open } from "react-icons/bs";
+import {
+  AiOutlineEdit,
+  AiOutlineFileSearch,
+  AiOutlineShoppingCart,
+} from "react-icons/ai";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -248,48 +253,58 @@ export const cmsLinks = [
     title: "My Sample",
     leftIcon: <AiOutlineShoppingCart className={tw?.cmsNavIconLeft} />,
     isDropdown: true,
-    options: [
-      { title: "Sample Link", link: "/cms/my-sample", status: "active" },
-    ],
+    options: [{ title: "Sample", link: "/cms/my-sample" }],
+    linksArr: ["/cms/my-sample"],
+    status: "active",
   },
   {
     // ADMIN
     id: "admin123",
     role: "admin",
     title: "Library",
+    leftIcon: <BsFolder2Open className={tw?.cmsNavIconLeft} />,
     link: "/cms/all-library",
-    leftIcon: <FiUsers className={tw?.cmsNavIconLeft} />,
+    linksArr: ["/cms/all-library"],
     status: "active",
   },
   {
     id: "admin456",
     role: "admin",
     title: "Pages",
-    leftIcon: <FiUsers className={tw?.cmsNavIconLeft} />,
+    leftIcon: <AiOutlineFileSearch className={tw?.cmsNavIconLeft} />,
     isDropdown: true,
     options: [
-      { title: "Home", link: "/cms/all-home", status: "active" },
-      { title: "FAQS", link: "/cms/all-faqs", status: "active" },
-      { title: "Contact", link: "/cms/all-contact", status: "active" },
+      { title: "Homepage", link: "/cms/all-homepage" },
+      { title: "FAQs", link: "/cms/all-faqs" },
+      { title: "Contact Us", link: "/cms/all-contact" },
+      { title: "Privacy", link: "/cms/all-privacy" },
+      { title: "Terms", link: "/cms/all-terms" },
     ],
+    linksArr: [
+      "/cms/all-homepage",
+      "/cms/all-faqs",
+      "/cms/all-contact",
+      "/cms/all-privacy",
+      "/cms/all-terms",
+    ],
+    status: "active",
   },
   {
     id: "admin789",
     role: "admin",
     title: "Blog",
     leftIcon: <AiOutlineEdit className={tw?.cmsNavIconLeft} />,
-    isDropdown: true,
-    options: [
-      { title: "All Blog", link: "/cms/all-blog", status: "active" },
-      { title: "Create Post", link: "/cms/all-blog-create", status: "active" },
-    ],
+    link: "/cms/all-blog",
+    linksArr: ["/cms/all-blog", "/cms/all-blog-create"],
+    status: "active",
   },
   {
     id: "admin1011",
     role: "admin",
     title: "Users",
-    link: "/cms/all-users",
     leftIcon: <FiUsers className={tw?.cmsNavIconLeft} />,
+    link: "/cms/all-users",
+    linksArr: ["/cms/all-users", "/cms/all-users-view"],
     status: "active",
   },
 ];
@@ -299,9 +314,6 @@ export const userCmsLinks = cmsLinks?.filter((item) => item?.role === "user");
 
 // ADMIN CMS LINKS
 export const adminCmsLinks = cmsLinks?.filter((item) => item?.role === "admin");
-
-// GENERAL CMS LINKS
-export const generalCmsLinks = ["/cms/settings"];
 
 // NOTIFICATIONS LIST
 export const notificationsList = [

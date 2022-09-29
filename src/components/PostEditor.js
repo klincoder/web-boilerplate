@@ -14,7 +14,7 @@ import CustomSpinner from "./CustomSpinner";
 import CustomSelectForm from "./CustomSelectForm";
 import CustomTextInputForm from "./CustomTextInputForm";
 import TiptapEditorForm from "./TiptapEditorForm";
-import LabelModalBtn from "./LabelBtnModal";
+import LabelBtnModal from "./LabelBtnModal";
 import LabelBtnSlug from "./LabelBtnSlug";
 import ImageShowcase from "./ImageShowcase";
 import FormFeedback from "./FormFeedback";
@@ -23,9 +23,9 @@ import { appRegex } from "../config/data";
 import { allBlogCatAtom } from "../recoil/atoms";
 import { fireDB, doc, setDoc, collection } from "../config/firebase";
 import {
-  handleGenBlogSlug,
+  handleGenSlug,
   handleIsValidUrl,
-  handleTitleSelect,
+  handleSelectOptByTitle,
   handleUppercaseFirst,
 } from "../config/functions";
 
@@ -66,7 +66,7 @@ const PostEditor = ({ rowData }) => {
   const router = useRouter();
 
   // Define variables
-  const categoryOpt = handleTitleSelect(allBlogCategory);
+  const categoryOpt = handleSelectOptByTitle(allBlogCategory);
 
   // Debug
   //console.log("Debug postEditor: ", rowExcerpt);
@@ -204,8 +204,8 @@ const PostEditor = ({ rowData }) => {
     >
       {({ values, errors, isValid, isSubmitting, setFieldValue }) => {
         // Define variables
-        const titleSlug = handleGenBlogSlug(values.title);
-        const slugInput = handleGenBlogSlug(values.slug);
+        const titleSlug = handleGenSlug(values.title);
+        const slugInput = handleGenSlug(values.slug);
         const isValidUrl = handleIsValidUrl(values.titleImage);
         const disableSlug = values.disableSlug;
         const isEditedSlug = values.isEditedSlug;
@@ -264,7 +264,7 @@ const PostEditor = ({ rowData }) => {
                   placeholder="Enter image link"
                   label="Title Image"
                   labelRight={
-                    <LabelModalBtn
+                    <LabelBtnModal
                       name="libraryShowcaseBtn"
                       modalID="libraryShowcaseModal"
                       icon="upload"
@@ -279,7 +279,7 @@ const PostEditor = ({ rowData }) => {
                   label="Category"
                   data={categoryOpt}
                   labelRight={
-                    <LabelModalBtn
+                    <LabelBtnModal
                       name="blogCategoryBtn"
                       modalID="blogCategoryModal"
                       icon="add"

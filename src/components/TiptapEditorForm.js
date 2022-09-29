@@ -1,5 +1,5 @@
 // Import resources
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { useFormikContext } from "formik";
 import StarterKit from "@tiptap/starter-kit";

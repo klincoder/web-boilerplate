@@ -22,7 +22,7 @@ import { allBlogCatAtom } from "../recoil/atoms";
 import { collection, doc, fireDB, setDoc } from "../config/firebase";
 import {
   handleCategoryExist,
-  handleGenBlogSlug,
+  handleGenSlug,
   handleSlugExist,
   handleUppercaseFirst,
 } from "../config/functions";
@@ -169,14 +169,14 @@ const FormBlogCategory = ({ rowData, isModal }) => {
     >
       {({ values, errors, isValid, isSubmitting, setFieldValue }) => {
         // Define variables
-        const titleSlug = handleGenBlogSlug(values.title);
-        const slugInput = handleGenBlogSlug(values.slug);
+        const titleSlug = handleGenSlug(values.title);
+        const slugInput = handleGenSlug(values.slug);
         const disableSlug = values.disableSlug;
         const isEditedSlug = values.isEditedSlug;
 
         // Return form
         return (
-          <Form autoComplete="">
+          <Form autoComplete="" className="p-6 rounded-lg bg-white">
             {/** Debug */}
             {/* {console.log("Debug formValues:", } */}
 
