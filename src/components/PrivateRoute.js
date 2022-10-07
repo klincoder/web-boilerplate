@@ -1,8 +1,8 @@
 // Import resources
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 
 // Import custom files
+import useAppSettings from "../hooks/useAppSettings";
 import { useAuthContext } from "../context/AuthContext";
 import { privateRouteArr } from "../config/data";
 
@@ -11,11 +11,10 @@ const PrivateRoute = ({ children }) => {
   // Define auth context
   const { user } = useAuthContext();
 
-  // Define router
-  const router = useRouter();
+  // Define app settings
+  const { router, currPath } = useAppSettings();
 
   // Define variables
-  const currPath = router.pathname;
   const isPrivateRoute = user?.id && privateRouteArr?.includes(currPath);
 
   // Debug

@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -13,21 +11,12 @@ import useAppSettings from "../hooks/useAppSettings";
 import CustomTextInputForm from "./CustomTextInputForm";
 import CustomTextareaForm from "./CustomTextareaForm";
 import { collection, doc, fireDB, setDoc } from "../config/firebase";
+import { alertMsg, apiRoutes } from "../config/data";
 
 // Component
 const FormContactUs = () => {
-  // Define state
-  const [showPass, setShowPass] = useState(false);
-
   // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
-  const routeHasQuery = Object.keys(router.query)?.length > 0;
+  const { todaysDate, alert, siteInfo } = useAppSettings();
 
   // Debug
   //console.log("Debug formContactUs: ",)
@@ -52,14 +41,20 @@ const FormContactUs = () => {
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM
-  const onSubmit = async (values, { setSubmitting }) => {
+  const handleSubmitForm = async (values, { resetForm, setSubmitting }) => {
     // Define variables
     const finalName = values.fullName?.trim()?.toLowerCase();
-    const finalEmailAddr = values.emailAddr?.trim()?.toLowerCase();
+    const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalMsg = values.fullName
       ?.trim()
       ?.replace(/[\r?\n]+/, "")
       ?.toLowerCase();
+    // Define email msg
+    const emailMsg = {
+      sender: finalName,
+      subject: "Contact form submission",
+      msg: finalMsg,
+    };
 
     // Debug
     //console.log("Debug submitForm: ", finalUsername);
@@ -68,20 +63,30 @@ const FormContactUs = () => {
     try {
       // Add message to db
       const addMsgRef = doc(collection(fireDB, "contactForm"));
-      // Await
       await setDoc(addMsgRef, {
         id: addMsgRef?.id,
         fullName: finalName,
-        emailAddress: finalEmailAddr,
+        emailAddress: finalEmail,
         message: finalMsg,
         dateCreated: todaysDate,
         dateUpdated: todaysDate,
       });
 
       // Send email to admin
-      //handleAdminEmail()
+      await handleAdminEmail(
+        "admin",
+        siteInfo?.adminName,
+        siteInfo?.adminEmail,
+        emailMsg,
+        apiRoutes?.contactForm
+      );
+
+      // Alert succ
+      alert.success("Message sent");
+      resetForm();
     } catch (err) {
-      alert.error(err.message);
+      alert.error(alertMsg?.general);
+      //console.log("Debug submitForm: ", err.message)
     } // close try catch
     // Set submitting
     setSubmitting(false);
@@ -92,10 +97,10 @@ const FormContactUs = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validate}
-      onSubmit={onSubmit}
+      onSubmit={handleSubmitForm}
     >
       {({ values, errors, isValid, isSubmitting }) => (
-        <Form autoComplete="off">
+        <Form autoComplete="">
           {/** Debug */}
           {/* {console.log("Debug formValues:", } */}
 

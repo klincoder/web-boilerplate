@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 // Import custom files
+import useAppSettings from "../hooks/useAppSettings";
 import { useAuthContext } from "../context/AuthContext";
 import { handleGetAllCountries } from "../config/functions";
 import {
@@ -32,14 +33,12 @@ import {
 
 // Component
 const GetDatabaseContent = () => {
-  // Define isMounted
-  const isMounted = useRef(false);
-
   // Define auth context
   const { user } = useAuthContext();
-
-  // Define variables
   const currUserID = user?.id;
+
+  // Define isMounted
+  const { isMounted } = useAppSettings();
 
   // Define state
   const setAllUsersAtom = useSetRecoilState(allUsersAtom); // All
@@ -195,6 +194,7 @@ const GetDatabaseContent = () => {
     };
   }, [
     currUserID,
+    isMounted,
     setAppSettingsAtom,
     setAppLibraryAtom,
     setAllUsersAtom,

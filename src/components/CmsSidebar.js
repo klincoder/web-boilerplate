@@ -2,7 +2,6 @@
 import React from "react";
 import { AiOutlineSetting } from "react-icons/ai";
 import { BsSpeedometer2 } from "react-icons/bs";
-import { useRouter } from "next/router";
 import { useRecoilState } from "recoil";
 
 // Import custom files
@@ -20,11 +19,7 @@ const CmsSidebar = ({ userRole }) => {
   const [toggleMenu, setToggleMenu] = useRecoilState(toggleCmsMenuAtom);
 
   // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define router
-  const router = useRouter();
-  const currPath = router.pathname;
+  const { todaysDate, currPath } = useAppSettings();
 
   // Debug
   // console.log("Debug cmsSidebar: ", );

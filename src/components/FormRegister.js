@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
@@ -28,13 +26,7 @@ const FormRegister = () => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { siteInfo, todaysDate, todaysDate1 } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
+  const { siteInfo, todaysDate, todaysDate1, alert } = useAppSettings();
 
   // Debug
   //console.log("Debug formRegister: ",)
@@ -77,6 +69,11 @@ const FormRegister = () => {
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPhoneNum = values.phoneNum?.trim();
     const finalPass = values.pass?.trim();
+    const emailMsg = {
+      username: finalUsername,
+      email: finalEmail,
+      date: todaysDate1,
+    };
 
     // Define email and user exist
     const emailExist = handleEmailExist(finalEmail);
@@ -112,18 +109,10 @@ const FormRegister = () => {
         username: finalUsername,
         emailAddress: finalEmail,
         phoneNumber: finalPhoneNum,
-        pushNotifications: true,
+        pushStatus: true,
         dateCreated: todaysDate,
         dateUpdated: todaysDate,
       });
-
-      // Send emails
-      // Define emailMsg
-      const emailMsg = {
-        username: finalUsername,
-        email: finalEmail,
-        date: todaysDate1,
-      };
 
       // Send user welcome email
       await handleSendEmail(

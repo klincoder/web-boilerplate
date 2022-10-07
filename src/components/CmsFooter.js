@@ -1,7 +1,6 @@
 // Import resources
 import React from "react";
 import moment from "moment";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -9,9 +8,6 @@ import useAppSettings from "../hooks/useAppSettings";
 
 // Component
 const CmsFooter = () => {
-  // Define router
-  const router = useRouter();
-
   // Define app settings
   const { siteInfo } = useAppSettings();
 

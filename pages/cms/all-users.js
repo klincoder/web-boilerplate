@@ -9,7 +9,7 @@ import CustomButton from "../../src/components/CustomButton";
 import { appImages, baseUrl } from "../../src/config/data";
 
 // Component
-const AllUsers = ({ currSession }) => {
+const AllUsers = () => {
   // Define page details
   const pageTitle = "All Users";
 

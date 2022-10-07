@@ -1,6 +1,5 @@
 // Import resources
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -19,12 +18,7 @@ const PageHeader = ({ userID, loading }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
 
   // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define router
-  const router = useRouter();
-  const currPath = router.pathname;
-  const isBlogSlug = currPath === "/blog/[slug]";
+  const { currPath, isBlogSlug } = useAppSettings();
 
   // Debug
   //console.log("Debug pageHeader: ", currPath);

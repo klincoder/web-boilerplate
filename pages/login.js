@@ -1,6 +1,5 @@
 // Import resources
 import React from "react";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -12,10 +11,6 @@ import CustomCard from "../src/components/CustomCard";
 const Login = () => {
   // Define page details
   const pageTitle = "Login";
-
-  // Define router
-  const router = useRouter();
-  const routerHistory = router.asPath;
 
   // Debug
   //console.log("Debug login: ", routerHistory);

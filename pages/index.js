@@ -152,7 +152,6 @@ export default Home;
 
 // GET SEVER SIDE PROPS
 export const getServerSideProps = async (context) => {
-  // FETCH DATA
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageHome");
   const pageDetailsSnap = await getDoc(pageDetailsRef);

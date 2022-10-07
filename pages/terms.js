@@ -5,7 +5,6 @@ import React from "react";
 import tw from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import CustomDivider from "../src/components/CustomDivider";
-import { appImages } from "../src/config/data";
 import { doc, fireDB, getDoc } from "../src/config/firebase";
 import { handleHtmlParser } from "../src/config/functions";
 
@@ -23,7 +22,7 @@ const Terms = ({ pageDetails }) => {
     <PageContent pageDetails={pageDetails}>
       {/** SECTION - PAGE DETAILS */}
       <section className="bg-white pt-14 pb-24">
-        {/** HEADING */}
+        {/** HEADER */}
         <div className="container mx-auto mb-12">
           <h3 className="text-center mb-8">{pageTitle}</h3>
           <CustomDivider />

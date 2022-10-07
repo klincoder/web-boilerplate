@@ -1,42 +1,26 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# misc
-genesissupport-dev-firebase-adminsdk-ae2ny-545f1a95f5.json
-
-# dependencies
+# GENERAL
 /node_modules
 /.yarn
 /.pnp
 .pnp.js
-
-# testing
 /coverage
-
-# next.js
 /.next/
 /out/
-
-# production
 /build
-
-# misc
 .DS_Store
 *.pem
+.vercel
+*.tsbuildinfo
+backup
 
-# debug
+# DEBUG
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
+# LOCAL ENV FILES
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo

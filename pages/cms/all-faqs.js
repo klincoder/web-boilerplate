@@ -1,6 +1,5 @@
 // Import resources
 import React from "react";
-import { getSession } from "next-auth/react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 // Import custom files

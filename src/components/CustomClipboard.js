@@ -1,11 +1,11 @@
 // Import resources
 import React from "react";
-import { useAlert } from "react-alert";
 import copy from "copy-to-clipboard";
 
 // Import custom files
 import tw from "../styles/twStyles";
 import CustomButton from "./CustomButton";
+import useAppSettings from "../hooks/useAppSettings";
 
 // Component
 const CustomClipboard = ({
@@ -17,8 +17,8 @@ const CustomClipboard = ({
   children,
   ...rest
 }) => {
-  // Define alert
-  const alert = useAlert();
+  // Define app settings
+  const { alert } = useAppSettings();
 
   // Debug
   // console.log("Debug customClipboard: ", Clipboard);

@@ -1,8 +1,6 @@
 // Import resources
 import React, { useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
 import { useRecoilValue } from "recoil";
-import { useRouter } from "next/router";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 // Import custom files
@@ -10,23 +8,25 @@ import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
 import CustomButton from "../../src/components/CustomButton";
 import PostEditor from "../../src/components/PostEditor";
-import { appImages, baseUrl } from "../../src/config/data";
+import useAppSettings from "../../src/hooks/useAppSettings";
 import { userBlogAtom } from "../../src/recoil/atoms";
 import { handleGetInfoById } from "../../src/config/functions";
 
 // Component
-function AllBlogCreate({ currSession }) {
+const AllBlogCreate = () => {
   // Define state
   const [pageTitle, setPageTitle] = useState("");
   const myPosts = useRecoilValue(userBlogAtom);
 
-  // Define router
-  const router = useRouter();
-  const rowID = router.query?.id;
+  // Define app settings
+  const { routerQuery } = useAppSettings();
+
+  // Define row info
+  const rowID = routerQuery?.id;
   const rowData = handleGetInfoById(myPosts, rowID);
 
   // Debug
-  //console.log("Debug AllBlogcreate: ", { rowID, rowData});
+  //console.log("Debug allBlogcreate: ", { rowID, rowData});
 
   // SIDE EFFECTS
   // LISTEN TO PAGE TITLE
@@ -63,29 +63,7 @@ function AllBlogCreate({ currSession }) {
       {/* </VerifyPageAccess> */}
     </CmsContent>
   ); // close return
-} // close component
+}; // close component
 
 // Export
 export default AllBlogCreate;
-
-// GET SEVER SIDE PROPS
-export const getServerSideProps = async (context) => {
-  // Get session
-  const session = await getSession(context);
-  // If no session, redirect
-  if (!session) {
-    return {
-      redirect: {
-        destination: `/login?callbackUrl=${baseUrl}/cms`,
-        permanent: false,
-      }, // close redirect
-    }; // close return
-  } // close if !session
-
-  // Return props
-  return {
-    props: {
-      currSession: session ? session?.user : null,
-    }, // close props
-  }; // close return
-}; // close getServerSide

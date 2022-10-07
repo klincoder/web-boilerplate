@@ -1,8 +1,9 @@
 // Import resources
+import React, { useRef } from "react";
 import moment from "moment";
+import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import { useAlert } from "react-alert";
-import { useRecoilValue } from "recoil";
 
 // Import custom files
 import { handleFormatDate } from "../config/functions";
@@ -12,6 +13,14 @@ import { appSettingsAtom } from "../recoil/atoms";
 const useAppSettings = () => {
   // Define atom
   const allSettings = useRecoilValue(appSettingsAtom);
+
+  // Define todays date
+  const todaysDate = moment.utc().format();
+  const todaysDate1 = handleFormatDate(todaysDate, 1);
+  const todaysDate2 = handleFormatDate(todaysDate, 2);
+
+  // Define isMounted
+  const isMounted = useRef(false);
 
   // Define router
   const router = useRouter();
@@ -24,10 +33,8 @@ const useAppSettings = () => {
     ({ id }) => id === "generalSettings"
   )?.data;
 
-  // Define todays date
-  const todaysDate = moment.utc().format();
-  const todaysDate1 = handleFormatDate(todaysDate, 1);
-  const todaysDate2 = handleFormatDate(todaysDate, 2);
+  // Define pages
+  const pageHome = allSettings?.find(({ id }) => id === "pageHome")?.data;
 
   // Define site info
   const siteInfo = {
@@ -44,13 +51,17 @@ const useAppSettings = () => {
     location: generalSettings?.location,
   };
 
+  // Define current path
+  const currPath = router.pathname;
+  const routerQuery = router.query;
+  const isHomePath = currPath === "/";
+  const isBlogSlug = currPath === "/blog/[slug]";
+  const routeHasQuery = Object.keys(router.query)?.length > 0;
+
   // Debug
-  //console.log("Debug useApp Settings: ", user);
+  //console.log("Debug useAppSettings: ", user);
 
-  // FUNCTIONS
-  // HANDLE
-
-  // Return data
+  // Return component
   return {
     siteInfo,
     todaysDate,
@@ -58,6 +69,12 @@ const useAppSettings = () => {
     todaysDate2,
     router,
     alert,
+    currPath,
+    routerQuery,
+    isHomePath,
+    isBlogSlug,
+    isMounted,
+    routeHasQuery,
   }; // close return
 }; // close component
 

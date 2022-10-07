@@ -4,16 +4,17 @@ import React from "react";
 // Import custom files
 import tw from "../styles/twStyles";
 import CustomImage from "./CustomImage";
-import useAppSettings from "../hooks/useAppSettings";
 import CustomDivider from "./CustomDivider";
 import LogoutBtn from "./LogoutBtn";
 import CustomButton from "./CustomButton";
+import { useAuthContext } from "../context/AuthContext";
 import { appImages } from "../config/data";
 
 // Component
 const ProfileIcon = () => {
   //Define app settings
-  const { userAvatar } = useAppSettings();
+  const { user } = useAuthContext();
+  const userAvatar = user?.avatar;
 
   // Debug
   //console.log("Debug profileIcon: ",)

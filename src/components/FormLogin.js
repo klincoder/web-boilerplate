@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -28,14 +26,7 @@ const FormLogin = () => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { todaysDate1 } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
-  const routeHasQuery = Object.keys(router.query)?.length > 0;
+  const { todaysDate1, router, alert, routeHasQuery } = useAppSettings();
 
   // Define destUrl
   const destUrl = routeHasQuery ? router.query.callbackUrl : "/cms";

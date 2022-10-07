@@ -22,7 +22,7 @@ import {
 } from "../../src/config/firebase";
 
 // Component
-const Blog = ({ pageDetails, activePosts, ...rest }) => {
+const Blog = ({ pageDetails, activePosts }) => {
   // Define state
   const [paginatedPosts, setPaginatedPosts] = useState([]);
   const paginatedData = paginatedPosts?.data;
@@ -116,7 +116,6 @@ export default Blog;
 // GET SERVER SIDE PROPS
 // PRE-FETCH DYNAMIC CONTENT
 export const getServerSideProps = async (context) => {
-  // FETCH DATA
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageBlog");
   const pageDetailsSnap = await getDoc(pageDetailsRef);

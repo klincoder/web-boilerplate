@@ -43,16 +43,3 @@ const BlankPageCms = () => {
 
 // Export
 export default BlankPageCms;
-
-// GET SEVERSIDE PROPS
-// export const getServerSideProps = async (context) => {
-//   // FETCH DATA
-//   // Get page details
-
-//   // Return props
-//   return {
-//     props: {
-//       //pageDetails: null,
-//     }, // close props
-//   }; // close return
-// } // close getServerSide

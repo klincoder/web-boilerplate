@@ -47,7 +47,6 @@ const FormPasswordRecovery = () => {
 
     // If !emailExist
     if (!emailExist?.isValid) {
-      // Alert err
       alert.error("User not found");
       return;
     } // close if

@@ -155,8 +155,9 @@ a > code {
   color: inherit;
 }
 
-/** CUSTOM CSS */
-/** ANIMATIONS **/
+/****************
+  CUSTOM CSS
+******************/
 .fadeLeftMini {
   animation: fadeLeftMini 1s;
   animation-fill-mode: both;
@@ -170,9 +171,11 @@ a > code {
 .loader-circle-1 {
   animation-delay: 0.1s;
 }
+
 .loader-circle-2 {
   animation-delay: 0.2s;
 }
+
 .loader-circle-3 {
   animation-delay: 0.3s;
 }
@@ -186,7 +189,9 @@ a > code {
   transition: opacity 1s ease;
 }
 
-/** KEY FRAMES*/
+/************
+  KEY FRAMES
+**************/
 @keyframes fadeLeftMini {
   0% {
     opacity: 0;

@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -11,9 +9,9 @@ import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
 import useAppSettings from "../hooks/useAppSettings";
 import CustomTextInputForm from "./CustomTextInputForm";
+import FormFeedback from "./FormFeedback";
 import { useAuthContext } from "../context/AuthContext";
 import { collection, fireDB, doc, setDoc } from "../config/firebase";
-import FormFeedback from "./FormFeedback";
 
 // Component
 const FormBlank = ({ isQuery, rowData }) => {
@@ -23,17 +21,14 @@ const FormBlank = ({ isQuery, rowData }) => {
   const username = user?.username;
   const userEmail = user?.email;
 
-  // Define rowData info
-  const rowID = rowData?.id;
-
   // Define state
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { todaysDate } = useAppSettings();
+  const { todaysDate, router, alert } = useAppSettings();
 
-  // Define alert
-  const alert = useAlert();
+  // Define rowData info
+  const rowID = rowData?.id;
 
   // Debug
   //console.log("Debug formBlank: ",)

@@ -3,20 +3,20 @@ import React, { useEffect, useRef } from "react";
 import AlertTemplate from "react-alert-template-basic";
 import NextNProgress from "nextjs-progressbar";
 import Script from "next/script";
+import { RecoilRoot } from "recoil";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
-import { useRouter } from "next/router";
-import { RecoilRoot, useSetRecoilState } from "recoil";
 
 // Import custom files
 import "../src/styles/globals.css";
-import * as gtag from "../src/config/gtag";
+import useAppSettings from "../src/hooks/useAppSettings";
+import GetDatabaseContent from "../src/components/GetDatabaseContent";
 import PrivateRoute from "../src/components/PrivateRoute";
 import ProtectedRoute from "../src/components/ProtectedRoute";
-import GetDatabaseContent from "../src/components/GetDatabaseContent";
 import ScrollUpButton from "../src/components/ScrollUpButton";
-import PrevRouteTracker from "../src/components/PrevRouteTracker";
+import * as gtag from "../src/config/gtag";
 import { isProdEnv, noAuthRoute } from "../src/config/data";
 import { AuthContextProvider } from "../src/context/AuthContext";
+import { useRouter } from "next/router";
 
 // Component
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
@@ -72,9 +72,6 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
           <AuthContextProvider>
             {/** Get database content */}
             <GetDatabaseContent />
-
-            {/** Prev route tracker */}
-            {/* <PrevRouteTracker /> */}
 
             {/** If isNoAuthRequired */}
             {isNoAuthRoute ? (

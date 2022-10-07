@@ -1,7 +1,6 @@
 // Import resources
 import React from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
@@ -17,9 +16,6 @@ const PageMeta = ({
   screenshot,
   ...rest
 }) => {
-  // Define router
-  const router = useRouter();
-
   // Define app settings
   const { siteInfo } = useAppSettings();
 

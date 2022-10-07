@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
 // Import custom files
@@ -35,6 +33,13 @@ const FormBlogCategory = ({ rowData, isModal }) => {
   const username = user?.username;
   const userEmail = user?.email;
 
+  // Define state
+  const [formMsg, setFormMsg] = useState(null);
+  const allBlogCategory = useRecoilValue(allBlogCatAtom);
+
+  // Define app settings
+  const { todaysDate, router, alert } = useAppSettings();
+
   // Define rowData info
   const rowID = rowData?.id;
   const rowUserID = rowData?.userID;
@@ -42,19 +47,6 @@ const FormBlogCategory = ({ rowData, isModal }) => {
   const rowDesc = rowData?.description;
   const rowSlug = rowData?.slug;
   const rowStatus = rowData?.status;
-
-  // Define state
-  const [formMsg, setFormMsg] = useState(null);
-  const allBlogCategory = useRecoilValue(allBlogCatAtom);
-
-  // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
 
   // Debug
   //console.log("Debug formBlogCategory: ",)

@@ -1,7 +1,6 @@
 // Import resources
 import React from "react";
 import moment from "moment";
-import { useRouter } from "next/router";
 
 // Import custom files
 import tw from "../styles/twStyles";
@@ -10,13 +9,9 @@ import useAppSettings from "../hooks/useAppSettings";
 import { copyrightLinks } from "../config/data";
 
 // Component
-const PageFooter = ({ currPath }) => {
+const PageFooter = () => {
   // Define app settings
-  const { siteInfo } = useAppSettings();
-
-  // Define router
-  const router = useRouter();
-  const isBlogSlug = currPath === "/blog/[slug]";
+  const { siteInfo, router, currPath } = useAppSettings();
 
   // Debug
   //console.log("Debug pagefooter: ",)

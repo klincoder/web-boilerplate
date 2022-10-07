@@ -15,9 +15,9 @@ const handler = async (req, res) => {
     const reqFromEmail = reqData?.fromEmail;
     const reqFooterName = reqData?.footerName;
     const reqMsg = reqData?.msg;
+    const emailSender = reqData?.sender;
     const emailSubj = reqMsg?.subject;
     const emailMsg = reqMsg?.msg;
-    const emailSender = reqData?.sender;
 
     // Debug
     //console.log("Debug apiContactSupport: ",);

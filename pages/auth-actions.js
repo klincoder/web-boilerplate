@@ -1,7 +1,5 @@
 // Import resources
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router";
-import { useAlert } from "react-alert";
+import React, { useEffect, useState } from "react";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -10,6 +8,7 @@ import CustomAlertMsg from "../src/components/CustomAlertMsg";
 import FormResetPassword from "../src/components/FormResetPassword";
 import CustomCard from "../src/components/CustomCard";
 import CustomButton from "../src/components/CustomButton";
+import useAppSettings from "../src/hooks/useAppSettings";
 import { useAuthContext } from "../src/context/AuthContext";
 
 // Component
@@ -21,16 +20,8 @@ const AuthActions = () => {
   const [pageTitle, setPageTitle] = useState("");
   const [actionMsg, setActionMsg] = useState(null);
 
-  // Define isMounted
-  const isMounted = useRef(false);
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
-  const routerQuery = router.query;
-  const routerHasQuery = Object.keys(routerQuery)?.length > 0;
+  // Define app settings
+  const { isMounted, routerQuery, alert } = useAppSettings();
 
   // Debug
   //console.log("Debug authActions: ", actionMsg);
@@ -99,7 +90,7 @@ const AuthActions = () => {
     return () => {
       isMounted.current = false;
     };
-  }, [routerQuery, handleVerifyEmail]);
+  }, [routerQuery, handleVerifyEmail, isMounted]);
 
   // Return component
   return (
@@ -155,19 +146,3 @@ const AuthActions = () => {
 
 // Export
 export default AuthActions;
-
-// GET SEVER SIDE PROPS
-export const getServerSideProps = async (context) => {
-  // FETCH DATA
-  // Get page details
-  // const pageDetailsRef = doc(fireDB, "appSettings", "pagePrivacy");
-  // const pageDetailsSnap = await getDoc(pageDetailsRef);
-  // const pageDetailsData = pageDetailsSnap.data();
-
-  // Return props
-  return {
-    props: {
-      //pageDetails:  pageDetailsData,
-    }, // close props
-  }; // close return
-}; // close getServerSide

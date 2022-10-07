@@ -1,9 +1,7 @@
 // Import resources
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import { useAlert } from "react-alert";
-import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
 // Import custom files
@@ -37,6 +35,13 @@ const PostEditor = ({ rowData }) => {
   const username = user?.username;
   const userEmail = user?.email;
 
+  // Define state
+  const [formMsg, setFormMsg] = useState(null);
+  const allBlogCategory = useRecoilValue(allBlogCatAtom);
+
+  // Define app settings
+  const { todaysDate, isMounted, router, alert } = useAppSettings();
+
   // Define rowData info
   const rowID = rowData?.id;
   const rowUserID = rowData?.userID;
@@ -48,22 +53,6 @@ const PostEditor = ({ rowData }) => {
   const rowExcerpt = rowData?.contentExcerpt;
   const rowStatus = rowData?.status;
   const rowDatePublished = rowData?.datePublished;
-
-  // Define state
-  const [formMsg, setFormMsg] = useState(null);
-  const allBlogCategory = useRecoilValue(allBlogCatAtom);
-
-  // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define isMounted
-  const isMounted = useRef(false);
-
-  // Define alert
-  const alert = useAlert();
-
-  // Define router
-  const router = useRouter();
 
   // Define variables
   const categoryOpt = handleSelectOptByTitle(allBlogCategory);
