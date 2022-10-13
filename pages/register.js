@@ -1,5 +1,6 @@
 // Import resources
 import React from "react";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -7,6 +8,7 @@ import PageContent from "../src/components/PageContent";
 import CustomCard from "../src/components/CustomCard";
 import FormRegister from "../src/components/FormRegister";
 import { appImages } from "../src/config/data";
+import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 
 // Component
 const Register = () => {
@@ -36,3 +38,26 @@ const Register = () => {
 
 // Export
 export default Register;
+
+// GET SEVERSIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+  // If no session, redirect
+  if (session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=/cms`,
+        permanent: false,
+      }, // close redirect
+    }; // close return
+  } // close if session
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session : null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

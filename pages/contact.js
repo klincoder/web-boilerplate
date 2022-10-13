@@ -1,15 +1,15 @@
 // Import resources
 import React from "react";
+import { IoMdCall } from "react-icons/io";
+import { MdEmail, MdLocationOn } from "react-icons/md";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import FormContactUs from "../src/components/FormContactUs";
-import CustomListItem from "../src/components/CustomListItem";
 import useAppSettings from "../src/hooks/useAppSettings";
 import CustomButton from "../src/components/CustomButton";
 import CustomDivider from "../src/components/CustomDivider";
-import { appImages } from "../src/config/data";
 import { doc, fireDB, getDoc } from "../src/config/firebase";
 
 // Component
@@ -22,22 +22,22 @@ const Contact = ({ pageDetails }) => {
     {
       id: "123",
       title: "Call Us",
-      image: appImages?.call,
       desc: siteInfo?.phone,
+      icon: <IoMdCall size={28} className="text-primary" />,
       link: `tel:${siteInfo?.phone}`,
     },
     {
       id: "456",
       title: "Email Us",
-      image: appImages?.email,
       desc: siteInfo?.email,
+      icon: <MdEmail size={28} className="text-primary" />,
       link: `mailto:${siteInfo?.email}`,
     },
     {
       id: "789",
       title: "Location",
-      image: appImages?.location,
       desc: siteInfo?.location,
+      icon: <MdLocationOn size={28} className="text-primary" />,
       link: `#`,
     },
   ];
@@ -50,7 +50,7 @@ const Contact = ({ pageDetails }) => {
     <PageContent pageDetails={pageDetails}>
       {/** SECTION - PAGE DETAILS */}
       <section className="bg-white px-4 pt-14 pb-24">
-        {/** HEADING */}
+        {/** HEADER */}
         <div className="container mx-auto mb-12">
           <h3 className="text-center mb-8">{pageDetails?.title}</h3>
           <CustomDivider />
@@ -63,14 +63,13 @@ const Contact = ({ pageDetails }) => {
             {/** Loop contactArr */}
             {contactArr?.map((item) => (
               <CustomButton isLink key={item?.id} href={item?.link}>
-                <a className="no-underline">
-                  <CustomListItem
-                    title={item?.title}
-                    description={item?.desc}
-                    image={item?.image}
-                    divClass="mb-12"
-                    titleClass="text-primary"
-                  />
+                <a className="flex gap-3 text-gray-700 mb-6 no-underline">
+                  {/** Icon */}
+                  <span>{item?.icon}</span>
+                  <div className="flex flex-col">
+                    <span className="text-xl font-bold">{item?.title}</span>
+                    <span>{item?.desc}</span>
+                  </div>
                 </a>
               </CustomButton>
             ))}
@@ -90,9 +89,8 @@ const Contact = ({ pageDetails }) => {
 // Export
 export default Contact;
 
-// GET SEVER SIDE PROPS
+// GET SERVER SIDE PROPS
 export const getServerSideProps = async (context) => {
-  // FETCH DATA
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageContact");
   const pageDetailsSnap = await getDoc(pageDetailsRef);

@@ -1,12 +1,14 @@
 // Import resources
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
 import CustomButton from "../../src/components/CustomButton";
 import { appImages, baseUrl } from "../../src/config/data";
+import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
 
 // Component
 const BlankPageCms = () => {
@@ -43,3 +45,26 @@ const BlankPageCms = () => {
 
 // Export
 export default BlankPageCms;
+
+// GET SEVERSIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+  // If no session, redirect
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=/cms`,
+        permanent: false,
+      }, // close redirect
+    }; // close return
+  } // close if !session
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session : null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

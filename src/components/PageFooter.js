@@ -11,7 +11,7 @@ import { copyrightLinks } from "../config/data";
 // Component
 const PageFooter = () => {
   // Define app settings
-  const { siteInfo, router, currPath } = useAppSettings();
+  const { siteInfo, currPath } = useAppSettings();
 
   // Debug
   //console.log("Debug pagefooter: ",)
@@ -31,7 +31,7 @@ const PageFooter = () => {
                   <a
                     className={`
                       text-white hover:text-primary
-                      ${router.pathname === item?.link && "!text-primary"}
+                      ${currPath === item?.link && "!text-primary"}
                     `}
                   >
                     {item?.title}

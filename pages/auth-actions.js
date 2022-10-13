@@ -82,10 +82,9 @@ const AuthActions = () => {
         // DEFAULT
         default:
           setPageTitle("Error occurred");
-          setActionMsg({ mode: "err", msg: "Invalid code" });
+          setActionMsg({ type: "err", msg: "Invalid code" });
       } // close switch
     })();
-
     // Clean up
     return () => {
       isMounted.current = false;
@@ -104,7 +103,7 @@ const AuthActions = () => {
             {/** Card */}
             <CustomCard isNormal title={pageTitle}>
               {/** If err */}
-              {actionMsg?.mode === "err" && (
+              {actionMsg?.type === "err" && (
                 <CustomAlertMsg isNormal type="success">
                   <div>{actionMsg?.msg}</div>
                 </CustomAlertMsg>

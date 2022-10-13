@@ -26,10 +26,10 @@ const FormLogin = () => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { todaysDate1, router, alert, routeHasQuery } = useAppSettings();
+  const { todaysDate1, router, alert, routerQuery } = useAppSettings();
 
-  // Define destUrl
-  const destUrl = routeHasQuery ? router.query.callbackUrl : "/cms";
+  // Define variables
+  const destUrl = routerQuery?.callbackUrl || "/cms";
 
   // Debug
   //console.log("Debug formLogin: ",);
@@ -74,13 +74,13 @@ const FormLogin = () => {
       // If isEmailVerified
       if (isEmailVerified) {
         // Send login alert
-        await handleSendEmail(
-          "user",
-          currUser?.displayName,
-          currUser?.email,
-          todaysDate1,
-          apiRoutes?.login
-        );
+        // await handleSendEmail(
+        //   "user",
+        //   currUser?.displayName,
+        //   currUser?.email,
+        //   todaysDate1,
+        //   apiRoutes?.login
+        // );
         // Alert succ
         alert.success(alertMsg?.loginSucc);
         router.push(destUrl);

@@ -12,6 +12,7 @@ import {
   confirmPasswordReset,
   applyActionCode,
   signOut,
+  onIdTokenChanged,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -92,6 +93,7 @@ export {
   confirmPasswordReset,
   applyActionCode,
   signOut,
+  onIdTokenChanged,
   doc,
   collection,
   collectionGroup,

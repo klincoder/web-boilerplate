@@ -1,14 +1,14 @@
 // Import resources
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import AlertTemplate from "react-alert-template-basic";
 import NextNProgress from "nextjs-progressbar";
 import Script from "next/script";
 import { RecoilRoot } from "recoil";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import { useRouter } from "next/router";
 
 // Import custom files
 import "../src/styles/globals.css";
-import useAppSettings from "../src/hooks/useAppSettings";
 import GetDatabaseContent from "../src/components/GetDatabaseContent";
 import PrivateRoute from "../src/components/PrivateRoute";
 import ProtectedRoute from "../src/components/ProtectedRoute";
@@ -16,7 +16,6 @@ import ScrollUpButton from "../src/components/ScrollUpButton";
 import * as gtag from "../src/config/gtag";
 import { isProdEnv, noAuthRoute } from "../src/config/data";
 import { AuthContextProvider } from "../src/context/AuthContext";
-import { useRouter } from "next/router";
 
 // Component
 const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
@@ -73,8 +72,11 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
             {/** Get database content */}
             <GetDatabaseContent />
 
+            {/** Main component */}
+            <Component {...pageProps} />
+
             {/** If isNoAuthRequired */}
-            {isNoAuthRoute ? (
+            {/* {isNoAuthRoute ? (
               <PrivateRoute>
                 <Component {...pageProps} />
               </PrivateRoute>
@@ -82,7 +84,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
               <ProtectedRoute>
                 <Component {...pageProps} />
               </ProtectedRoute>
-            )}
+            )} */}
 
             {/** Scroll up button */}
             <ScrollUpButton />

@@ -1,7 +1,6 @@
 // Import resources
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import nookies from "nookies";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
@@ -23,7 +22,6 @@ import {
   applyActionCode,
   verifyPasswordResetCode,
   confirmPasswordReset,
-  onIdTokenChanged,
 } from "../config/firebase";
 
 // Create context
@@ -170,13 +168,9 @@ export const AuthContextProvider = ({ children }) => {
   // LISTEN TO AUTH STATE
   useEffect(() => {
     // On mount
-    const unsubscribe = onIdTokenChanged(fireAuth, async (currUser) => {
+    const unsubscribe = onAuthStateChanged(fireAuth, (currUser) => {
       // If currUser
       if (currUser?.emailVerified) {
-        // Get token
-        const token = await currUser.getIdToken();
-        nookies.set(undefined, "ftoken", token, { path: "/" });
-        // Listen to more user info from database
         const userInfoRef = doc(fireDB, "users", currUser?.uid);
         onSnapshot(userInfoRef, (snapshot) => {
           // Define variables
@@ -199,7 +193,6 @@ export const AuthContextProvider = ({ children }) => {
         // console.log("Debug authContextUser 1: ", currUser);
       } else {
         setUser(null);
-        nookies.set(undefined, "ftoken", "", { path: "/" });
         // Debug
         //console.log("Debug authContextUser 2: ", currUser);
       } // close if
@@ -207,10 +200,8 @@ export const AuthContextProvider = ({ children }) => {
       setLoading(false);
     });
     // Clean up
-    return () => {
-      unsubscribe();
-    };
-  }, []); // fireUserID
+    return unsubscribe();
+  }, [fireUserID]);
 
   // Return provider
   return (

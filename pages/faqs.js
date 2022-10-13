@@ -1,6 +1,7 @@
 // Import resources
 import React from "react";
 import { useRecoilValue } from "recoil";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -10,9 +11,11 @@ import CustomAlertMsg from "../src/components/CustomAlertMsg";
 import CustomButton from "../src/components/CustomButton";
 import { activeFaqsAtom } from "../src/recoil/atoms";
 import { doc, fireDB, getDoc } from "../src/config/firebase";
+import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
+import { baseUrl } from "../src/config/data";
 
 // Component
-const Faqs = ({ pageDetails }) => {
+const Faqs = ({ currSession, pageDetails }) => {
   // Define pageDetails info
   const introInfo = pageDetails?.sectionIntro;
 
@@ -23,11 +26,11 @@ const Faqs = ({ pageDetails }) => {
   );
 
   // Debug
-  //console.log("Debug faqs: ",)
+  //console.log("Debug faqs: ", currSession);
 
   // Return component
   return (
-    <PageContent pageDetails={pageDetails}>
+    <PageContent currSession={currSession} pageDetails={pageDetails}>
       {/** SECTION */}
       <section id="faqs" className="pt-14 pb-24 bg-white">
         {/** HEADING */}
@@ -70,8 +73,11 @@ const Faqs = ({ pageDetails }) => {
 export default Faqs;
 
 // GET SEVERSIDE PROPS
-export async function getServerSideProps(context) {
-  // FETCH DATA
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageFaqs");
   const pageDetailsSnap = await getDoc(pageDetailsRef);
@@ -80,7 +86,8 @@ export async function getServerSideProps(context) {
   // Return props
   return {
     props: {
+      currSession: session ? session : null,
       pageDetails: pageDetailsData,
     }, // close props
   }; // close return
-} // close getServerSide
+}; // close getServerSide

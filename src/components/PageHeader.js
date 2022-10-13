@@ -13,7 +13,7 @@ import ToggleMenuBtn from "./ToggleMenuBtn";
 import { appImages, navLinks } from "../config/data";
 
 // Component
-const PageHeader = ({ userID, loading }) => {
+const PageHeader = ({ userID }) => {
   // Define state
   const [toggleMenu, setToggleMenu] = useState(false);
 
