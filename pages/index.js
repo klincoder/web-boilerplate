@@ -1,6 +1,6 @@
 // Import resources
 import React from "react";
-import { useLocalStorage, writeStorage } from "@rehooks/local-storage";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -11,6 +11,7 @@ import CtaDownloadApp from "../src/components/CtaDownloadApp";
 import CtaHomepage from "../src/components/CtaHomepage";
 import useAppSettings from "../src/hooks/useAppSettings";
 import CustomButton from "../src/components/CustomButton";
+import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import { handleSendEmail } from "../src/config/functions";
 import { apiRoutes, appFeaturesList, appImages } from "../src/config/data";
 import {
@@ -26,11 +27,9 @@ import {
 } from "../src/config/firebase";
 
 // Component
-const Home = ({ pageDetails }) => {
+const Home = ({ currSession, pageDetails }) => {
   // Define app settings
   const { todaysDate1 } = useAppSettings();
-
-  const [userInfo] = useLocalStorage("userStorage");
 
   // Define pageDetails info
   const heroInfo = {
@@ -78,7 +77,7 @@ const Home = ({ pageDetails }) => {
 
   // Return component
   return (
-    <PageContent pageDetails={pageDetails}>
+    <PageContent currSession={currSession} pageDetails={pageDetails}>
       {/** SECTION - HERO */}
       <SectionWrapper
         showBtn
@@ -152,6 +151,10 @@ export default Home;
 
 // GET SEVER SIDE PROPS
 export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageHome");
   const pageDetailsSnap = await getDoc(pageDetailsRef);
@@ -160,6 +163,7 @@ export const getServerSideProps = async (context) => {
   // Return props
   return {
     props: {
+      currSession: session ? session : null,
       pageDetails: pageDetailsData,
     }, // close props
   }; // close return

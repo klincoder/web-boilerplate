@@ -1,14 +1,38 @@
 // Import resources
 import * as firebaseAdmin from "firebase-admin";
 
+// Import custom files
+import { isProdEnv } from "./data";
+import { fireDB, doc, getDoc } from "./firebase";
+
+// DEFINE VARIABLES
+// DEV CONFIG
+const devConfig = {
+  clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_DEV_CLIENT_EMAIL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_DEV_PROJECT_ID,
+  privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_DEV_PRIVATE_KEY?.replace(
+    /\\n/g,
+    "\n"
+  ),
+};
+
+// PROD CONFIG
+const prodConfig = {
+  clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROD_CLIENT_EMAIL,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROD_PROJECT_ID,
+  privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROD_PRIVATE_KEY?.replace(
+    /\\n/g,
+    "\n"
+  ),
+};
+
+// FINAL CONFIG
+const finalConfig = isProdEnv ? prodConfig : devConfig;
+
 // INITIALIZE APP
 if (!firebaseAdmin.apps.length) {
   firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert({
-      privateKey: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PRIVATE_KEY,
-      clientEmail: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CLIENT_EMAIL,
-      projectId: process.env.NEXT_PUBLIC_FIREBASE_ADMIN_PROJECT_ID,
-    }),
+    credential: firebaseAdmin.credential.cert(finalConfig),
     databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
   });
 } // close if
@@ -16,18 +40,28 @@ if (!firebaseAdmin.apps.length) {
 // FUNCTIONS
 // HANDLE VERIFY TOKEN
 const handleVerifyIdToken = async (ftoken) => {
-  // If ftoken
-  if (ftoken) {
+  // If empty args, return
+  if (!ftoken) return false;
+  // Try catch
+  try {
+    // Verify id token
+    const verifiedToken = await firebaseAdmin.auth().verifyIdToken(ftoken);
+    // Get user info from db
+    const getUserRef = doc(fireDB, "users", verifiedToken?.uid);
+    const getUserSnap = await getDoc(getUserRef);
+    const getUserData = getUserSnap.exists() ? getUserSnap.data() : null;
     // Define variables
-    const result = await firebaseAdmin.auth().verifyIdToken(ftoken);
-    const id = result?.uid;
-    const username = result?.name;
-    const email = result?.email;
-    const emailVerified = result?.email_verified;
-    return { id, username, email, emailVerified };
-  } else {
+    const id = verifiedToken?.uid;
+    const email = verifiedToken?.email;
+    const emailVerified = verifiedToken?.email_verified;
+    const role = getUserData?.role;
+    const username = getUserData?.username;
+    // Return
+    return { id, username, role, email, emailVerified };
+  } catch (err) {
+    console.log("Debug handleVerifyIdToken: ", err.message);
     return false;
-  } // close if
+  } // close try catch
 }; // close fxn
 
 // Export

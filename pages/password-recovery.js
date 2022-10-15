@@ -44,11 +44,11 @@ export const getServerSideProps = async (context) => {
   // Get session
   const ftoken = nookies.get(context)?.ftoken;
   const session = await handleVerifyIdToken(ftoken);
-  // If no session, redirect
+  // If session, redirect
   if (session) {
     return {
       redirect: {
-        destination: `/login?callbackUrl=/cms`,
+        destination: `/cms`,
         permanent: false,
       }, // close redirect
     }; // close return

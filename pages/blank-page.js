@@ -1,14 +1,16 @@
 // Import resources
 import React from "react";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
+import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import { appImages } from "../src/config/data";
 import { doc, fireDB, getDoc } from "../src/config/firebase";
 
 // Component
-const BlankPage = ({ pageDetails }) => {
+const BlankPage = ({ currSession, pageDetails }) => {
   // Define pageDetails info
   const pageTitle = "BlankPage";
 
@@ -17,7 +19,7 @@ const BlankPage = ({ pageDetails }) => {
 
   // Return component
   return (
-    <PageContent pageDetails={pageDetails}>
+    <PageContent currSession={currSession} pageDetails={pageDetails}>
       {/** SECTION */}
       <section className="bg-white">
         {/** MAIN CONTAINER */}
@@ -40,17 +42,22 @@ const BlankPage = ({ pageDetails }) => {
 // Export
 export default BlankPage;
 
-// GET SEVER SIDE PROPS
-// export const getServerSideProps = async (context) => {
-//   // Get page details
-//   // const pageDetailsRef = doc(fireDB, "appSettings", "pagePrivacy");
-//   // const pageDetailsSnap = await getDoc(pageDetailsRef);
-//   // const pageDetailsData = pageDetailsSnap.data();
+// GET SEVERSIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
 
-//   // Return props
-//   return {
-//     props: {
-//       //pageDetails:  pageDetailsData,
-//     }, // close props
-//   }; // close return
-// }; // close getServerSide
+  // Get page details
+  // const pageDetailsRef = doc(fireDB, "appSettings", "pagePrivacy");
+  // const pageDetailsSnap = await getDoc(pageDetailsRef);
+  // const pageDetailsData = pageDetailsSnap.data();
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session : null,
+      //pageDetails:  pageDetailsData,
+    }, // close props
+  }; // close return
+}; // close getServerSide

@@ -7,11 +7,11 @@ import nookies from "nookies";
 import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
 import CustomButton from "../../src/components/CustomButton";
-import { appImages, baseUrl } from "../../src/config/data";
 import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
+import { appImages, baseUrl } from "../../src/config/data";
 
 // Component
-const BlankPageCms = () => {
+const BlankPageCms = ({ currSession }) => {
   // Define page details
   const pageTitle = "BlankPageCms";
 
@@ -20,7 +20,7 @@ const BlankPageCms = () => {
 
   // Return component
   return (
-    <CmsContent title={pageTitle} pageAccess="admin">
+    <CmsContent currSession={currSession} title={pageTitle} pageAccess="admin">
       {/** MAIN CONTAINER */}
       <div className="flex flex-col mb-6">
         {/** COL 1 - HEADER */}

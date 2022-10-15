@@ -14,6 +14,7 @@ import {
   fireAuth,
   fireDB,
   onAuthStateChanged,
+  onIdTokenChanged,
   onSnapshot,
   signInWithEmailAndPassword,
   signOut,
@@ -23,7 +24,6 @@ import {
   applyActionCode,
   verifyPasswordResetCode,
   confirmPasswordReset,
-  onIdTokenChanged,
 } from "../config/firebase";
 
 // Create context
@@ -35,9 +35,9 @@ export const useAuthContext = () => useContext(AuthContext);
 // Create context provider
 export const AuthContextProvider = ({ children }) => {
   // Define state
-  const allUsers = useRecoilValue(allUsersAtom);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const allUsers = useRecoilValue(allUsersAtom);
 
   // Define app settings
   const { todaysDate2, router, alert } = useAppSettings();
@@ -184,13 +184,13 @@ export const AuthContextProvider = ({ children }) => {
           const currUserObj = {
             id: currUser?.uid,
             email: currUser?.email,
-            username: currUser?.displayName,
             emailVerified: currUser?.emailVerified,
-            phoneNumber: currUser?.phoneNumber,
-            avatar: currUser?.photoURL,
             lastLogin: handleFormatDate(currUser?.metadata?.lastSignInTime, 2),
             fullName: dbUser?.fullName,
+            username: dbUser?.displayName,
             role: dbUser?.role,
+            phoneNumber: dbUser?.phoneNumber,
+            avatar: dbUser?.avatar,
           };
           // Set user
           setUser(currUserObj);
@@ -200,7 +200,6 @@ export const AuthContextProvider = ({ children }) => {
       } else {
         setUser(null);
         nookies.set(undefined, "ftoken", "", { path: "/" });
-        // Debug
         //console.log("Debug authContextUser 2: ", currUser);
       } // close if
       // Set loading
@@ -235,6 +234,3 @@ export const AuthContextProvider = ({ children }) => {
     </AuthContext.Provider>
   ); // close return
 }; // close provider
-
-// Export
-//export default AuthContext

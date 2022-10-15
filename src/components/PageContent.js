@@ -25,7 +25,7 @@ const PageContent = ({
 
   // Define variables
   const userID = currSession?.id || user?.id;
-  const pageTitle = pageDetails?.title;
+  const pageTitle = pageDetails?.title || title;
   const pageDesc = pageDetails?.description;
 
   // Debug
@@ -39,7 +39,7 @@ const PageContent = ({
         {...rest}
         isNormal
         isHomePath={isHomePath}
-        title={pageTitle || title}
+        title={pageTitle}
         description={pageDesc}
       />
 

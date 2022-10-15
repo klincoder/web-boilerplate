@@ -1,5 +1,6 @@
 // Import resources
 import React from "react";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../../src/styles/twStyles";
@@ -7,7 +8,7 @@ import CmsContent from "../../src/components/CmsContent";
 import { baseUrl } from "../../src/config/data";
 
 // Component
-const CmsDashboard = () => {
+const CmsDashboard = ({ currSession }) => {
   // Define page details
   const pageTitle = "Dashboard";
 
@@ -16,7 +17,7 @@ const CmsDashboard = () => {
 
   // Return component
   return (
-    <CmsContent title={pageTitle}>
+    <CmsContent currSession={currSession} title={pageTitle}>
       {/** MAIN CONTAINER */}
       <div className="flex flex-col mb-6">
         {/** COL 1 - HEADER */}
@@ -36,3 +37,26 @@ const CmsDashboard = () => {
 
 // Export
 export default CmsDashboard;
+
+// GET SEVERSIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+  // If no session, redirect
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=/cms`,
+        permanent: false,
+      }, // close redirect
+    }; // close return
+  } // close if !session
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session : null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

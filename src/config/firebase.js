@@ -44,8 +44,8 @@ import {
 import { isProdEnv } from "./data";
 
 // DEFINE VARIABLES
-// FIREBASE DEV CONFIG
-const firebaseDev = {
+// DEV CONFIG
+const devConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_DEV_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_DEV_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_DEV_PROJECT_ID,
@@ -55,8 +55,8 @@ const firebaseDev = {
   databaseUrl: process.env.NEXT_PUBLIC_FIREBASE_DEV_DATABASE_URL,
 };
 
-// FIREBASE PROD CONFIG
-const firebaseProd = {
+// PROD CONFIG
+const prodConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PROD_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_PROD_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROD_PROJECT_ID,
@@ -66,12 +66,12 @@ const firebaseProd = {
   databaseUrl: process.env.NEXT_PUBLIC_FIREBASE_PROD_DATABASE_URL,
 };
 
-// FIREBASE CONFIG
-const firebaseConfig = isProdEnv ? firebaseProd : firebaseDev;
+// FINAL CONFIG
+const finalConfig = isProdEnv ? prodConfig : devConfig;
 
 // INITIALZE APP
 // Check app initialzation
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseDev);
+const app = getApps().length > 0 ? getApp() : initializeApp(finalConfig);
 
 // Define firebase services
 const fireDB = getFirestore(app);

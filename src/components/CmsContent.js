@@ -15,12 +15,16 @@ import FormBlogCategory from "./FormBlogCategory";
 import { useAuthContext } from "../context/AuthContext";
 
 // Component
-const CmsContent = ({ title, pageAccess, children }) => {
+const CmsContent = ({ currSession, title, pageAccess, children }) => {
   // Define auth context
   const { user } = useAuthContext();
 
   // Define app settings
   const { siteInfo } = useAppSettings();
+
+  // Define variables
+  const userID = currSession?.id || user?.id;
+  const userRole = currSession?.role || user?.role;
 
   // Debug
   //console.log("Debug cmsContent: ", pageAccess);
@@ -35,7 +39,7 @@ const CmsContent = ({ title, pageAccess, children }) => {
       <CmsHeader />
 
       {/** Sidebar */}
-      <CmsSidebar userRole={user?.role} />
+      <CmsSidebar userRole={userRole} />
 
       {/** Page body */}
       <div className="min-h-screen bg-gray-50 md:pl-60">
