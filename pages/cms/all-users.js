@@ -1,15 +1,18 @@
 // Import resources
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
+import TableAllUsers from "../../src/components/TableAllUsers";
 import CustomButton from "../../src/components/CustomButton";
 import { appImages, baseUrl } from "../../src/config/data";
+import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
 
 // Component
-const AllUsers = () => {
+const AllUsers = ({ currSession }) => {
   // Define page details
   const pageTitle = "All Users";
 
@@ -18,23 +21,22 @@ const AllUsers = () => {
 
   // Return component
   return (
-    <CmsContent title={pageTitle} pageAccess="admin">
+    <CmsContent currSession={currSession} title={pageTitle} pageAccess="admin">
       {/** MAIN CONTAINER */}
       <div className="flex flex-col mb-6">
         {/** COL 1 - HEADER */}
         <div className="flex items-center justify-between mb-10">
           <h4>{pageTitle}</h4>
-          <CustomButton isLink href="/cms">
+          {/* <CustomButton isLink href="/cms">
             <a className={`text-white ${tw?.btnTextPrimary}`}>
               <AiOutlinePlus size={24} />
             </a>
-          </CustomButton>
+          </CustomButton> */}
         </div>
 
-        {/** COL 2 - BODY */}
-        <div className="flex flex-col p-4 mb-6 rounded-lg bg-white">
-          {/** Content */}
-          <p>Content goes here...</p>
+        {/** COL 2 - TABLE */}
+        <div className="flex flex-col mb-6">
+          <TableAllUsers />
         </div>
       </div>
     </CmsContent>
@@ -43,3 +45,26 @@ const AllUsers = () => {
 
 // Export
 export default AllUsers;
+
+// GET SEVERSIDE PROPS
+export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.ftoken;
+  const session = await handleVerifyIdToken(ftoken);
+  // If no session, redirect
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/login?callbackUrl=/cms`,
+        permanent: false,
+      }, // close redirect
+    }; // close return
+  } // close if !session
+
+  // Return props
+  return {
+    props: {
+      currSession: session ? session : null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

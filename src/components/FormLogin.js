@@ -74,13 +74,13 @@ const FormLogin = () => {
       // If isEmailVerified
       if (isEmailVerified) {
         // Send login alert
-        // await handleSendEmail(
-        //   "user",
-        //   currUser?.displayName,
-        //   currUser?.email,
-        //   todaysDate1,
-        //   apiRoutes?.login
-        // );
+        await handleSendEmail(
+          "user",
+          currUser?.displayName,
+          currUser?.email,
+          todaysDate1,
+          apiRoutes?.login
+        );
         // Alert succ
         alert.success(alertMsg?.loginSucc);
         router.push(destUrl);
@@ -93,7 +93,7 @@ const FormLogin = () => {
         });
       } // close if
     } catch (err) {
-      setFormMsg({ type: "err", msg: err.message });
+      setFormMsg({ type: "err", msg: "Invalid credentials" });
       //console.log("Debug submitForm: ", err.message);
     } // close try catch
     // Set submitting

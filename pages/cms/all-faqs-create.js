@@ -1,24 +1,45 @@
 // Import resources
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useRecoilValue } from "recoil";
 import nookies from "nookies";
 
 // Import custom files
 import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
 import useAppSettings from "../../src/hooks/useAppSettings";
+import CustomButton from "../../src/components/CustomButton";
+import FormAllFaqsCreate from "../../src/components/FormAllFaqsCreate";
+import { allFaqsAtom } from "../../src/recoil/atoms";
+import { handleGetInfoById } from "../../src/config/functions";
 import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
-import FormAllTerms from "../../src/components/FormAllTerms";
 
 // Component
-const AllTerms = ({ currSession }) => {
-  // Define page details
-  const pageTitle = "All Terms";
+const AllFaqsCreate = ({ currSession }) => {
+  // Define state
+  const [pageTitle, setPageTitle] = useState("");
+  const allFaqs = useRecoilValue(allFaqsAtom);
 
-  // Define app setings
-  const { pageTerms } = useAppSettings();
+  // Define app settings
+  const { routerQuery } = useAppSettings();
+
+  // Define row info
+  const rowID = routerQuery?.id;
+  const rowData = handleGetInfoById(allFaqs, rowID);
 
   // Debug
-  //console.log("Debug allTerms: ",)
+  //console.log("Debug allFaqsCreate: ", currSession);
+
+  // SIDE EFFECTS
+  // LISTEN TO PAGE TITLE
+  useEffect(() => {
+    // If rowID
+    if (rowID) {
+      setPageTitle("Edit FAQ");
+    } else {
+      setPageTitle("Create FAQ");
+    } // close if
+  }, [rowID]);
 
   // Return component
   return (
@@ -28,11 +49,16 @@ const AllTerms = ({ currSession }) => {
         {/** COL 1 - HEADER */}
         <div className="flex items-center justify-between mb-10">
           <h4>{pageTitle}</h4>
+          <CustomButton isLink href="/cms/all-faqs">
+            <a className={`flex flex-row items-center ${tw?.btnLink}`}>
+              <AiOutlineArrowLeft size={20} /> Go Back
+            </a>
+          </CustomButton>
         </div>
 
         {/** COL 2 - FORM */}
         <div className="flex flex-col mb-6">
-          <FormAllTerms rowData={pageTerms} />
+          <FormAllFaqsCreate rowData={rowData} />
         </div>
       </div>
     </CmsContent>
@@ -40,7 +66,7 @@ const AllTerms = ({ currSession }) => {
 }; // close component
 
 // Export
-export default AllTerms;
+export default AllFaqsCreate;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {

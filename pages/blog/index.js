@@ -1,5 +1,6 @@
 // Import resources
 import React, { useEffect, useState } from "react";
+import nookies from "nookies";
 
 // Import custom files
 import tw from "../../src/styles/twStyles";
@@ -8,6 +9,7 @@ import BlogItem from "../../src/components/BlogItem";
 import CustomPagination from "../../src/components/CustomPagination";
 import CustomAlertMsg from "../../src/components/CustomAlertMsg";
 import CustomDivider from "../../src/components/CustomDivider";
+import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
 import { handlePaginateArr } from "../../src/config/functions";
 import {
   fireDB,
@@ -116,6 +118,10 @@ export default Blog;
 // GET SERVER SIDE PROPS
 // PRE-FETCH DYNAMIC CONTENT
 export const getServerSideProps = async (context) => {
+  // Get session
+  const ftoken = nookies.get(context)?.gsltoken;
+  const session = await handleVerifyIdToken(ftoken);
+
   // Get page details
   const pageDetailsRef = doc(fireDB, "appSettings", "pageBlog");
   const pageDetailsSnap = await getDoc(pageDetailsRef);
@@ -137,6 +143,7 @@ export const getServerSideProps = async (context) => {
   // Return props
   return {
     props: {
+      currSession: session ? session : null,
       pageDetails: pageDetailsData,
       activePosts: activePostsData,
     }, // close props

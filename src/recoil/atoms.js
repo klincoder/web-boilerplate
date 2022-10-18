@@ -52,6 +52,12 @@ export const activeFaqsAtom = atom({
   default: [],
 });
 
+// ALL CONTACT FORM ATOM
+export const allContactFormAtom = atom({
+  key: "allContactFormAtom",
+  default: [],
+});
+
 /**********************
   USER
 **********************/

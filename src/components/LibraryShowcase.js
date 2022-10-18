@@ -57,13 +57,10 @@ const LibraryShowcase = () => {
   } = useUploadFile(maxFileCount, fileExtensions);
 
   // Define app settings
-  const { todaysDate } = useAppSettings();
-
-  // Define alert
-  const alert = useAlert();
+  const { todaysDate, alert } = useAppSettings();
 
   // Debug
-  //console.log("Debug libraryShowcase 1: ", selectedFiles );
+  //console.log("Debug libraryShowcase: ", selectedFiles);
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM
@@ -85,10 +82,9 @@ const LibraryShowcase = () => {
             const fileType = item?.type;
             const fileSize = item?.size;
             // Check if rawTitle exist
-            const getRawTitle = appLibrary?.filter(
-              (item) => item?.rawTitle === rawFileName
-            );
-            const isRawTitle = getRawTitle?.length > 0;
+            const isRawTitle =
+              appLibrary?.filter((item) => item?.rawTitle === rawFileName)
+                ?.length > 0;
             // If !isRawTitle
             if (!isRawTitle) {
               // Get upload url
@@ -114,9 +110,9 @@ const LibraryShowcase = () => {
         setLoading(false);
         handleResetFileInput();
       } catch (err) {
-        alert.error(err.message);
+        alert.error(alertMsg?.general);
         setLoading(false);
-        console.log("Debug libraryShowcase: ", err.message);
+        //console.log("Debug libraryShowcase: ", err.message);
       } // cloe try catch
     } else {
       alert.error(alertMsg?.general);

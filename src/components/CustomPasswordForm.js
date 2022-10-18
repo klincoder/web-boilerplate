@@ -58,8 +58,13 @@ const CustomPasswordForm = ({
                 {...rest}
                 name={name}
                 type={showPass ? "text" : "password"}
+                value={value || field.value}
+                onChange={(e) => form.setFieldValue(name, e.target.value)}
                 placeholder={placeholder || label}
-                className={`form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-r-0 border-solid border-gray-300 rounded-l transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none placeholder:text-gray-400 ${inputClass}`}
+                className={`
+                  ${inputClass}
+                  form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-r-0 border-solid border-gray-300 rounded-l transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none placeholder:text-gray-400
+                `}
               />
 
               {/** Toggle password button */}

@@ -87,6 +87,7 @@ export const getStaticPaths = async () => {
         params: { slug: doc.data().slug },
       };
     });
+
   // Return paths
   return {
     paths: allPostsData,
@@ -95,8 +96,8 @@ export const getStaticPaths = async () => {
 }; // close getStaticPaths
 
 // GET STATIC PROPS
+// PRE-FETCH DYNAMIC CONTENT
 export const getStaticProps = async ({ params }) => {
-  // FETCH DATA
   // Get post details
   const postRef = query(
     collectionGroup(fireDB, "blogPosts"),
@@ -116,4 +117,4 @@ export const getStaticProps = async ({ params }) => {
       rowData: postData?.[0],
     }, // close props
   }; // close return
-}; // close getStaticProps
+}; // close getServerSide

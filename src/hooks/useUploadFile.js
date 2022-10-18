@@ -76,14 +76,11 @@ const useUploadFile = (maxFileCount, fileExtensions) => {
     if (!fileInput || !newFileName) return null;
     // Define file validations
     folder = folder || username;
-    // Upload file
     // Create storage ref
     const storageRef = ref(fireStorage, `/${folder}/${newFileName}`);
     const uploadTask = await uploadBytesResumable(storageRef, fileInput);
     const url = await getDownloadURL(uploadTask.ref);
-    // Debug
     //console.log("Debug fxnUploadUrl: ", url);
-    // Return
     return url;
   }; // close fxn
 

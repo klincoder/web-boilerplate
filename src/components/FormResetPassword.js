@@ -95,7 +95,7 @@ const FormResetPassword = ({ actionCode }) => {
           <CustomPasswordForm
             isRequired
             name="repeatNewPass"
-            label="Password"
+            label="Repeat Password"
             showPass={showPass}
             onShowPass={() => setShowPass(!showPass)}
           />

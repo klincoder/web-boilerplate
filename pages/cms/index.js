@@ -6,6 +6,7 @@ import nookies from "nookies";
 import tw from "../../src/styles/twStyles";
 import CmsContent from "../../src/components/CmsContent";
 import { baseUrl } from "../../src/config/data";
+import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
 
 // Component
 const CmsDashboard = ({ currSession }) => {

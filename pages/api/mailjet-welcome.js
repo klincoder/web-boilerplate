@@ -35,7 +35,7 @@ const handler = async (req, res) => {
                 Name: reqToName,
               },
             ],
-            Subject: "Welcome to GSL",
+            Subject: "Welcome onboard",
             HTMLPart: `
               <div style="font-size: 14px;">
               <h3>Hi, ${reqToName}</h3>

@@ -2,7 +2,7 @@
 import Mailjet from "node-mailjet";
 import moment from "moment";
 import { FiUsers } from "react-icons/fi";
-import { BsFolder2Open } from "react-icons/bs";
+import { BsFolder2Open, BsSpeedometer2 } from "react-icons/bs";
 import {
   AiOutlineEdit,
   AiOutlineFileSearch,
@@ -241,6 +241,9 @@ export const copyrightLinks = [
 // STATUS LIST
 export const statusList = ["Active", "Inactive"];
 
+// FAQS CATEGORY LIST
+export const faqsCategoryList = ["General", "Covid", "Clinic", "Hometest"];
+
 /************************
   CMS DATA
 *************************/
@@ -283,6 +286,7 @@ export const cmsLinks = [
     linksArr: [
       "/cms/all-homepage",
       "/cms/all-faqs",
+      "/cms/all-faqs-create",
       "/cms/all-contact",
       "/cms/all-privacy",
       "/cms/all-terms",

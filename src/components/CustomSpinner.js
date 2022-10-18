@@ -13,7 +13,7 @@ const CustomSpinner = () => {
   return (
     <div
       role="status"
-      className="spinner-grow inline-block w-4 h-4 bg-current rounded-full opacity-0"
+      className="spinner-grow inline-block w-4 h-4 bg-current rounded-full opacity-0 ml-2"
     >
       <span className="visually-hidden">Loading...</span>
     </div>

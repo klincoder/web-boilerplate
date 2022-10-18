@@ -11,15 +11,14 @@ import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
 import FormFeedback from "./FormFeedback";
 import { useAuthContext } from "../context/AuthContext";
-import { handleTitleCase, handleSendEmail } from "../config/functions";
-import { appRegex, apiRoutes, alertMsg } from "../config/data";
+import { handleSendEmail, handleGenUsername } from "../config/functions";
+import { apiRoutes, alertMsg } from "../config/data";
 import { fireAuth, fireDB, setDoc, doc } from "../config/firebase";
 
 // Component
 const FormRegister = () => {
   // Define auth context
-  const { handleEmailExist, handleUsernameExist, handleRegister } =
-    useAuthContext();
+  const { handleEmailExist, handleRegister } = useAuthContext();
 
   // Define state
   const [showPass, setShowPass] = useState(false);
@@ -34,59 +33,36 @@ const FormRegister = () => {
   // FORM CONFIG
   // Initial values
   const initialValues = {
-    fullName: "",
-    username: "",
     emailAddr: "",
-    phoneNum: "",
     pass: "",
-    repeatPass: "",
   };
 
   // Validate
   const validate = Yup.object().shape({
-    fullName: Yup.string().required("Required").min(3, "Too short"),
-    username: Yup.string()
-      .required("Required")
-      .min(6, "Too short")
-      .max(20, "Too long"),
     emailAddr: Yup.string().required("Required").email("Invalid email address"),
-    phoneNum: Yup.string()
-      .matches(appRegex?.digitsOnly, "Digits only")
-      .min(10, "Too short")
-      .max(10, "Too long"),
     pass: Yup.string().required("Required").min(8, "Too short"),
-    repeatPass: Yup.string()
-      .required("Required")
-      .oneOf([Yup.ref("pass"), null], "Password must match"),
   });
 
   // FUNCTIONS
   // HANDLE SBUMIT FORM
   const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
     // Define variables
-    const finalFullName = handleTitleCase(values.fullName?.trim());
-    const finalUsername = values.username?.trim()?.toLowerCase();
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
-    const finalPhoneNum = values.phoneNum?.trim();
     const finalPass = values.pass?.trim();
+    const finalUsername = handleGenUsername(finalEmail);
     const emailMsg = {
       username: finalUsername,
       email: finalEmail,
       date: todaysDate1,
     };
 
-    // Define email and user exist
+    // Define email exist
     const emailExist = handleEmailExist(finalEmail);
-    const usernameExist = handleUsernameExist(finalUsername);
 
     // If emailExist
     if (emailExist?.isValid) {
       // Alert err
       alert.error("Email address already exist");
-      return;
-    } else if (usernameExist?.isValid) {
-      // Alert err
-      alert.error("Username is unavailable");
       return;
     } // close if
 
@@ -102,26 +78,26 @@ const FormRegister = () => {
       const newUserRef = doc(fireDB, "users", currUserID);
       await setDoc(newUserRef, {
         regMethod: "website",
-        userID: currUserID,
-        role: "user",
         avatar: "",
-        fullName: finalFullName,
+        role: "user",
+        fullName: "",
+        phoneNumber: "",
+        pushStatus: true,
+        userID: currUserID,
         username: finalUsername,
         emailAddress: finalEmail,
-        phoneNumber: finalPhoneNum,
-        pushStatus: true,
         dateCreated: todaysDate,
         dateUpdated: todaysDate,
       });
 
       // Send user welcome email
-      await handleSendEmail(
-        "user",
-        finalUsername,
-        finalEmail,
-        emailMsg,
-        apiRoutes?.welcome
-      );
+      // await handleSendEmail(
+      //   "user",
+      //   finalUsername,
+      //   finalEmail,
+      //   emailMsg,
+      //   apiRoutes?.welcome
+      // );
 
       // Send admin new user email
       await handleSendEmail(
@@ -137,7 +113,7 @@ const FormRegister = () => {
       setFormMsg({ type: "succ", msg: alertMsg?.linkSentSucc });
     } catch (err) {
       // Alert err
-      alert.error(err.message);
+      alert.error(alertMsg?.general);
       setFormMsg({ type: "err", msg: err.message });
       //console.log("Debug regSubmitForm: ", err.message);
     } // close try catch
@@ -160,12 +136,6 @@ const FormRegister = () => {
           {/** Form feedback */}
           <FormFeedback data={formMsg} />
 
-          {/** Full name */}
-          <CustomTextInputForm isRequired name="fullName" label="Full Name" />
-
-          {/** Username */}
-          <CustomTextInputForm isRequired label="Username" name="username" />
-
           {/** Email address */}
           <CustomTextInputForm
             isRequired
@@ -175,32 +145,14 @@ const FormRegister = () => {
             helperText="We'll send a verification link"
           />
 
-          {/** Phone number */}
-          <CustomTextInputForm name="phoneNum" label="Phone Number" />
-
           {/** Password */}
-          <div className="flex flex-col md:flex-row md:gap-2">
-            <div className="w-full md:w-1/2">
-              <CustomPasswordForm
-                isRequired
-                name="pass"
-                label="Password"
-                showPass={showPass}
-                onShowPass={() => setShowPass(!showPass)}
-              />
-            </div>
-
-            {/** Repeat Password */}
-            <div className="w-full md:w-1/2">
-              <CustomPasswordForm
-                isRequired
-                name="repeatPass"
-                label="Repeat Password"
-                showPass={showPass}
-                onShowPass={() => setShowPass(!showPass)}
-              />
-            </div>
-          </div>
+          <CustomPasswordForm
+            isRequired
+            name="pass"
+            label="Password"
+            showPass={showPass}
+            onShowPass={() => setShowPass(!showPass)}
+          />
 
           {/** Button */}
           <div className="text-center">

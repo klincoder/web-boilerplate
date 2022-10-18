@@ -19,6 +19,7 @@ import {
   userBlogAtom,
   userBlogCatAtom,
   userActiveBlogAtom,
+  allContactFormAtom,
 } from "../recoil/atoms";
 import {
   fireDB,
@@ -47,6 +48,7 @@ const GetDatabaseContent = () => {
   const setAllBlogCatAtom = useSetRecoilState(allBlogCatAtom);
   const setAllFaqsAtom = useSetRecoilState(allFaqsAtom);
   const setActiveFaqsAtom = useSetRecoilState(activeFaqsAtom);
+  const setAllContactFormAtom = useSetRecoilState(allContactFormAtom);
   const setUserBlogAtom = useSetRecoilState(userBlogAtom); // User
   const setUserActiveBlogAtom = useSetRecoilState(userActiveBlogAtom);
   const setUserBlogCatAtom = useSetRecoilState(userBlogCatAtom);
@@ -186,6 +188,21 @@ const GetDatabaseContent = () => {
       setActiveFaqsAtom(filterActive);
     });
 
+    // LISTEN TO ALL CONTACT FORM
+    const allContactRef = query(
+      collection(fireDB, "contactForm"),
+      orderBy("dateCreated", "desc")
+    );
+    // Snapshot
+    onSnapshot(allContactRef, (snapshot) => {
+      // Define data
+      const data = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      // Set atom
+      setAllContactFormAtom(data);
+    });
+
     // Debug
     // console.log("Debug getDatabaseContent: ", filterUserBlog);
     // Clean up
@@ -206,6 +223,7 @@ const GetDatabaseContent = () => {
     setUserBlogAtom,
     setUserActiveBlogAtom,
     setUserBlogCatAtom,
+    setAllContactFormAtom,
   ]);
 
   // Return component

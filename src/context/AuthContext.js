@@ -174,7 +174,7 @@ export const AuthContextProvider = ({ children }) => {
       // If currUser
       if (currUser?.emailVerified) {
         // Get token
-        const token = await currUser.getIdToken();
+        const token = await currUser.getIdToken(true);
         nookies.set(undefined, "ftoken", token, { path: "/" });
         // Listen to more user info from database
         const userInfoRef = doc(fireDB, "users", currUser?.uid);
@@ -187,7 +187,7 @@ export const AuthContextProvider = ({ children }) => {
             emailVerified: currUser?.emailVerified,
             lastLogin: handleFormatDate(currUser?.metadata?.lastSignInTime, 2),
             fullName: dbUser?.fullName,
-            username: dbUser?.displayName,
+            username: dbUser?.username,
             role: dbUser?.role,
             phoneNumber: dbUser?.phoneNumber,
             avatar: dbUser?.avatar,

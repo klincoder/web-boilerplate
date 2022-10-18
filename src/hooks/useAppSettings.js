@@ -35,6 +35,11 @@ const useAppSettings = () => {
 
   // Define pages
   const pageHome = allSettings?.find(({ id }) => id === "pageHome")?.data;
+  const pageFaqs = allSettings?.find(({ id }) => id === "pageFaqs")?.data;
+  const pageContact = allSettings?.find(({ id }) => id === "pageContact")?.data;
+  const pagePrivacy = allSettings?.find(({ id }) => id === "pagePrivacy")?.data;
+  const pageTerms = allSettings?.find(({ id }) => id === "pageTerms")?.data;
+  const pageBlog = allSettings?.find(({ id }) => id === "pageBlog")?.data;
 
   // Define site info
   const siteInfo = {
@@ -75,6 +80,12 @@ const useAppSettings = () => {
     isBlogSlug,
     isMounted,
     routeHasQuery,
+    pageHome,
+    pageFaqs,
+    pageContact,
+    pagePrivacy,
+    pageTerms,
+    pageBlog,
   }; // close return
 }; // close component
 
