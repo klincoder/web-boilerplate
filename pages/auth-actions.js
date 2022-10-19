@@ -1,6 +1,6 @@
 // Import resources
-import React, { useEffect, useState } from "react";
-import nookies from "nookies";
+import React, { useCallback, useEffect, useState, memo, useMemo } from "react";
+import useLocalStorage, { deleteFromStorage } from "@rehooks/local-storage";
 
 // Import custom files
 import tw from "../src/styles/twStyles";
@@ -10,11 +10,10 @@ import FormResetPassword from "../src/components/FormResetPassword";
 import CustomCard from "../src/components/CustomCard";
 import CustomButton from "../src/components/CustomButton";
 import useAppSettings from "../src/hooks/useAppSettings";
-import CustomSpinner from "../src/components/CustomSpinner";
 import CustomLoader from "../src/components/CustomLoader";
 import { useAuthContext } from "../src/context/AuthContext";
-import { baseUrl } from "../src/config/data";
-import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
+import { apiRoutes, baseUrl } from "../src/config/data";
+import { handleSendEmail } from "../src/config/functions";
 
 // Component
 const AuthActions = () => {
@@ -22,12 +21,18 @@ const AuthActions = () => {
   const { handleVerifyEmail } = useAuthContext();
 
   // Define state
-  const [pageTitle, setPageTitle] = useState("Auth Actions");
+  const [pageTitle, setPageTitle] = useState("Verification");
   const [actionMsg, setActionMsg] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
   // Define app settings
-  const { isMounted, routerQuery, router, alert } = useAppSettings();
+  const { isMounted, routerQuery, router, alert, todaysDate2 } =
+    useAppSettings();
+
+  // Define loca storage
+  const [tempEmailData] = useLocalStorage("tempEmail");
+  const finalEmail = tempEmailData?.email;
+  const finalUsername = tempEmailData?.username;
 
   // Define variables
   const mode = routerQuery?.mode;
@@ -36,46 +41,85 @@ const AuthActions = () => {
   const lang = routerQuery?.lang || "en";
 
   // Debug
-  //console.log("Debug authActions: ", actionMsg);
+  //console.log("Debug authActions 1: ", actionMsg);
 
   // FUNCTIONS
-  // HANDLE VERIFY AUTH CODE
-  const handleVerifyAuthCode = async (mode, actionCode) => {
+  // HANDLE ERROR MESSAGE
+  const handleErrMsg = () => {
+    // Set page title
+    setPageTitle("Verification Error");
+    setActionMsg({ mode: "empty", type: "err", msg: "Invalid code" });
+    setIsReady(true);
+  }; // close fxn
+
+  // HANDLE SUCCESS MESSAGE
+  const handleSuccMsg = useCallback(
+    (mode, msg) => {
+      // Set action msg
+      setActionMsg({
+        mode: mode,
+        type: "succ",
+        msg: msg,
+        code: actionCode,
+        url: continueUrl,
+      });
+      setIsReady(true);
+    },
+    [actionCode, continueUrl]
+  ); // close if
+
+  // HANDLE ACTION CODE
+  const handleActionCode = useCallback(async () => {
     // Try catch
     try {
       // Switch mode
       switch (mode) {
         case "verifyEmail":
           // Set page title
-          setPageTitle("Email Confirmation");
-          // Verify email confirmation code
+          setPageTitle("Email Verification");
+          // Verify email verification code
           await handleVerifyEmail(actionCode);
-          alert.success("Email confirmed successfully");
-          router.push("/cms");
-          //console.log("Debug authActions: ", verifiedEmail);
-          setIsReady(true);
+          // Define variables
+          const emailMsg = {
+            username: finalUsername,
+            email: finalEmail,
+            date: todaysDate2,
+          };
+          // Send user welcome email
+          await handleSendEmail(
+            "user",
+            finalUsername,
+            finalEmail,
+            emailMsg,
+            apiRoutes?.welcome
+          );
+          deleteFromStorage("tempEmail");
+          //console.log("Debug authActions 2: ", { tempEmailData, emailMsg });
+          router.push("/login?verifyEmailMsg=true");
           break;
         case "resetPassword":
           // Set page title
           setPageTitle("Reset Password");
-          setActionMsg({
-            mode: "resetPassword",
-            msg: `Reset Password`,
-            code: actionCode,
-            url: continueUrl,
-          });
-          setIsReady(true);
+          handleSuccMsg("resetPassword");
           break;
-        // default:
-        //   setActionMsg({ mode: "empty", type: "err", msg: "Invalid code" });
-        //   setIsReady(true);
+        default:
+          // Alert err
+          handleErrMsg();
       } // close switch
     } catch (err) {
-      setActionMsg({ mode: "empty", type: "err", msg: "Invalid code" });
-      setIsReady(true);
-      //console.log("Debug authActions: ", err.message);
+      handleErrMsg();
+      //console.log("Debug authActions 3: ", err.message);
     } // close try catch
-  }; // close if
+  }, [
+    mode,
+    actionCode,
+    router,
+    finalEmail,
+    finalUsername,
+    todaysDate2,
+    handleVerifyEmail,
+    handleSuccMsg,
+  ]); // close fxn
 
   // SIDE EFFECTS
   // LISTEN TO ROUTER QUERY
@@ -84,20 +128,19 @@ const AuthActions = () => {
     isMounted.current = true;
     // IIFE
     (async () => {
-      // Call handleVerifyAuthCode
-      await handleVerifyAuthCode(mode, actionCode);
-    })(); // close ife fxn
+      // Call fxn
+      await handleActionCode();
+    })(); // close fxn
     // Clean up
     return () => {
       isMounted.current = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isMounted, handleActionCode]);
 
   // Return component
   return (
     <PageContent title={pageTitle}>
-      {/** If isReady */}
+      {/** If !isReady */}
       {!isReady ? (
         <CustomLoader />
       ) : (
@@ -117,19 +160,25 @@ const AuthActions = () => {
 
                 {/** If verifyEmail */}
                 {actionMsg?.mode === "verifyEmail" && (
-                  <CustomAlertMsg
-                    isNormal
-                    type={actionMsg?.type === "succ" ? "success" : "danger"}
-                  >
+                  <>
                     {/** Message */}
-                    <div>{actionMsg?.msg}</div>
+                    <CustomAlertMsg
+                      isNormal
+                      type={actionMsg?.type === "succ" ? "success" : "danger"}
+                    >
+                      {actionMsg?.msg}
+                    </CustomAlertMsg>
                     {/** Button */}
                     {actionMsg?.type === "succ" && (
-                      <CustomButton isLink href="/login">
+                      <CustomButton
+                        isNormal
+                        onClick={() => router.push("/login")}
+                        btnClass={`w-full -mt-2 ${tw?.btnPrimary}`}
+                      >
                         Login
                       </CustomButton>
                     )}
-                  </CustomAlertMsg>
+                  </>
                 )}
 
                 {/** If resetPassword */}
@@ -146,18 +195,4 @@ const AuthActions = () => {
 }; // close component
 
 // Export
-export default AuthActions;
-
-// GET SEVERSIDE PROPS
-export const getServerSideProps = async (context) => {
-  // Get session
-  const ftoken = nookies.get(context)?.ftoken;
-  const session = await handleVerifyIdToken(ftoken);
-
-  // Return props
-  return {
-    props: {
-      currSession: session ? session : null,
-    }, // close props
-  }; // close return
-}; // close getServerSide
+export default memo(AuthActions);

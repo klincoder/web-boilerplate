@@ -2,18 +2,23 @@
 import React, { useState } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import { writeStorage } from "@rehooks/local-storage";
 
 // Import custom files
 import useAppSettings from "../hooks/useAppSettings";
+import FormFeedback from "./FormFeedback";
 import CustomTextInputForm from "./CustomTextInputForm";
 import CustomPasswordForm from "./CustomPasswordForm";
 import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
-import FormFeedback from "./FormFeedback";
 import { useAuthContext } from "../context/AuthContext";
-import { handleSendEmail, handleGenUsername } from "../config/functions";
-import { apiRoutes, alertMsg } from "../config/data";
+import { appRegex, apiRoutes, alertMsg } from "../config/data";
 import { fireAuth, fireDB, setDoc, doc } from "../config/firebase";
+import {
+  handleTitleCase,
+  handleSendEmail,
+  handleGenUsername,
+} from "../config/functions";
 
 // Component
 const FormRegister = () => {
@@ -25,7 +30,7 @@ const FormRegister = () => {
   const [formMsg, setFormMsg] = useState(null);
 
   // Define app settings
-  const { siteInfo, todaysDate, todaysDate1, alert } = useAppSettings();
+  const { siteInfo, todaysDate, todaysDate1, router, alert } = useAppSettings();
 
   // Debug
   //console.log("Debug formRegister: ",)
@@ -33,12 +38,14 @@ const FormRegister = () => {
   // FORM CONFIG
   // Initial values
   const initialValues = {
+    fullName: "",
     emailAddr: "",
     pass: "",
   };
 
   // Validate
   const validate = Yup.object().shape({
+    fullName: Yup.string().required("Required").min(3, "Too short"),
     emailAddr: Yup.string().required("Required").email("Invalid email address"),
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
@@ -47,17 +54,16 @@ const FormRegister = () => {
   // HANDLE SBUMIT FORM
   const handleSubmitForm = async (values, { setSubmitting, resetForm }) => {
     // Define variables
+    const finalFullName = handleTitleCase(values.fullName?.trim());
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
     const finalUsername = handleGenUsername(finalEmail);
+    const emailExist = handleEmailExist(finalEmail);
     const emailMsg = {
       username: finalUsername,
       email: finalEmail,
       date: todaysDate1,
     };
-
-    // Define email exist
-    const emailExist = handleEmailExist(finalEmail);
 
     // If emailExist
     if (emailExist?.isValid) {
@@ -74,30 +80,23 @@ const FormRegister = () => {
       const currUser = fireAuth.currentUser;
       const currUserID = currUser.uid;
 
+      // Write tempEmail to local storage
+      writeStorage("tempEmail", { email: finalEmail, username: finalUsername });
+
       // Add user to database
       const newUserRef = doc(fireDB, "users", currUserID);
       await setDoc(newUserRef, {
         regMethod: "website",
         avatar: "",
         role: "user",
-        fullName: "",
-        phoneNumber: "",
+        fullName: finalFullName,
+        emailAddress: finalEmail,
         pushStatus: true,
         userID: currUserID,
         username: finalUsername,
-        emailAddress: finalEmail,
         dateCreated: todaysDate,
         dateUpdated: todaysDate,
       });
-
-      // Send user welcome email
-      // await handleSendEmail(
-      //   "user",
-      //   finalUsername,
-      //   finalEmail,
-      //   emailMsg,
-      //   apiRoutes?.welcome
-      // );
 
       // Send admin new user email
       await handleSendEmail(
@@ -111,9 +110,9 @@ const FormRegister = () => {
       // Reset form
       resetForm();
       setFormMsg({ type: "succ", msg: alertMsg?.linkSentSucc });
+      router.push("#registerPage");
     } catch (err) {
-      // Alert err
-      alert.error(alertMsg?.general);
+      alert.error(err.message);
       setFormMsg({ type: "err", msg: err.message });
       //console.log("Debug regSubmitForm: ", err.message);
     } // close try catch
@@ -136,18 +135,19 @@ const FormRegister = () => {
           {/** Form feedback */}
           <FormFeedback data={formMsg} />
 
+          {/** Full name */}
+          <CustomTextInputForm name="fullName" label="Full Name" />
+
           {/** Email address */}
           <CustomTextInputForm
-            isRequired
             type="email"
             name="emailAddr"
             label="Email Address"
-            helperText="We'll send a verification link"
+            helperText="We'll send a verification code"
           />
 
           {/** Password */}
           <CustomPasswordForm
-            isRequired
             name="pass"
             label="Password"
             showPass={showPass}

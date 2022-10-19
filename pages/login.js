@@ -7,12 +7,20 @@ import tw from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import FormLogin from "../src/components/FormLogin";
 import CustomCard from "../src/components/CustomCard";
+import useAppSettings from "../src/hooks/useAppSettings";
+import CustomAlertMsg from "../src/components/CustomAlertMsg";
 import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 
 // Component
-const Login = () => {
+const Login = ({ currSession }) => {
   // Define page details
   const pageTitle = "Login";
+
+  // Define app settings
+  const { routerQuery } = useAppSettings();
+
+  // Define variables
+  const verifyEmailMsg = routerQuery?.verifyEmailMsg;
 
   // Debug
   //console.log("Debug login: ", routerHistory);
@@ -26,6 +34,13 @@ const Login = () => {
         <div className="container mx-auto flex flex-row items-center justify-center px-4 pt-14 pb-24 w-full md:space-y-0">
           {/** COL 1 - CARD */}
           <CustomCard isNormal title="Login">
+            {/** If verifyEmailMsg */}
+            {verifyEmailMsg && (
+              <CustomAlertMsg isNormal showBtn type="success">
+                Email verified. Login.
+              </CustomAlertMsg>
+            )}
+
             {/** Form */}
             <FormLogin />
           </CustomCard>
@@ -51,7 +66,7 @@ export const getServerSideProps = async (context) => {
         permanent: false,
       }, // close redirect
     }; // close return
-  } // close if session
+  } // close if !session
 
   // Return props
   return {
