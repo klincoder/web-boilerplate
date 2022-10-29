@@ -4,19 +4,6 @@ import { atom, selector, selectorFamily } from "recoil";
 // Import custom files
 import { otpDefaultTimer } from "../config/data";
 
-// ATOMS
-// APP SETTINGS ATOM
-export const appSettingsAtom = atom({
-  key: "appSettingsAtom",
-  default: null,
-});
-
-// APP LIBRARY ATOM
-export const appLibraryAtom = atom({
-  key: "allAppLibraryAtom",
-  default: null,
-});
-
 /**********************
   ALL 
 **********************/
@@ -86,6 +73,18 @@ export const userBlogCatAtom = atom({
 /**********************
   OTHERS
 **********************/
+// APP SETTINGS ATOM
+export const appSettingsAtom = atom({
+  key: "appSettingsAtom",
+  default: null,
+});
+
+// APP LIBRARY ATOM
+export const appLibraryAtom = atom({
+  key: "allAppLibraryAtom",
+  default: [],
+});
+
 // TOGGLE CMS MENU ATOM
 export const toggleCmsMenuAtom = atom({
   key: "toggleCmsMenuAtom",
