@@ -4,7 +4,7 @@
 
 // Component
 const BlankHook = () => {
-  // Define variable
+  // Define variables
   let testFxn;
 
   // FUNCTIONS

@@ -14,8 +14,8 @@ const CustomButton = ({
   type,
   href,
   onClick,
-  btnClass,
   modalID,
+  styleBtn,
   children,
   ...rest
 }) => {
@@ -32,7 +32,7 @@ const CustomButton = ({
           type={type || "button"}
           onClick={onClick}
           className={
-            btnClass ||
+            styleBtn ||
             `w-full mt-3 ${
               isSecondary ? twStyles?.btnSecondary : twStyles?.btnPrimary
             }`
@@ -44,7 +44,7 @@ const CustomButton = ({
 
       {/** IS LINK */}
       {isLink && (
-        <Link href={href || "/"} {...rest}>
+        <Link {...rest} href={href || "/"} className={styleBtn}>
           {children}
         </Link>
       )}
@@ -57,6 +57,7 @@ const CustomButton = ({
           onClick={onClick}
           data-bs-toggle="modal"
           data-bs-target={`#${modalID}`}
+          className={styleBtn}
         >
           {children}
         </button>

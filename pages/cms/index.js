@@ -3,21 +3,25 @@ import React from "react";
 import nookies from "nookies";
 
 // Import custom files
-import twStyles from "../src/styles/twStyles";
-import PageContent from "../src/components/PageContent";
-import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
-import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
+import twStyles from "../../src/styles/twStyles";
+import PageContent from "../../src/components/PageContent";
+import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
+import { handleSiteInfo } from "../../src/config/functions";
 
 // Component
-const Home = ({ currSession, pageDetails, siteInfo }) => {
+const Cms = ({ currSession, siteInfo }) => {
+  // Define variables
+  const pageTitle = "Dashboard";
+
   // Debug
-  //console.log("Debug home: ", currSession);
+  //console.log("Debug Cms: ");
 
   // Return component
   return (
     <PageContent
+      isCms
       currSession={currSession}
-      pageDetails={pageDetails}
+      title={pageTitle}
       siteInfo={siteInfo}
     >
       {/** SECTION HERO */}
@@ -27,7 +31,7 @@ const Home = ({ currSession, pageDetails, siteInfo }) => {
 }; // close component
 
 // Export
-export default Home;
+export default Cms;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {
@@ -35,15 +39,23 @@ export const getServerSideProps = async (context) => {
   const ftoken = nookies.get(context)?.ftoken;
   const session = await handleVerifyIdToken(ftoken);
 
-  // Define data
-  const pageData = await handleAppSettings("page_home");
+  // Get data
   const siteInfo = await handleSiteInfo();
+
+  // // If no session, redirect
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: `/login?callbackUrl=/cms`,
+  //       permanent: false,
+  //     }, // close redirect
+  //   }; // close return
+  // } // close if !session
 
   // Return props
   return {
     props: {
       currSession: session || null,
-      pageDetails: pageData || null,
       siteInfo: siteInfo || null,
     }, // close props
   }; // close return

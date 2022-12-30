@@ -128,6 +128,14 @@ export const statusList = ["Active", "Inactive"];
 // FAQS CATEGORY LIST
 export const faqsCategoryList = ["General", "Covid", "Clinic", "Hometest"];
 
+// COPYRIGHT LINKS
+export const copyrightLinks = [
+  { id: "123", title: "Privacy", link: "/privacy" },
+  { id: "456", title: "Terms", link: "/terms" },
+  { id: "789", title: "Contact", link: "/contact" },
+  // { id: "1011", title: "Blog", link: "/blog", isBlog: true },
+];
+
 /************************
   CMS DATA
 *************************/

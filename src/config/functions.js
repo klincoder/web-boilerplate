@@ -112,10 +112,10 @@ export const handleFindId = (objArr, rowID) => {
 }; // close fxn
 
 // HANDLE FILTER ID
-export const handleFilterId = (objArr, rowID) => {
+export const handleFilterId = (objArr, id) => {
   // If empty args, return
-  if (!objArr || !rowID) return;
-  const result = objArr?.filter((i) => i?.id === rowID);
+  if (!objArr || !id) return;
+  const result = objArr?.filter((i) => i?.id === id);
   if (result?.length > 0) {
     return result;
   } else {
@@ -478,13 +478,13 @@ export const handleDayJsDiff = (date1, date2, unit) => {
 }; // close fxn
 
 // HANDLE DAYJS FORMAT
-export const handleDayJsFormat = (dateVal, formatType) => {
-  // If empty args, return
-  if (!dateVal) return;
+export const handleDayJsFormat = (dateVal, num, formatVal) => {
   // Define variables
+  dateVal = dateVal || undefined;
+  formatVal = formatVal || "YYYY";
   let result;
-  // Switch formatType
-  switch (formatType) {
+  // Switch num
+  switch (num) {
     case 1:
       result = dayjs.utc(dateVal).format("MMM D, YYYY");
       break;
@@ -492,16 +492,7 @@ export const handleDayJsFormat = (dateVal, formatType) => {
       result = dayjs.utc(dateVal).format("MMM D, YYYY h:mm A");
       break;
     case 3:
-      result = dayjs.utc(dateVal).format("YYYY-MM-DD");
-      break;
-    case 4:
-      result = dayjs.utc(dateVal).format("h:mm A");
-      break;
-    case 5:
-      result = dayjs(dateVal).format("DD MMM");
-      break;
-    case 6:
-      result = dayjs(dateVal).format("HH:mm");
+      result = dayjs.utc(dateVal).format(formatVal);
       break;
     default:
       result = dayjs.utc(dateVal).format();
@@ -759,8 +750,8 @@ export const handleObjArrDuplicatesByName = (objArr) => {
   return result;
 }; // close fxn
 
-// HANDLE VERIFY CMS PAGE ACCESS
-export const handleVerifyCmsPageAccess = (cmsLinks, pageAccess, currPath) => {
+// HANDLE VERIFY PAGE ACCESS
+export const handleVerifyPageAccess = (cmsLinks, pageAccess, currPath) => {
   // If empty args, return
   if (!cmsLinks || !currPath) return;
   // Define variables

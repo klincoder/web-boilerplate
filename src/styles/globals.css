@@ -21,7 +21,7 @@
     @apply text-lg text-black font-bold mt-0 mb-2;
   }
   a {
-    @apply text-accent underline hover:no-underline;
+    @apply text-primary underline underline-offset-4 hover:no-underline;
   }
   ul {
     @apply list-disc;
