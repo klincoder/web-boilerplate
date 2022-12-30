@@ -5,22 +5,14 @@ import nookies from "nookies";
 // Import custom files
 import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
-import CustomDivider from "../src/components/CustomDivider";
 import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
-import {
-  handleAppSettings,
-  handleHtmlParser,
-  handleSiteInfo,
-} from "../src/config/functions";
+import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
+import CustomAlertMsg from "../src/components/CustomAlertMsg";
 
 // Component
-const Privacy = ({ currSession, pageDetails, siteInfo }) => {
-  // Define variables
-  const pageTitle = pageDetails?.title;
-  const pageContent = handleHtmlParser(pageDetails?.content);
-
+const PageError = ({ currSession, pageDetails, siteInfo }) => {
   // Debug
-  //console.log("Debug privacy: ", currSession);
+  //console.log("Debug pageError: ", currSession);
 
   // Return component
   return (
@@ -34,14 +26,8 @@ const Privacy = ({ currSession, pageDetails, siteInfo }) => {
         <div className="container mx-auto flex flex-col px-6 pt-14 pb-24">
           {/** COL 1 */}
           <div className="flex flex-col p-6 mb-8 rounded shadow-lg">
-            {/** Title */}
-            <h3>{pageTitle}</h3>
-
-            {/** Divider */}
-            <CustomDivider styleDivider="mt-2 mb-6" />
-
-            {/** Content */}
-            <div>{pageContent}</div>
+            {/** Alert msg */}
+            <CustomAlertMsg isIcon title="Page Error" />
           </div>
         </div>
       </section>
@@ -50,7 +36,7 @@ const Privacy = ({ currSession, pageDetails, siteInfo }) => {
 }; // close component
 
 // Export
-export default Privacy;
+export default PageError;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {
@@ -59,15 +45,15 @@ export const getServerSideProps = async (context) => {
   const session = await handleVerifyIdToken(ftoken);
 
   // Define data
-  const pageData = await handleAppSettings("page_privacy");
+  const pageData = await handleAppSettings("page_404");
   const siteInfo = await handleSiteInfo();
 
   // Return props
   return {
     props: {
-      currSession: session ? session : null,
-      pageDetails: pageData,
-      siteInfo: siteInfo,
+      currSession: session || null,
+      pageDetails: pageData || null,
+      siteInfo: siteInfo || null,
     }, // close props
   }; // close return
 }; // close getServerSide

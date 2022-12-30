@@ -86,9 +86,9 @@ export const userActiveBlogAtom = atom({
   default: [],
 });
 
-// TOGGLE CMS MENU ATOM
-export const toggleCmsMenuAtom = atom({
-  key: "toggleCmsMenuAtom",
+// TOGGLE MENU ATOM
+export const toggleMenuAtom = atom({
+  key: "toggleMenuAtom",
   default: false,
 });
 

@@ -10,6 +10,7 @@ import PageFooter from "./PageFooter";
 import LogoutModal from "./LogoutModal";
 import CustomAlertMsg from "./CustomAlertMsg";
 import CustomModal from "./CustomModal";
+import CmsSidebar from "./CmsSidebar";
 import { cmsLinks } from "../config/data";
 import { handleVerifyPageAccess } from "../config/functions";
 
@@ -42,7 +43,7 @@ const PageContent = ({
   // Return component
   return (
     <div className="min-h-screen">
-      {/** Page meta */}
+      {/** Meta */}
       <PageMeta
         {...rest}
         isNormal={!isCms}
@@ -54,10 +55,10 @@ const PageContent = ({
       {/** Header */}
       <PageHeader isCms={isCms} userID={userID} userAvatar={userAvatar} />
 
-      {/** Sidebar */}
-      {/* {isCms && <CmsSidebar userRole={userRole} />} */}
+      {/** Cms sidebar */}
+      {isCms && <CmsSidebar userRole={userRole} />}
 
-      {/** Page body */}
+      {/** Body */}
       {isCms ? (
         <div className="min-h-screen bg-gray-50 md:pl-60">
           <div className="p-6">

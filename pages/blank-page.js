@@ -5,11 +5,15 @@ import nookies from "nookies";
 // Import custom files
 import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
+import useAppSettings from "../src/hooks/useAppSettings";
 import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
 
 // Component
 const BlankPage = ({ currSession, pageDetails, siteInfo }) => {
+  // Define app settings
+  const { isMounted } = useAppSettings();
+
   // Debug
   //console.log("Debug blankPage: ", currSession);
 
@@ -41,9 +45,11 @@ export const getServerSideProps = async (context) => {
   // Get session
   const ftoken = nookies.get(context)?.ftoken;
   const session = await handleVerifyIdToken(ftoken);
+
   // Define data
   const pageData = await handleAppSettings("page_home");
   const siteInfo = await handleSiteInfo();
+
   // Return props
   return {
     props: {

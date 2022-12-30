@@ -41,9 +41,11 @@ export const getServerSideProps = async (context) => {
   // Get session
   const ftoken = nookies.get(context)?.ftoken;
   const session = await handleVerifyIdToken(ftoken);
+
   // Define data
   const pageData = await handleAppSettings("page_register");
   const siteInfo = await handleSiteInfo();
+
   // Return props
   return {
     props: {

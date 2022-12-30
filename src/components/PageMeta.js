@@ -28,6 +28,12 @@ const PageMeta = ({
       {/** Favicon */}
       <link rel="icon" href="/favicon.ico" />
 
+      {/** Fonts */}
+      {/* <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      /> */}
+
       {/** If isNormal, show seo meta */}
       {isNormal && (
         <>

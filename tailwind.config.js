@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+// Define default theme
+const defaultTheme = require("tailwindcss/defaultTheme");
+
+// Define exports
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
-    // "./src/components/**/*.{js,ts,jsx,tsx}",
-    // "./src/sections/**/*.{js,jsx}",
-    // "./src/styles/**/*.{js,ts,jsx,tsx}",
     "./node_modules/tw-elements/dist/js/**/*.js",
   ], // close content
   theme: {
@@ -35,6 +36,9 @@ module.exports = {
         lightSuccess: "#24c278",
         veryLightSuccess: "#68e3aa",
       }, // close colors
+      fontFamily: {
+        montserrat: ['"Montserrat"', ...defaultTheme.fontFamily.sans],
+      }, // close font family
     }, // close extend
   }, // close theme
   plugins: [require("tw-elements/dist/plugin")], // close plugins

@@ -7,6 +7,7 @@ import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
+import FormTest from "../src/components/FormTest";
 
 // Component
 const Home = ({ currSession, pageDetails, siteInfo }) => {
@@ -22,6 +23,11 @@ const Home = ({ currSession, pageDetails, siteInfo }) => {
     >
       {/** SECTION HERO */}
       {/* <p className="text-4xl">Heading new</p> */}
+
+      {/** FORM */}
+      <div className="container mx-auto p-3 my-10 rounded-lg shadow-lg">
+        <FormTest />
+      </div>
     </PageContent>
   ); // close return
 }; // close component

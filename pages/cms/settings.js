@@ -9,12 +9,12 @@ import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
 import { handleSiteInfo } from "../../src/config/functions";
 
 // Component
-const Cms = ({ currSession, siteInfo }) => {
+const Settings = ({ currSession, siteInfo }) => {
   // Define variables
-  const pageTitle = "Dashboard";
+  const pageTitle = "Settings";
 
   // Debug
-  //console.log("Debug Cms: ");
+  //console.log("Debug settings: ");
 
   // Return component
   return (
@@ -40,7 +40,7 @@ const Cms = ({ currSession, siteInfo }) => {
 }; // close component
 
 // Export
-export default Cms;
+export default Settings;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {

@@ -1,6 +1,6 @@
 // Import resources
-import React, { useState } from "react";
-import { AiFillShopping } from "react-icons/ai";
+import React from "react";
+import { useRecoilState } from "recoil";
 
 // Import custom files
 import twStyles from "../styles/twStyles";
@@ -11,14 +11,15 @@ import ProfileIcon from "./ProfileIcon";
 import ToggleMenuBtn from "./ToggleMenuBtn";
 import CustomButton from "./CustomButton";
 import { navLinks } from "../config/data";
+import { toggleMenuAtom } from "../recoil/atoms";
 
 // Component
 const PageHeader = ({ isCms, userID, userAvatar }) => {
-  // Define state
-  const [toggleMenu, setToggleMenu] = useState(false);
-
   // Define app settings
   const { currPath, isBlogSlug } = useAppSettings();
+
+  // Define state
+  const [toggleMenu, setToggleMenu] = useRecoilState(toggleMenuAtom);
 
   // Debug
   //console.log("Debug pageHeader: ", navLinks?.length);
