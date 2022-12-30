@@ -8,9 +8,9 @@ import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
 
 // Component
-const Home = ({ currSession, pageDetails, siteInfo }) => {
+const BlankPage = ({ currSession, pageDetails, siteInfo }) => {
   // Debug
-  //console.log("Debug home: ", currSession);
+  //console.log("Debug blankPage: ", currSession);
 
   // Return component
   return (
@@ -21,7 +21,7 @@ const Home = ({ currSession, pageDetails, siteInfo }) => {
 }; // close component
 
 // Export
-export default Home;
+export default BlankPage;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {
