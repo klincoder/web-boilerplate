@@ -1,5 +1,5 @@
 // Import resources
-import * as firebaseAdmin from "firebase-admin";
+import * as fireAdmin from "firebase-admin";
 
 // Import custom files
 import { isProdEnv } from "./data";
@@ -31,9 +31,9 @@ const prodConfig = {
 const finalConfig = isProdEnv ? prodConfig : devConfig;
 
 // INITIALIZE APP
-if (!firebaseAdmin.apps.length) {
-  firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(finalConfig),
+if (!fireAdmin.apps.length) {
+  fireAdmin.initializeApp({
+    credential: fireAdmin.credential.cert(finalConfig),
     databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
   });
 } // close if
@@ -46,7 +46,7 @@ const handleVerifyIdToken = async (ftoken) => {
   // Try catch
   try {
     // Verify id token
-    const verifyToken = await firebaseAdmin.auth().verifyIdToken(ftoken);
+    const verifyToken = await fireAdmin.auth().verifyIdToken(ftoken);
     // Get user info from db
     const userRef = doc(fireDB, "users", verifyToken?.uid);
     const userSnap = await getDoc(userRef);
@@ -77,4 +77,4 @@ const handleVerifyIdToken = async (ftoken) => {
 }; // close fxn
 
 // Export
-export { firebaseAdmin, handleVerifyIdToken };
+export { fireAdmin, handleVerifyIdToken };

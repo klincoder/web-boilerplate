@@ -6,7 +6,7 @@ import twStyles from "../styles/twStyles";
 import useAppSettings from "../hooks/useAppSettings";
 
 // Component
-const CustomChip = () => {
+const CustomChip = ({ isSolid, title, onClick, styleChip, ...rest }) => {
   // Define app settings
   const { isMounted } = useAppSettings();
 
@@ -15,8 +15,14 @@ const CustomChip = () => {
 
   // Return component
   return (
-    <span class="px-4 py-2 rounded-full border border-gray-300 text-gray-500 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease">
-      Text
+    <span
+      {...rest}
+      onClick={onClick}
+      className={`${styleChip} 
+      ${isSolid ? "bg-primary text-white" : "bg-white border-gray-400"} 
+      flex text-sm px-3 py-1 rounded-full border align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease`}
+    >
+      {title || "Title"}
     </span>
   ); // close return
 }; // close component

@@ -886,3 +886,30 @@ export const handleSortObjArrStep = (objArr) => {
   const result = newArr?.sort((a, b) => (a?.step > b?.step ? 1 : -1));
   return result;
 }; // close fxn
+
+// HANDLE SEND VERIFY LINK
+export const handleSendVerifyLink = async (
+  toName,
+  toEmail,
+  api,
+  fromName,
+  fromEmail
+) => {
+  // If empty args, return
+  if (!toName || !toEmail || !api || !fromName) return;
+  //console.log("Debug testBtn: ", { toName, toEmail, api, fromName, fromEmail });
+  // Return and await response
+  return await axios({
+    method: "POST",
+    url: `/api/${api}`,
+    data: {
+      toName: toName,
+      toEmail: toEmail,
+      fromName: fromName || "Klincoder",
+      fromEmail: fromEmail || "support@klincoder.com",
+      footerName: `${fromName} Team`,
+    },
+  }).then((apiRes) => {
+    return apiRes;
+  }); // close return
+}; // close fxn

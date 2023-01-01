@@ -80,10 +80,8 @@ const CustomInput = ({
               )}
             </div>
 
-            {/** Helper msg */}
-            {helperText && (
-              <CustomHelperText visible={helperText} title={helperText} />
-            )}
+            {/** Helper text */}
+            <CustomHelperText visible={helperText} title={helperText} />
 
             {/** Error msg */}
             <CustomHelperText isError visible={error} title={error?.message} />

@@ -27,7 +27,6 @@ const useAuthState = () => {
   const allUsers = useRecoilValue(allUsersAtom);
 
   // Define variables
-  let testFxn;
 
   // FUNCTIONS
   // HANDLE EMAIL EXIST
@@ -60,7 +59,7 @@ const useAuthState = () => {
   }; // close fxn
 
   // HANDLE VERIFY WALLET TRANSACTION
-  const handleVerifyWalletTranx = (amt) => {
+  const handleVerifyWalletTranx = (user, amt) => {
     // If empty args, return
     if (typeof amt !== "number") return;
     const isValidAmt = user?.walletBal > amt ? true : false;

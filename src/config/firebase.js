@@ -78,30 +78,30 @@ const fireDB = getFirestore(app);
 const fireAuth = getAuth(app);
 const fireStorage = getStorage(app);
 
-// FUNCTIONS
-// HANDLE GET DOCS
-const handleGetDoc = async (docRef, data) => {
-  // If empty args, return
-  if (!docRef || !data) return;
-  const pageRef = doc(fireDB, "app_settings", "page_home");
-  const pageSnap = await getDoc(pageRef);
-  const pageData = pageSnap.data();
-  return await setDoc(docRef, data);
-}; // close fxn
+// // FUNCTIONS
+// // HANDLE GET DOCS
+// const handleGetDoc = async (docRef, data) => {
+//   // If empty args, return
+//   if (!docRef || !data) return;
+//   const pageRef = doc(fireDB, "app_settings", "page_home");
+//   const pageSnap = await getDoc(pageRef);
+//   const pageData = pageSnap.data();
+//   return await setDoc(docRef, data);
+// }; // close fxn
 
-// HANDLE SET DOC
-const handleSetDoc = async (docRef, data) => {
-  // If empty args, return
-  if (!docRef || !data) return;
-  return await setDoc(docRef, data);
-}; // close fxn
+// // HANDLE SET DOC
+// const handleSetDoc = async (docRef, data) => {
+//   // If empty args, return
+//   if (!docRef || !data) return;
+//   return await setDoc(docRef, data);
+// }; // close fxn
 
-// HANDLE MERGE DOC
-const handleMergeDoc = async (docRef, data) => {
-  // If empty args, return
-  if (!docRef || !data) return;
-  return await setDoc(docRef, data, { merge: true });
-}; // close fxn
+// // HANDLE MERGE DOC
+// const handleMergeDoc = async (docRef, data) => {
+//   // If empty args, return
+//   if (!docRef || !data) return;
+//   return await setDoc(docRef, data, { merge: true });
+// }; // close fxn
 
 // Export
 export {

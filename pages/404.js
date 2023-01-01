@@ -38,22 +38,22 @@ const PageError = ({ currSession, pageDetails, siteInfo }) => {
 // Export
 export default PageError;
 
-// GET SEVERSIDE PROPS
-export const getServerSideProps = async (context) => {
-  // Get session
-  const ftoken = nookies.get(context)?.ftoken;
-  const session = await handleVerifyIdToken(ftoken);
+// // GET SEVERSIDE PROPS
+// export const getServerSideProps = async (context) => {
+//   // Get session
+//   const ftoken = nookies.get(context)?.ftoken;
+//   const session = await handleVerifyIdToken(ftoken);
 
-  // Define data
-  const pageData = await handleAppSettings("page_404");
-  const siteInfo = await handleSiteInfo();
+//   // Define data
+//   const pageData = await handleAppSettings("page_404");
+//   const siteInfo = await handleSiteInfo();
 
-  // Return props
-  return {
-    props: {
-      currSession: session || null,
-      pageDetails: pageData || null,
-      siteInfo: siteInfo || null,
-    }, // close props
-  }; // close return
-}; // close getServerSide
+//   // Return props
+//   return {
+//     props: {
+//       currSession: session || null,
+//       pageDetails: pageData || null,
+//       siteInfo: siteInfo || null,
+//     }, // close props
+//   }; // close return
+// }; // close getServerSide

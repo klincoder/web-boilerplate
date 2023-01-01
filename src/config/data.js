@@ -43,6 +43,21 @@ export const fileExtensions = ["jpg", "jpeg", "gif", "png"];
 // OTP DEFAULT TIMER
 export const otpDefaultTimer = 59;
 
+// ACTION SETTINGS
+export const actionSettings = {
+  url: `${baseUrl}`,
+  iOS: {
+    bundleId: "com.example.klincoder",
+  },
+  android: {
+    packageName: "com.example.klincoder",
+    installApp: true,
+    minimumVersion: "12",
+  },
+  //handleCodeInApp: false,
+  //dynamicLinkDomain: 'custom.page.link'
+};
+
 // APP IMAGES
 export const appImages = {
   general: "https://placehold.co/600x400.png",
@@ -61,6 +76,8 @@ export const appRegex = {
 
 // API ROUTES
 export const apiRoutes = {
+  verifyEmail: "mailjet-verify-email",
+  resetEmail: "mailjet-reset-email",
   otp: "mailjet-otp",
   welcome: "mailjet-welcome",
   login: "mailjet-login",
@@ -94,6 +111,8 @@ export const alertMsg = {
   passRecoveryErr: "Failed to recover password",
   logoutSucc: "Logout successful",
   linkSentSucc: "We sent your confirmation link. Check your inbox or spam.",
+  verifyEmailSucc: "Your email address was verified.",
+  authErr: "Authentication failed. Please contact support.",
 };
 
 // NAV LINKS

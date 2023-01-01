@@ -19,7 +19,7 @@ import { fireAuth, onIdTokenChanged } from "../src/config/firebase";
 
 // Alert provider options
 const alertProviderOpt = {
-  position: positions.TOP_RIGHT,
+  position: positions.TOP_LEFT,
   timeout: 5000,
   offset: "40px",
   transition: transitions.SCALE,

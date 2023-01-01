@@ -11,6 +11,11 @@ import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 import CustomTextarea from "./CustomTextarea";
 import CustomRadio from "./CustomRadio";
+import CustomCheckbox from "./CustomCheckbox";
+import CustomSwitch from "./CustomSwitch";
+import CustomSelect from "./CustomSelect";
+import CustomSpinner from "./CustomSpinner";
+import { handleAddItemToArr, handleAddItemToObjArr } from "../config/functions";
 
 // Component
 const FormTest = () => {
@@ -27,13 +32,12 @@ const FormTest = () => {
     emailAddr: "",
     pass: "",
     message: "",
-    gender1: "",
-    gender2: "",
+    gender: "",
     courses: [],
     allowPush: false,
+    location: [],
+    images: [],
     dateOfBirth: "",
-    timeOfBirth: "",
-    paymentMethod: "",
   };
 
   // Validate
@@ -42,15 +46,15 @@ const FormTest = () => {
     emailAddr: Yup.string().required("Required").email("Invalid email address"),
     pass: Yup.string().required("Required").min(8, "Too short"),
     message: Yup.string().required("Required").min(5, "Too short"),
-    gender1: Yup.string().required("Required"),
-    //gender2: Yup.object().required("Required").nullable(),
-    // allowPush: Yup.boolean().oneOf([true], "Must be selected"),
+    gender: Yup.string().required("Required"),
+    courses: Yup.array()
+      .required("Required")
+      .min(1, "At least 1")
+      .max(3, "At most 3"),
+    allowPush: Yup.boolean().oneOf([true], "Required"),
+    location: Yup.object().required("Required").nullable(),
     // dateOfBirth: Yup.string().required("Required"),
     // paymentMethod: Yup.object().required("Required").nullable(),
-    // courses: Yup.array()
-    //   .required("Required")
-    //   .min(1, "At least 1")
-    //   .max(3, "At most 3"),
   });
 
   // Form state
@@ -59,6 +63,8 @@ const FormTest = () => {
     formState: { errors, isValid, isSubmitting },
     handleSubmit,
     watch,
+    setValue,
+    trigger,
     reset,
   } = useForm({
     mode: "all",
@@ -70,18 +76,21 @@ const FormTest = () => {
   const formVal = watch();
 
   // Debug
-  //console.log("Debug formTest: ", formVal?.gender1);
+  //console.log("Debug formTest: ", formVal);
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values) => {
     // Debug
-    console.log("Debug submitForm: ", values?.gender1);
+    console.log("Debug submitForm: ", values);
   }; // close fxn
 
   // Return component
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
+      {/** Debug */}
+      {/* {console.log("Debug formValues: ",)} */}
+
       {/** Heading */}
       <h3 className="mb-3">Test Form</h3>
 
@@ -109,29 +118,61 @@ const FormTest = () => {
       {/** Message */}
       <CustomTextarea name="message" control={control} label="Message" />
 
-      {/** Gender 1 */}
+      {/** Gender */}
       <CustomRadio
-        name="gender1"
-        control={control}
-        label="Gender 1"
+        name="gender"
+        label="Gender"
         data={["Male", "Female"]}
-        value="Female"
-        // data={[
-        //   {id: "123", title: "Male",},
-        // ]}
+        value={formVal?.gender}
+        errMsg={errors?.gender?.message}
+        onClick={(val) => {
+          setValue("gender", val);
+          trigger("gender");
+        }}
       />
 
-      {/** Checkbox */}
+      {/** Courses */}
+      <CustomCheckbox
+        name="courses"
+        label="Courses"
+        data={["React", "React Native"]}
+        value={formVal?.courses}
+        errMsg={errors?.courses?.message}
+        onClick={(val) => {
+          //const newObjArr = handleAddItemToObjArr(formVal?.courses, val?.id, val);
+          const newArr = handleAddItemToArr(formVal?.courses, val);
+          setValue("courses", newArr);
+          trigger("courses");
+        }}
+      />
+
+      {/** Allow push */}
+      <CustomSwitch
+        name="allowPush"
+        control={control}
+        label="Notification Settings"
+        data={["SMS"]}
+      />
 
       {/** Select */}
-
-      {/** File picker */}
+      <CustomSelect
+        name="location"
+        control={control}
+        label="Location"
+        data={[
+          { label: "Chocolate", value: "chocolate" },
+          { label: "Strawberry", value: "strawberry" },
+          { label: "Vanilla", value: "vanilla" },
+        ]}
+      />
 
       {/** Date picker */}
 
+      {/** File picker */}
+
       {/** Submit */}
       <CustomButton isNormal type="submit" disabled={!isValid || isSubmitting}>
-        Submit
+        Submit {isSubmitting && <CustomSpinner />}
       </CustomButton>
     </form>
   ); // close return

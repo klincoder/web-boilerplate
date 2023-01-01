@@ -52,7 +52,7 @@ const ScrollUpBtn = () => {
           isNormal
           id="scrollUpBtn"
           onClick={handleScrollUp}
-          btnClass="bottom-5 right-5 fixed p-4 bg-primary text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-lightPrimary hover:shadow-lg focus:bg-lightPrimary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out"
+          styleBtn="bottom-5 right-5 fixed p-4 bg-primary text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-lightPrimary hover:shadow-lg focus:bg-lightPrimary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg transition duration-150 ease-in-out"
         >
           <FaArrowUp />
         </CustomButton>

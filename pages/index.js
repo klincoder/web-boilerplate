@@ -5,14 +5,20 @@ import nookies from "nookies";
 // Import custom files
 import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
-import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
-import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
+import CustomButton from "../src/components/CustomButton";
 import FormTest from "../src/components/FormTest";
+import { apiRoutes } from "../src/config/data";
+import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
+import {
+  handleAppSettings,
+  handleSendVerifyLink,
+  handleSiteInfo,
+} from "../src/config/functions";
 
 // Component
 const Home = ({ currSession, pageDetails, siteInfo }) => {
   // Debug
-  //console.log("Debug home: ", currSession);
+  //console.log("Debug home: ",);
 
   // Return component
   return (
@@ -22,12 +28,23 @@ const Home = ({ currSession, pageDetails, siteInfo }) => {
       siteInfo={siteInfo}
     >
       {/** SECTION HERO */}
-      {/* <p className="text-4xl">Heading new</p> */}
-
-      {/** FORM */}
-      <div className="container mx-auto p-3 my-10 rounded-lg shadow-lg">
-        <FormTest />
-      </div>
+      {/** TEST */}
+      {/* <div className="container mx-auto p-3 my-10 rounded-lg shadow-lg">
+        <CustomButton
+          isNormal
+          onClick={async () => {
+            const result = await handleSendVerifyLink(
+              "chinaemeremtech",
+              "chinaemeremtech@gmail.com",
+              apiRoutes?.verifyEmail,
+              siteInfo?.name
+            );
+            console.log("Debug testBtn: ", result?.data);
+          }}
+        >
+          TEST BUTTON
+        </CustomButton>
+      </div> */}
     </PageContent>
   ); // close return
 }; // close component

@@ -9,7 +9,7 @@ import CustomHelperText from "./CustomHelperText";
 import { handleItemIsInArr, handleItemIsInObjArr } from "../config/functions";
 
 // Component
-const CustomRadio = ({
+const CustomCheckbox = ({
   isNormal,
   isObjArr,
   name,
@@ -17,6 +17,7 @@ const CustomRadio = ({
   label,
   value,
   data,
+  title,
   onClick,
   helperText,
   errMsg,
@@ -25,7 +26,7 @@ const CustomRadio = ({
   ...rest
 }) => {
   // Debug
-  //console.log("Debug customRadio: ",)
+  //console.log("Debug customCheckbox: ",)
 
   // Return component
   return (
@@ -45,7 +46,6 @@ const CustomRadio = ({
         <Controller
           name={name}
           control={control}
-          defaultValue={value}
           render={({
             field: { value, ref, onChange, onBlur },
             fieldState: { error },
@@ -57,27 +57,26 @@ const CustomRadio = ({
                   key={item + index}
                   className="form-check form-check-inline"
                 >
-                  {/** Radio input */}
                   <input
                     {...rest}
                     ref={ref}
                     id={name + index}
                     name={name}
-                    type="radio"
+                    type="checkbox"
                     value={item}
                     onChange={onChange}
                     onBlur={onBlur}
                     className={`
                       ${styleInput} ${error ? "is-invalid" : ""} 
-                      form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-primary checked:border-primary checked:disabled:bg-lightPrimary disabled:bg-gray-300 disabled:pointer-events-none disabled:opacity-60 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer
+                      form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary checked:disabled:bg-lightPrimary disabled:bg-gray-300 disabled:pointer-events-none disabled:opacity-60 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer
                     `}
                   />
-                  {/** Radio label */}
+                  {/** Checkbox label */}
                   <label
                     htmlFor={name + index}
                     className="form-check-label inline-block text-gray-800 cursor-pointer text-sm"
                   >
-                    {item}
+                    {title}
                   </label>
                 </div>
               ))}
@@ -131,4 +130,4 @@ const CustomRadio = ({
 }; // close component
 
 // Export
-export default CustomRadio;
+export default CustomCheckbox;
