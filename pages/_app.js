@@ -1,58 +1,28 @@
 // Import resources
 import React, { useEffect } from "react";
-import nookies from "nookies";
-import AlertTemplate from "react-alert-template-basic";
 import NextNProgress from "nextjs-progressbar";
 import Script from "next/script";
-import { RecoilRoot } from "recoil";
 import { useRouter } from "next/router";
-import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import { RecoilRoot } from "recoil";
+import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
 
 // Import custom files
 import "../src/styles/globals.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import twStyles from "../src/styles/twStyles";
+import * as gtag from "../src/config/gtag";
 import GetDatabaseContent from "../src/components/GetDatabaseContent";
 import ScrollUpBtn from "../src/components/ScrollUpBtn";
-import * as gtag from "../src/config/gtag";
 import { isProdEnv } from "../src/config/data";
-import { fireAuth, onIdTokenChanged } from "../src/config/firebase";
-
-// Alert provider options
-const alertProviderOpt = {
-  position: positions.TOP_LEFT,
-  timeout: 5000,
-  offset: "40px",
-  transition: transitions.SCALE,
-};
 
 // Component
-const App = ({ Component, pageProps }) => {
+const App = ({ Component, pageProps: { session, ...pageProps } }) => {
   // Define router
   const router = useRouter();
 
   // Debug
   //console.log("Debug app: ",)
-
-  // SIDE EFFECTS
-  // LISTEN TO AUTH STATE
-  useEffect(() => {
-    // On mount
-    const unsubscribe = onIdTokenChanged(fireAuth, async (currUser) => {
-      // Get token
-      const token = await currUser?.getIdToken(true);
-      // If token
-      if (token) {
-        nookies.set(undefined, "ftoken", token, { path: "/" });
-      } else {
-        nookies.set(undefined, "ftoken", "", { path: "/" });
-        //console.log("Debug app: ", currUser);
-      } // close if
-    }); // close unsubscribe
-    // Clean up
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   // SIDE EFFECTS
   // GA TRACKING
@@ -84,18 +54,32 @@ const App = ({ Component, pageProps }) => {
         options={{ showSpinner: false }}
       />
 
+      {/** TOAST CONTAINER */}
+      <ToastContainer
+        theme="light"
+        position="top-right"
+        rtl={false}
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick={true}
+        pauseOnFocusLoss={true}
+        draggable={true}
+        pauseOnHover={true}
+      />
+
       {/** APP BODY */}
       <RecoilRoot>
-        <AlertProvider template={AlertTemplate} {...alertProviderOpt}>
-          {/** Get database content */}
-          <GetDatabaseContent />
+        {/* <SessionProvider session={session}> */}
+        {/** Get database content */}
+        <GetDatabaseContent />
 
-          {/** Main component */}
-          <Component {...pageProps} />
+        {/** Main component */}
+        <Component {...pageProps} />
 
-          {/** Scroll up button */}
-          <ScrollUpBtn />
-        </AlertProvider>
+        {/** Scroll up button */}
+        <ScrollUpBtn />
+        {/* </SessionProvider> */}
       </RecoilRoot>
 
       {/** CUSTOM JS SCRIPTS */}

@@ -1,29 +1,22 @@
 // Import resources
 import React from "react";
-import nookies from "nookies";
+import { getSession } from "next-auth/react";
 
 // Import custom files
 import twStyles from "../../src/styles/twStyles";
 import PageContent from "../../src/components/PageContent";
-import { handleVerifyIdToken } from "../../src/config/firebaseAdmin";
-import { handleSiteInfo } from "../../src/config/functions";
 
 // Component
-const Cms = ({ currSession, siteInfo }) => {
+const Cms = ({ currSession }) => {
   // Define variables
   const pageTitle = "Dashboard";
 
   // Debug
-  //console.log("Debug Cms: ");
+  //console.log("Debug cms: ", currSession);
 
   // Return component
   return (
-    <PageContent
-      isCms
-      currSession={currSession}
-      title={pageTitle}
-      siteInfo={siteInfo}
-    >
+    <PageContent isCms currSession={currSession} title={pageTitle}>
       {/** HEADING */}
       <div className="flex items-center justify-between mb-3">
         <h4>{pageTitle}</h4>
@@ -45,12 +38,7 @@ export default Cms;
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {
   // Get session
-  const ftoken = nookies.get(context)?.ftoken;
-  const session = await handleVerifyIdToken(ftoken);
-
-  // Get data
-  const siteInfo = await handleSiteInfo();
-
+  const session = await getSession(context);
   // If no session, redirect
   if (!session) {
     return {
@@ -65,7 +53,6 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       currSession: session || null,
-      siteInfo: siteInfo || null,
     }, // close props
   }; // close return
 }; // close getServerSide

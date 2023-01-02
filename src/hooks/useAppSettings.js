@@ -1,7 +1,6 @@
 // Import resources
 import { useRef } from "react";
 import { useRouter } from "next/router";
-import { useAlert } from "react-alert";
 
 // Import custom files
 import { handleDayJsFormat } from "../config/functions";
@@ -14,18 +13,15 @@ const useAppSettings = () => {
   // Define router
   const router = useRouter();
 
-  // Define alert
-  const alert = useAlert();
-
   // Define variables
   const todaysDate = handleDayJsFormat();
   const todaysDate1 = handleDayJsFormat(todaysDate, 1);
   const todaysDate2 = handleDayJsFormat(todaysDate, 2);
-  const currPath = router.pathname;
-  const routeQuery = router.query;
+  const currPath = router?.pathname;
+  const routeQuery = router?.query;
   const isHomePath = currPath === "/";
   const isBlogSlug = currPath === "/blog/[slug]";
-  const isRouteQuery = Object.keys(routeQuery)?.length > 0;
+  const isRouteQuery = Object?.keys(routeQuery)?.length > 0;
 
   // FUNCTIONS
   // HANDLE
@@ -34,7 +30,6 @@ const useAppSettings = () => {
   return {
     isMounted,
     router,
-    alert,
     todaysDate,
     todaysDate1,
     todaysDate2,

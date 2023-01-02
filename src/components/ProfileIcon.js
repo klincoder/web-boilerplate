@@ -27,7 +27,7 @@ const ProfileIcon = ({ userAvatar }) => {
         styleBtn="dropdown-toggle flex items-center hidden-arrow"
       >
         <CustomImage
-          image={userAvatar || appImages?.logo}
+          image={userAvatar || appImages?.avatar}
           styleImage="rounded-full object-cover"
           alt="avatar"
           width={25}

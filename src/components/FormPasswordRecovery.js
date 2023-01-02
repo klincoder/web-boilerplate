@@ -7,6 +7,8 @@ import * as Yup from "yup";
 // Import custom files
 import twStyles from "../styles/twStyles";
 import useAppSettings from "../hooks/useAppSettings";
+import useAuthState from "../hooks/useAuthState";
+import useAlertState from "../hooks/useAlertState";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
@@ -17,6 +19,7 @@ const FormPasswordRecovery = () => {
   const { isMounted } = useAppSettings();
 
   // Define state
+  const { handleEmailExist } = useAuthState();
   const [showPass, setShowPass] = useState(false);
 
   // FORM CONFIG

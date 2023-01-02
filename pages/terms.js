@@ -1,12 +1,11 @@
 // Import resources
 import React from "react";
-import nookies from "nookies";
+import { getSession } from "next-auth/react";
 
 // Import custom files
 import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import CustomDivider from "../src/components/CustomDivider";
-import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
 import {
   handleAppSettings,
   handleHtmlParser,
@@ -53,21 +52,20 @@ const Terms = ({ currSession, pageDetails, siteInfo }) => {
 export default Terms;
 
 // GET SEVERSIDE PROPS
-export const getServerSideProps = async (context) => {
-  // Get session
-  const ftoken = nookies.get(context)?.ftoken;
-  const session = await handleVerifyIdToken(ftoken);
+// export const getServerSideProps = async (context) => {
+//   // Get session
+//   const session = await getSession(context);
 
-  // Define data
-  const pageData = await handleAppSettings("page_terms");
-  const siteInfo = await handleSiteInfo();
+//   // Get data
+//   const pageData = await handleAppSettings("page_terms");
+//   const siteInfo = await handleSiteInfo();
 
-  // Return props
-  return {
-    props: {
-      currSession: session || null,
-      pageDetails: pageData || null,
-      siteInfo: siteInfo || null,
-    }, // close props
-  }; // close return
-}; // close getServerSide
+//   // Return props
+//   return {
+//     props: {
+//       currSession: session || null,
+//       pageDetails: pageData || null,
+//       siteInfo: siteInfo || null,
+//     }, // close props
+//   }; // close return
+// }; // close getServerSide

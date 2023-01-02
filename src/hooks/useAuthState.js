@@ -1,8 +1,10 @@
 // Import resources
 import { useRecoilValue } from "recoil";
+import { signOut } from "next-auth/react";
 
 // Import custom files
 import useAppSettings from "./useAppSettings";
+import useAlertState from "./useAlertState";
 import { allUsersAtom } from "../recoil/atoms";
 import { handleSendEmail } from "../config/functions";
 import { alertMsg, apiRoutes } from "../config/data";
@@ -11,9 +13,9 @@ import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   fireAuth,
+  signOut as signOutToken,
   sendEmailVerification,
   signInWithEmailAndPassword,
-  signOut,
   updateProfile,
   verifyPasswordResetCode,
 } from "../config/firebase";
@@ -21,50 +23,26 @@ import {
 // Component
 const useAuthState = () => {
   // Define app settings
-  const { alert, router, todaysDate2 } = useAppSettings();
+  const { router, todaysDate2 } = useAppSettings();
 
   // Define state
   const allUsers = useRecoilValue(allUsersAtom);
 
-  // Define variables
+  // Define alert
+  const alert = useAlertState();
 
   // FUNCTIONS
-  // HANDLE EMAIL EXIST
-  const handleEmailExist = (emailAddr) => {
+  // HANDLE USER EXIST
+  const handleUserExist = (emailAddr) => {
     // If empty args, return
     if (!emailAddr) return;
     // Filter users
-    const filterData = allUsers?.filter((i) => i?.emailAddress === emailAddr);
-    const data = filterData[0];
-    const isValid = filterData?.length > 0;
-    return { isValid, data };
-  }; // close fxn
-
-  // HANDLE USERNAME EXIST
-  const handleUsernameExist = (username) => {
-    // If empty args, return
-    if (!username) return;
-    // Filter users
-    const filterUsers = allUsers?.filter((i) => i?.username === username);
-    const data = filterUsers[0];
-    const isValid = filterUsers?.length > 0;
-    return { isValid, data };
-  }; // close fxn
-
-  // HANDLE IS SUPER ADMIN
-  const handleIsSuperAdmin = (username) => {
-    // If empty args, return
-    if (!username) return;
-    return username?.toLowerCase() === "klincoder";
-  }; // close fxn
-
-  // HANDLE VERIFY WALLET TRANSACTION
-  const handleVerifyWalletTranx = (user, amt) => {
-    // If empty args, return
-    if (typeof amt !== "number") return;
-    const isValidAmt = user?.walletBal > amt ? true : false;
-    const result = userInfo?.isPositiveWallet && isValidAmt ? true : false;
-    return result;
+    const filterData = allUsers?.filter(
+      (i) => i?.email_address === emailAddr || i?.username === emailAddr
+    );
+    const data = filterData?.[0];
+    const valid = filterData?.length > 0;
+    return { valid, data };
   }; // close fxn
 
   // HANDLE REGISTER
@@ -74,7 +52,7 @@ const useAuthState = () => {
     return await createUserWithEmailAndPassword(fireAuth, email, pass).then(
       async (res) => {
         // Send verification link
-        await sendEmailVerification(res.user, actionSettings);
+        //await sendEmailVerification(res.user, actionSettings);
         await updateProfile(res?.user, { displayName: username });
       }
     ); // close return
@@ -90,10 +68,17 @@ const useAuthState = () => {
   // HANDLE LOGOUT
   const handleLogout = async () => {
     // Return await response
-    return await signOut(fireAuth).then(() => {
-      alert.success(alertMsg?.logoutSucc);
-      router.replace("/");
-    }); // close return
+    return await signOut({ redirect: false, callbackUrl: "/" }).then(
+      async (res) => {
+        await signOutToken(fireAuth);
+        alert.success(alertMsg?.logoutSucc);
+        router.replace(res?.url);
+      }
+    );
+    // return await signOut(fireAuth).then(() => {
+    //   alert.success(alertMsg?.logoutSucc);
+    //   router.replace("/");
+    // }); // close return
   }; // close fxn
 
   // HANDLE SEND EMAIL VERIFY LINK
@@ -129,8 +114,8 @@ const useAuthState = () => {
     return await verifyPasswordResetCode(fireAuth, actionCode).then(
       async (email) => {
         // Define variables
-        const emailExist = handleEmailExist(email);
-        const userInfo = emailExist?.data;
+        const userExist = handleUserExist(email);
+        const userInfo = userExist?.data;
         // Confirm new password (save to firebase auth)
         await confirmPasswordReset(fireAuth, actionCode, newPass).then(
           async () => {
@@ -149,13 +134,28 @@ const useAuthState = () => {
     ); // close return
   }; // close fxn
 
+  // HANDLE IS SUPER ADMIN
+  const handleIsSuperAdmin = (username) => {
+    // If empty args, return
+    if (!username) return;
+    return username?.toLowerCase() === "klincoder";
+  }; // close fxn
+
+  // HANDLE VERIFY WALLET TRANSACTION
+  const handleVerifyWalletTranx = (user, amt) => {
+    // If empty args, return
+    if (typeof amt !== "number") return;
+    const isValidAmt = user?.walletBal > amt ? true : false;
+    const result = userInfo?.isPositiveWallet && isValidAmt ? true : false;
+    return result;
+  }; // close fxn
+
   // Return component
   return {
+    handleUserExist,
     handleRegister,
     handleLogin,
     handleLogout,
-    handleEmailExist,
-    handleUsernameExist,
     handleIsSuperAdmin,
     handleSendEmailVerifyLink,
     handleSendPassResetLink,

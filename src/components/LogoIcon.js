@@ -15,7 +15,13 @@ const LogoIcon = ({ ...rest }) => {
   // Return component
   return (
     <CustomButton {...rest} isLink href="/">
-      <CustomImage image={appImages?.logo} alt="logo" width={60} height={60} />
+      <CustomImage
+        image={appImages?.logo}
+        alt="logo"
+        width={60}
+        height={60}
+        priority
+      />
     </CustomButton>
   ); // close return
 }; // close component

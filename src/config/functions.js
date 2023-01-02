@@ -862,10 +862,10 @@ export const handleProdBoughtNames = (objArr) => {
   return result;
 }; // close fxn
 
-// HANDLE IS VALID URL
-export const handleIsValidUrl = (str) => {
+// HANDLE IS URL
+export const handleIsUrl = (val) => {
   // If empty args, return
-  if (!str) return false;
+  if (!val) return false;
   const pattern = RegExp(
     "^(https?:\\/\\/)?" + // protocol
       "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
@@ -875,7 +875,7 @@ export const handleIsValidUrl = (str) => {
       "(\\#[-a-z\\d_]*)?$", // fragment locator
     "i"
   );
-  return pattern?.test(str);
+  return pattern?.test(val);
 }; // close fxn
 
 // HANDLE SORT OBJARR BY STEP
@@ -887,29 +887,24 @@ export const handleSortObjArrStep = (objArr) => {
   return result;
 }; // close fxn
 
-// HANDLE SEND VERIFY LINK
-export const handleSendVerifyLink = async (
-  toName,
-  toEmail,
-  api,
-  fromName,
-  fromEmail
-) => {
+// HANDLE FIREADMIN ACTIONS
+export const handleFireAdminAction = async (email, action) => {
   // If empty args, return
-  if (!toName || !toEmail || !api || !fromName) return;
-  //console.log("Debug testBtn: ", { toName, toEmail, api, fromName, fromEmail });
-  // Return and await response
+  if (!email || !action) return null;
   return await axios({
     method: "POST",
-    url: `/api/${api}`,
-    data: {
-      toName: toName,
-      toEmail: toEmail,
-      fromName: fromName || "Klincoder",
-      fromEmail: fromEmail || "support@klincoder.com",
-      footerName: `${fromName} Team`,
-    },
-  }).then((apiRes) => {
-    return apiRes;
-  }); // close return
+    url: `/api/fireadmin`,
+    data: { action, email },
+  }).then((res) => {
+    return res?.data;
+  });
+}; // close fxn
+
+// HANDLE IS EMAIL
+export const handleIsEmail = (val) => {
+  // If empty args return
+  if (!val) return false;
+  const pattern =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+  return pattern.test(val);
 }; // close fxn

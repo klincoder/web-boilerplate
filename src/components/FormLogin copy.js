@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { writeStorage } from "@rehooks/local-storage";
 
 // Import custom files
 import twStyles from "../styles/twStyles";
@@ -14,20 +13,15 @@ import CustomSpinner from "./CustomSpinner";
 import useAuthState from "../hooks/useAuthState";
 import useAlertState from "../hooks/useAlertState";
 import { alertMsg, apiRoutes } from "../config/data";
-import { doc, fireAuth, fireDB, setDoc } from "../config/firebase";
-import {
-  handleGenUsername,
-  handleSendEmail,
-  handleTitleCase,
-} from "../config/functions";
+import { fireAuth } from "../config/firebase";
 
 // Component
-const FormRegister = ({ siteInfo }) => {
+const FormLogin = ({ siteInfo }) => {
   // Define app settings
-  const { todaysDate, todaysDate1, router } = useAppSettings();
+  const { todaysDate1, router, routeQuery } = useAppSettings();
 
   // Define state
-  const { handleEmailExist, handleRegister } = useAuthState();
+  const { handleEmailExist, handleLogin } = useAuthState();
   const [showPass, setShowPass] = useState(false);
 
   // Define alert
@@ -36,14 +30,12 @@ const FormRegister = ({ siteInfo }) => {
   // FORM CONFIG
   // Initial values
   const initialValues = {
-    fullName: "",
     emailAddr: "",
     pass: "",
   };
 
   // Validate
   const validate = Yup.object().shape({
-    fullName: Yup.string().required("Required").min(3, "Too short"),
     emailAddr: Yup.string().required("Required").email("Invalid email address"),
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
@@ -53,6 +45,7 @@ const FormRegister = ({ siteInfo }) => {
     control,
     formState: { isValid, isSubmitting },
     handleSubmit,
+    watch,
     reset,
   } = useForm({
     mode: "all",
@@ -60,78 +53,62 @@ const FormRegister = ({ siteInfo }) => {
     resolver: yupResolver(validate),
   }); // close form state
 
+  // Define variables
+  const formVal = watch();
+  const destUrl = routeQuery?.callbackUrl || "/cms";
+
   // Debug
-  //console.log("Debug formRegister: ",)
+  //console.log("Debug formLogin: ",)
 
   // FUNCTIONS
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values) => {
     // Define variables
-    const finalFullName = handleTitleCase(values?.fullName?.trim());
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
-    const finalUsername = handleGenUsername(finalEmail);
     const emailExist = handleEmailExist(finalEmail);
-    const emailMsg = {
-      username: finalUsername,
-      email: finalEmail,
-      date: todaysDate1,
-    };
 
-    // If emailExist
-    if (emailExist?.isValid) {
-      alert.error(alertMsg?.emailExistSucc);
+    console.log("Debug submitForm: ", emailExist?.isValid);
+
+    // If !emailExist
+    if (!emailExist?.isValid) {
+      alert.error(alertMsg?.emailExistErr);
       return;
     } // close if
 
     // Debug
-    //console.log("Debug submitForm: ", values);
+    // console.log("Debug submitForm: ", values);
 
     // Try catch
     try {
-      // Register user
-      await handleRegister(finalUsername, finalEmail, finalPass);
+      // Login user
+      await handleLogin(finalEmail, finalPass);
       // Define variables
       const currUser = fireAuth.currentUser;
-      const currUserID = currUser.uid;
+      const isEmailVerified = currUser.emailVerified === true;
 
-      // Create tempData in local storage
-      writeStorage("tempData", {
-        email: finalEmail,
-        username: finalUsername,
-        //fromName: siteInfo?.name,
-      });
-
-      // Add user to db
-      // const newUserRef = doc(fireDB, "users", currUserID);
-      // await setDoc(newUserRef, {
-      //   reg_method: "website",
-      //   avatar: "",
-      //   role: "user",
-      //   full_name: finalFullName,
-      //   email_address: finalEmail,
-      //   push_status: { app: true, email: true, sms: true },
-      //   userID: currUserID,
-      //   username: finalUsername,
-      //   dateCreated: todaysDate,
-      //   dateUpdated: todaysDate,
-      // });
-
-      // // Send admin email
-      // await handleSendEmail(
-      //   "admin",
-      //   siteInfo?.adminName,
-      //   siteInfo?.adminEmail,
-      //   emailMsg,
-      //   apiRoutes?.newUser,
-      //   siteInfo?.name
-      // );
-
-      // Alert succ
-      alert.success(alertMsg?.linkSentSucc);
-      reset();
+      // If isEmailVerified
+      if (isEmailVerified) {
+        // Send login alert
+        await handleSendEmail(
+          "user",
+          currUser?.displayName,
+          currUser?.email,
+          todaysDate1,
+          apiRoutes?.login,
+          siteInfo?.name
+        );
+        // Alert succ
+        alert.success(alertMsg?.loginSucc);
+        router.push(destUrl);
+      } else {
+        // Send email verify link
+        await handleSendEmailVerifyLink(currUser);
+        alert.info(alertMsg?.linkSentSucc);
+        reset();
+      } // close if
     } catch (err) {
-      alert.error(alertMsg?.generalErr);
+      alert.error(alertMsg?.loginErr);
       //console.log("Debug submitForm: ", err.message);
     } // close try catch
   }; // close fxn
@@ -141,9 +118,6 @@ const FormRegister = ({ siteInfo }) => {
     <form onSubmit={handleSubmit(handleSubmitForm)}>
       {/** Debug */}
       {/* {console.log("Debug formValues: ",)} */}
-
-      {/** Full name */}
-      <CustomInput name="fullName" control={control} label="Full Name" />
 
       {/** Email address */}
       <CustomInput
@@ -168,19 +142,15 @@ const FormRegister = ({ siteInfo }) => {
         Submit {isSubmitting && <CustomSpinner />}
       </CustomButton>
 
-      {/** Accept terms */}
-      <div className="text-sm text-center text-gray-500 my-2">
-        By creating an account, you accept our{" "}
-        <CustomButton isLink href="/terms" target="_blank" rel="noreferrer">
-          terms
-        </CustomButton>
-      </div>
-
       {/** MORE LINKS */}
-      {/** Login */}
-      <div className="text-center text-sm mt-4">
-        <CustomButton isLink href="/login">
-          Have an account? Login
+      <div className="flex flex-col items-center justify-center text-sm mt-4 space-y-2 md:flex-row md:justify-between md:space-y-0">
+        {/** Forgot password */}
+        <CustomButton isLink href="/password-recovery">
+          Forgot password?
+        </CustomButton>
+        {/** Register */}
+        <CustomButton isLink href="/register">
+          Register
         </CustomButton>
       </div>
     </form>
@@ -188,4 +158,4 @@ const FormRegister = ({ siteInfo }) => {
 }; // close component
 
 // Export
-export default FormRegister;
+export default FormLogin;

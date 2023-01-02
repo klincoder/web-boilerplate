@@ -1,0 +1,59 @@
+// Import resources
+import { toast } from "react-toastify";
+
+// Import custom files
+
+// Component
+const useAlertState = () => {
+  // Define variables
+  let testFxn;
+
+  // FUNCTIONS
+  // HANDLE SUCCESS
+  const success = (msg) => {
+    toast.success(msg, {
+      // theme: "light",
+      // position: "top-right",
+      // autoClose: 5000,
+      // hideProgressBar: false,
+      // closeOnClick: true,
+      // pauseOnHover: true,
+      // draggable: true,
+      // progress: undefined,
+    });
+  }; // close fxn
+
+  // HANDLE ERROR
+  const error = (msg) => {
+    toast.error(msg, {
+      // theme: "light",
+      // position: "top-right",
+      // autoClose: 5000,
+      // hideProgressBar: false,
+      // closeOnClick: true,
+      // pauseOnHover: true,
+      // draggable: true,
+      // progress: undefined,
+    });
+  }; // close fxn
+
+  // HANDLE INFO
+  const info = (msg) => {
+    toast.info(msg, {
+      // theme: "light",
+      // position: "top-right",
+      // autoClose: 5000,
+      // hideProgressBar: false,
+      // closeOnClick: true,
+      // pauseOnHover: true,
+      // draggable: true,
+      // progress: undefined,
+    });
+  }; // close fxn
+
+  // Return component
+  return { success, error, info }; // close return
+}; // close component
+
+// Export
+export default useAlertState;

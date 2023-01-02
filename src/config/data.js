@@ -46,14 +46,14 @@ export const otpDefaultTimer = 59;
 // ACTION SETTINGS
 export const actionSettings = {
   url: `${baseUrl}`,
-  iOS: {
-    bundleId: "com.example.klincoder",
-  },
-  android: {
-    packageName: "com.example.klincoder",
-    installApp: true,
-    minimumVersion: "12",
-  },
+  // iOS: {
+  //   bundleId: "com.example.klincoder",
+  // },
+  // android: {
+  //   packageName: "com.example.klincoder",
+  //   installApp: true,
+  //   minimumVersion: "12",
+  // },
   //handleCodeInApp: false,
   //dynamicLinkDomain: 'custom.page.link'
 };
@@ -94,6 +94,7 @@ export const apiRoutes = {
 
 // ALERT MSG
 export const alertMsg = {
+  isRequiredAll: "All fields are required",
   generalSucc: "Action successful",
   generalErr: "internal error. Please contact support.",
   loginSucc: "Login successful",
@@ -102,11 +103,6 @@ export const alertMsg = {
   otpSendSucc: "We sent your OTP code. Check your inbox or spam.",
   otpSendErr: "Failed to send OTP. Try again.",
   otpVerifyErr: "Invalid code",
-  emailExistSucc: "Email address already exist",
-  emailExistErr: "Invalid email address",
-  usernameExistSucc: "Username already exist",
-  usernameExistErr: "Invalid username",
-  isRequiredAll: "All fields are required",
   passRecoverySucc: "Password recovery successful",
   passRecoveryErr: "Failed to recover password",
   logoutSucc: "Logout successful",

@@ -1,33 +1,29 @@
 // Import resources
 import React from "react";
-import nookies from "nookies";
 
 // Import custom files
 import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
-import { handleVerifyIdToken } from "../src/config/firebaseAdmin";
-import { handleAppSettings, handleSiteInfo } from "../src/config/functions";
 import CustomAlertMsg from "../src/components/CustomAlertMsg";
 
 // Component
-const PageError = ({ currSession, pageDetails, siteInfo }) => {
+const PageError = () => {
+  // Define variables
+  const pageTitle = "Page Error";
+
   // Debug
   //console.log("Debug pageError: ", currSession);
 
   // Return component
   return (
-    <PageContent
-      currSession={currSession}
-      pageDetails={pageDetails}
-      siteInfo={siteInfo}
-    >
+    <PageContent title={pageTitle}>
       {/** SECTION */}
       <section className="bg-white">
         <div className="container mx-auto flex flex-col px-6 pt-14 pb-24">
           {/** COL 1 */}
           <div className="flex flex-col p-6 mb-8 rounded shadow-lg">
             {/** Alert msg */}
-            <CustomAlertMsg isIcon title="Page Error" />
+            <CustomAlertMsg isIcon type="error" title={pageTitle} />
           </div>
         </div>
       </section>
@@ -37,23 +33,3 @@ const PageError = ({ currSession, pageDetails, siteInfo }) => {
 
 // Export
 export default PageError;
-
-// // GET SEVERSIDE PROPS
-// export const getServerSideProps = async (context) => {
-//   // Get session
-//   const ftoken = nookies.get(context)?.ftoken;
-//   const session = await handleVerifyIdToken(ftoken);
-
-//   // Define data
-//   const pageData = await handleAppSettings("page_404");
-//   const siteInfo = await handleSiteInfo();
-
-//   // Return props
-//   return {
-//     props: {
-//       currSession: session || null,
-//       pageDetails: pageData || null,
-//       siteInfo: siteInfo || null,
-//     }, // close props
-//   }; // close return
-// }; // close getServerSide

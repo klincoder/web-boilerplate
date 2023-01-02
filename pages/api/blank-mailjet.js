@@ -3,8 +3,6 @@ import axios from "axios";
 
 // Import custom files
 import { actionSettings, baseUrl, mailjetEmail } from "../../src/config/data";
-import { fireAuth } from "../../src/config/firebase";
-import { fireAdmin } from "../../src/config/firebaseAdmin";
 
 // Handler
 const handler = async (req, res) => {
@@ -18,7 +16,6 @@ const handler = async (req, res) => {
     const toEmail = reqData?.toEmail;
     const fromName = reqData?.fromName;
     const fromEmail = reqData?.fromEmail;
-    //const getLink = await fireAdmin.generateEmailVerificationLink(toEmail);
 
     // Debug
     //console.log("Debug apiBlank: ",);
