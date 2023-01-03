@@ -70,16 +70,16 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
 
       {/** APP BODY */}
       <RecoilRoot>
-        {/* <SessionProvider session={session}> */}
-        {/** Get database content */}
-        <GetDatabaseContent />
+        <SessionProvider session={session}>
+          {/** Get database content */}
+          <GetDatabaseContent />
 
-        {/** Main component */}
-        <Component {...pageProps} />
+          {/** Main component */}
+          <Component {...pageProps} />
 
-        {/** Scroll up button */}
-        <ScrollUpBtn />
-        {/* </SessionProvider> */}
+          {/** Scroll up button */}
+          <ScrollUpBtn />
+        </SessionProvider>
       </RecoilRoot>
 
       {/** CUSTOM JS SCRIPTS */}

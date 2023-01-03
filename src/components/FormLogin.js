@@ -18,9 +18,9 @@ import { fireAuth, signInWithCustomToken } from "../config/firebase";
 import { handleFireAdminAction } from "../config/functions";
 
 // Component
-const FormLogin = ({ csrfToken, siteInfo }) => {
+const FormLogin = ({ csrfToken }) => {
   // Define app settings
-  const { todaysDate1, router, routeQuery, isRouteQuery } = useAppSettings();
+  const { siteInfo, todaysDate1, router, routeQuery } = useAppSettings();
 
   // Define state
   const { handleUserExist, handleLogin } = useAuthState();
@@ -75,7 +75,7 @@ const FormLogin = ({ csrfToken, siteInfo }) => {
 
     // If !userExist
     if (!userExist?.valid) {
-      alert.error(alertMsg?.loginErr);
+      alert.error(alertMsg?.userExistErr);
       return;
     } // close if
 
@@ -96,19 +96,18 @@ const FormLogin = ({ csrfToken, siteInfo }) => {
       if (res?.error) {
         alert.error(alertMsg?.loginErr);
       } else {
-        // Login into firebase with custom token
-        const token = await handleFireAdminAction(finalEmail, "custom-token");
-        await signInWithCustomToken(fireAuth, token);
-        //await handleFireAdminAction(finalEmail, "custom-token-login");
+        // Login into firebase auth with custom token
+        await handleLogin();
 
-        // Send user email
+        // Send email
         // await handleLoginEmail(
         //   userInfo?.username,
         //   userInfo?.emailAddress,
-        //   moment().format("MMM, D, YYYY [at] h:mm A")
+        //  todaysDate1
         // );
 
         // Alert succ
+        reset();
         alert.success(alertMsg?.loginSucc);
         router.push(res?.url);
       } // close if res error

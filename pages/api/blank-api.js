@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Import custom files
-import { baseUrl, mailjetEmail } from "../../src/config/data";
+import { baseUrl } from "../../src/config/data";
 
 // Handler
 const handler = async (req, res) => {
@@ -12,7 +12,8 @@ const handler = async (req, res) => {
     const reqData = req.body;
 
     // Debug
-    //console.log("Debug apiBlank: ",);
+    //console.log("Debug apiBlank: ", reqData);
+    //res.send(reqData);
 
     // Send result
     res.send("POST request works!");

@@ -1,14 +1,10 @@
 // Import resources
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcryptjs from "bcryptjs";
 
 // Import custom files
 import { isProdEnv } from "../../../src/config/data";
-import {
-  handleFireAdminAction,
-  handleIsEmail,
-} from "../../../src/config/functions";
+import { handleCompareHashVal } from "../../../src/config/functions";
 import {
   fireDB,
   collection,
@@ -16,8 +12,6 @@ import {
   where,
   query,
   getDocs,
-  signInWithCustomToken,
-  fireAuth,
 } from "../../../src/config/firebase";
 
 // Debug
@@ -40,8 +34,6 @@ export default NextAuth({
         // Try catch
         try {
           // Get db user with credentials
-          // const isEmail = handleIsEmail(credentials.email);
-          // const field = isEmail ? "email_address" : "username";
           const userRef = query(
             collection(fireDB, "users"),
             where("email_address", "==", credentials.email),
@@ -68,7 +60,7 @@ export default NextAuth({
             })?.[0];
 
             // Verify pass
-            const verifyPass = bcryptjs.compareSync(
+            const verifyPass = handleCompareHashVal(
               credentials.password,
               currUser?.password
             );
@@ -78,8 +70,6 @@ export default NextAuth({
 
             // If currUser
             if (currUser && verifyPass) {
-              // // Login into firebase with custom token
-              // await signInWithCustomToken(fireAuth, "customToken");
               return currUser;
             } else {
               return null;
@@ -88,7 +78,7 @@ export default NextAuth({
             return null;
           } // close if
         } catch (err) {
-          //console.log("Debug authorize: ", err.message);
+          console.log("Debug authorize: ", err.message);
         } // close try catch
       }, // close authorize
     }), // close credentials provider

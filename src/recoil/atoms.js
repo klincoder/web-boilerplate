@@ -56,6 +56,12 @@ export const userBlogAtom = atom({
 /**********************
   OTHERS
 **********************/
+// GENERAL SETTINGS ATOM
+export const generalSettingsAtom = atom({
+  key: "generalSettingsAtom",
+  default: null,
+});
+
 // APP SETTINGS ATOM
 export const appSettingsAtom = atom({
   key: "appSettingsAtom",

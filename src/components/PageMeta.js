@@ -4,18 +4,21 @@ import Head from "next/head";
 
 // Import custom files
 import twStyles from "../styles/twStyles";
-import { baseUrl } from "../config/data";
+import useAppSettings from "../hooks/useAppSettings";
+import { appImages, baseUrl } from "../config/data";
 
 // Component
-const PageMeta = ({
-  isNormal,
-  title,
-  description,
-  siteInfo,
-  keywords,
-  screenshot,
-  ...rest
-}) => {
+const PageMeta = ({ isNormal, pageDetails, pageTitle }) => {
+  // Define app settings
+  const { siteInfo } = useAppSettings();
+
+  // Define variables
+  const title = isNormal ? pageDetails?.title : pageTitle;
+  const description = pageDetails?.description || "";
+  const keywords = pageDetails?.keywords || "";
+  const screenshot = pageDetails?.screenshot || appImages?.logo;
+  const link = isNormal ? `${baseUrl}/${pageDetails?.slug}` : baseUrl;
+
   // Debug
   //console.log("Debug pageMeta: ",)
 
@@ -23,18 +26,12 @@ const PageMeta = ({
   return (
     <Head>
       {/** Page title */}
-      <title>{`${title} - ${siteInfo?.name}`}</title>
+      <title>{title}</title>
 
       {/** Favicon */}
       <link rel="icon" href="/favicon.ico" />
 
-      {/** Fonts */}
-      {/* <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
-      /> */}
-
-      {/** If isNormal, show seo meta */}
+      {/** If isNormal, show meta */}
       {isNormal && (
         <>
           {/** Meta title */}
@@ -51,7 +48,7 @@ const PageMeta = ({
           <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="language" content="English" />
           <meta name="revisit-after" content="3 days" />
-          <meta name="author" content={siteInfo?.siteName} />
+          <meta name="author" content={siteInfo?.name} />
 
           {/** OPEN GRAPH FOR SOCIAL MEDIA */}
           {/** Og title */}
@@ -61,7 +58,7 @@ const PageMeta = ({
           <meta property="og:site_name" content="Fit to fly UK" />
 
           {/** Og url */}
-          <meta property="og:url" content={baseUrl} />
+          <meta property="og:url" content={link} />
 
           {/** Og description */}
           <meta property="og:description" content={description} />

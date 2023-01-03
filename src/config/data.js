@@ -76,20 +76,17 @@ export const appRegex = {
 
 // API ROUTES
 export const apiRoutes = {
-  verifyEmail: "mailjet-verify-email",
-  resetEmail: "mailjet-reset-email",
-  otp: "mailjet-otp",
-  welcome: "mailjet-welcome",
-  login: "mailjet-login",
-  passChange: "mailjet-pass-change",
-  profileChange: "mailjet-profile-change",
-  newUser: "mailjet-new-user",
-  broadcast: "mailjet-broadcast",
-  contactForm: "mailjet-contact-form",
-  adminTranx: "mailjet-admin-tranx",
-  userTranx: "mailjet-user-tranx",
-  newTranx: "mailjet-new-tranx",
-  newOrder: "mailjet-new-order",
+  otp: { api: "mailjet-otp", tempID: 4468134 },
+  welcome: { api: "mailjet-welcome", tempID: 1 },
+  login: { api: "mailjet-login", tempID: 1 },
+  passChange: { api: "mailjet-pass-change", tempID: 1 },
+  profileChange: { api: "mailjet-profile-change", tempID: 1 },
+  resetEmail: { api: "mailjet-reset-email", tempID: 1 },
+  newUser: { api: "mailjet-new-user", tempID: 1 },
+  newsletter: { api: "mailjet-broadcast", tempID: 1 },
+  contactForm: { api: "mailjet-contact-form", tempID: 1 },
+  tranx: { api: "mailjet-new-tranx", tempID: 1 },
+  order: { api: "mailjet-new-order", tempID: 1 },
 };
 
 // ALERT MSG
@@ -99,7 +96,7 @@ export const alertMsg = {
   generalErr: "internal error. Please contact support.",
   loginSucc: "Login successful",
   loginErr: "Invalid credentials",
-  registerSucc: "Account created",
+  registerSucc: "Account created. Login.",
   otpSendSucc: "We sent your OTP code. Check your inbox or spam.",
   otpSendErr: "Failed to send OTP. Try again.",
   otpVerifyErr: "Invalid code",
@@ -109,6 +106,8 @@ export const alertMsg = {
   linkSentSucc: "We sent your confirmation link. Check your inbox or spam.",
   verifyEmailSucc: "Your email address was verified.",
   authErr: "Authentication failed. Please contact support.",
+  userExistSucc: "User already exist",
+  userExistErr: "User not found",
 };
 
 // NAV LINKS

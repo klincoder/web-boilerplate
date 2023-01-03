@@ -1,14 +1,28 @@
 // Import resources
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 // Import custom files
 
 // Component
 const useAlertState = () => {
+  // Define state
+  const [loading, setLoading] = useState(false);
+
   // Define variables
   let testFxn;
 
   // FUNCTIONS
+  // HANDLE SHOW LOADING
+  const showLoading = () => {
+    setLoading(true);
+  }; // close fxn
+
+  // HANDLE HIDE LOADING
+  const hideLoading = () => {
+    setLoading(false);
+  }; // close fxn
+
   // HANDLE SUCCESS
   const success = (msg) => {
     toast.success(msg, {
@@ -52,7 +66,7 @@ const useAlertState = () => {
   }; // close fxn
 
   // Return component
-  return { success, error, info }; // close return
+  return { loading, success, error, info, showLoading, hideLoading }; // close return
 }; // close component
 
 // Export

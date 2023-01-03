@@ -1,23 +1,24 @@
 // Import resources
 import { useRecoilValue } from "recoil";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 // Import custom files
 import useAppSettings from "./useAppSettings";
 import useAlertState from "./useAlertState";
 import { allUsersAtom } from "../recoil/atoms";
-import { handleSendEmail } from "../config/functions";
-import { alertMsg, apiRoutes } from "../config/data";
+import { handleFireAdminAction, handleSendEmail } from "../config/functions";
+import { actionSettings, alertMsg, apiRoutes } from "../config/data";
 import {
   applyActionCode,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   fireAuth,
-  signOut as signOutToken,
   sendEmailVerification,
-  signInWithEmailAndPassword,
   updateProfile,
   verifyPasswordResetCode,
+  signInWithCustomToken,
+  signOut as signOutToken,
 } from "../config/firebase";
 
 // Component
@@ -31,14 +32,22 @@ const useAuthState = () => {
   // Define alert
   const alert = useAlertState();
 
+  // Define session
+  const session = useSession();
+
+  // Define variables
+  const user = session?.data?.user;
+  const sessionStatus = session?.status;
+  const sessionExpiry = session?.expiry;
+
   // FUNCTIONS
   // HANDLE USER EXIST
-  const handleUserExist = (emailAddr) => {
+  const handleUserExist = (val) => {
     // If empty args, return
-    if (!emailAddr) return;
+    if (!val) return;
     // Filter users
     const filterData = allUsers?.filter(
-      (i) => i?.email_address === emailAddr || i?.username === emailAddr
+      (i) => i?.email_address === val || i?.username === val
     );
     const data = filterData?.[0];
     const valid = filterData?.length > 0;
@@ -46,13 +55,12 @@ const useAuthState = () => {
   }; // close fxn
 
   // HANDLE REGISTER
-  const handleRegister = async (username, email, pass, actionSettings) => {
+  const handleRegister = async (username, email, pass) => {
     // If empty arg, return
     if (!username || !email || !pass) return;
     return await createUserWithEmailAndPassword(fireAuth, email, pass).then(
       async (res) => {
-        // Send verification link
-        //await sendEmailVerification(res.user, actionSettings);
+        // Update user profile
         await updateProfile(res?.user, { displayName: username });
       }
     ); // close return
@@ -62,7 +70,9 @@ const useAuthState = () => {
   const handleLogin = async (email, pass) => {
     // If empty arg, return
     if (!email || !pass) return;
-    return await signInWithEmailAndPassword(fireAuth, email, pass);
+    // Login into firebase auth with custom token
+    const token = await handleFireAdminAction(email, "custom-token");
+    return await signInWithCustomToken(fireAuth, token);
   }; // close fxn
 
   // HANDLE LOGOUT
@@ -74,11 +84,7 @@ const useAuthState = () => {
         alert.success(alertMsg?.logoutSucc);
         router.replace(res?.url);
       }
-    );
-    // return await signOut(fireAuth).then(() => {
-    //   alert.success(alertMsg?.logoutSucc);
-    //   router.replace("/");
-    // }); // close return
+    ); // close return
   }; // close fxn
 
   // HANDLE SEND EMAIL VERIFY LINK
@@ -89,11 +95,7 @@ const useAuthState = () => {
   }; // close fxn
 
   // HANDLE SEND PASSWORD RESET LINK
-  const handleSendPassResetLink = async (
-    currUser,
-    emailAddr,
-    actionSettings
-  ) => {
+  const handleSendPassResetLink = async (currUser, emailAddr) => {
     // If empty args, return
     if (!currUser || !emailAddr) return;
     return await sendPasswordResetEmail(currUser, emailAddr, actionSettings); // close return
@@ -152,6 +154,9 @@ const useAuthState = () => {
 
   // Return component
   return {
+    user,
+    sessionStatus,
+    sessionExpiry,
     handleUserExist,
     handleRegister,
     handleLogin,

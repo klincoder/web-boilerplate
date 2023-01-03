@@ -19,22 +19,19 @@ const PageContent = ({
   isCms,
   currSession,
   pageDetails,
-  siteInfo,
   title,
   pageAccess,
   children,
   ...rest
 }) => {
   // Define app settings
-  const { isHomePath, currPath } = useAppSettings();
+  const { siteInfo, isHomePath, currPath } = useAppSettings();
 
   // Define variables
   isCms = isCms ? true : false;
   const userID = currSession?.id;
   const userRole = currSession?.role;
   const userAvatar = currSession?.avatar;
-  const pageTitle = pageDetails?.title || title;
-  const pageDesc = pageDetails?.description || "";
   const isPageAccess = handleVerifyPageAccess(cmsLinks, pageAccess, currPath);
 
   // Debug
@@ -47,9 +44,8 @@ const PageContent = ({
       <PageMeta
         {...rest}
         isNormal={!isCms}
-        title={pageTitle}
-        description={pageDesc}
-        siteInfo={siteInfo}
+        pageDetails={pageDetails}
+        pageTitle={title}
       />
 
       {/** Header */}
@@ -61,6 +57,7 @@ const PageContent = ({
       {/** Body */}
       {isCms ? (
         <div className="min-h-screen bg-gray-50 md:pl-60">
+          {/** Main */}
           <div className="p-6">
             {isPageAccess ? <>{children}</> : <CustomAlertMsg isNormal />}
           </div>
@@ -71,7 +68,7 @@ const PageContent = ({
         </div>
       ) : (
         <>
-          {/** Children */}
+          {/** Main */}
           <>{children}</>
           {/** Footer */}
           <div className="sticky top-full">

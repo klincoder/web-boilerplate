@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import dayjsUTC from "dayjs/plugin/utc";
 dayjs.extend(dayjsUTC);
 import htmlParser from "html-react-parser";
+import bcryptjs from "bcryptjs";
 
 // Import custom files
 import { baseUrl, currSymbol, fileExtensions } from "./data";
@@ -11,63 +12,46 @@ import { doc, fireDB, getDoc } from "./firebase";
 
 // VARIABLES
 // FUNCTIONS
-// HANDLE APP SETTINGS
-export const handleAppSettings = async (docID) => {
+// HANDLE GET PAGE DETAILS
+export const handleGetPageDetails = async (docID) => {
   // If empty args, return
   if (!docID) return;
-  const docRef = doc(fireDB, "app_settings", docID);
+  const docRef = doc(fireDB, "pages", docID);
   const docSnap = await getDoc(docRef);
-  const docData = docSnap.data();
+  const docData = docSnap.exists() ? docSnap.data() : null;
   return docData;
 }; // close fxn
 
-// HANDLE SITE INFO
-export const handleSiteInfo = async () => {
-  // Define variablees
-  const generalSettings = await handleAppSettings("general_settings");
-  const siteInfo = {
-    logo: generalSettings?.app_logo,
-    name: generalSettings?.app_name,
-    email: generalSettings?.support_email,
-    phone: generalSettings?.support_phone,
-    noReply: generalSettings?.support_email_reply,
-    copyrightName: generalSettings?.copyright_name,
-    adminName: generalSettings?.admin_name,
-    adminEmail: generalSettings?.admin_email,
-    bank: generalSettings?.bank_info,
-    workingHours: generalSettings?.working_hours,
-    location: generalSettings?.location,
-  };
-  return siteInfo;
+// HANDLE GET SITE INFO
+export const handleGetSiteInfo = async () => {
+  // Define ref
+  const docRef = doc(fireDB, "app_settings", "general_settings");
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.exists() ? docSnap.data() : null;
+  return { name: docData?.app_name, noReply: docData?.support_email_reply };
 }; // close fxn
 
 // HANDLE SEND EMAIL
-export const handleSendEmail = async (
-  role,
-  toName,
-  toEmail,
-  msg,
-  api,
-  fromName,
-  fromEmail
-) => {
+export const handleSendEmail = async (newMsg, api) => {
   // If empty args, return
-  if (!role || !toName || !toEmail || !msg || !api || !fromName) return;
+  if (!newMsg || !api?.api || !api?.tempID) return null;
+  // Define variables
+  const siteInfo = await handleGetSiteInfo();
+  let defaultMsg = {
+    role: "user",
+    toName: "",
+    toEmail: "",
+    fromName: siteInfo?.name,
+    fromEmail: siteInfo?.noReply,
+  };
+  const finalMsg = { ...defaultMsg, ...newMsg };
   // Return and await response
   return await axios({
     method: "POST",
-    url: `${baseUrl}/api/${api}`,
-    data: {
-      role: role,
-      toName: toName,
-      toEmail: toEmail,
-      msg: msg,
-      fromName: fromName || "Klincoder",
-      fromEmail: fromEmail || "support@klincoder.com",
-      footerName: `${fromName} Team`,
-    },
-  }).then((apiRes) => {
-    return apiRes;
+    url: `/api/${api?.api}`,
+    data: { msg: finalMsg, tempID: api?.tempID },
+  }).then((res) => {
+    return res?.data;
   }); // close return
 }; // close fxn
 
@@ -813,9 +797,9 @@ export const handleGetAllCountries = async () => {
   return await axios({
     method: "GET",
     url: "https://restcountries.com/v3.1/all",
-  }).then((apiRes) => {
+  }).then((res) => {
     // Define resData
-    const resData = apiRes.data;
+    const resData = res.data;
     let countryNameArr = [];
     resData?.map((item) => {
       countryNameArr.push(item.name.common);
@@ -907,4 +891,19 @@ export const handleIsEmail = (val) => {
   const pattern =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
   return pattern.test(val);
+}; // close fxn
+
+// HANDLE HASH VAL
+export const handleHashVal = (rawVal) => {
+  // If empty args, return
+  if (!rawVal) return null;
+  return bcryptjs.hashSync(rawVal);
+}; // close fxn
+
+// HANDLE COMPARE HASH VAL
+export const handleCompareHashVal = (newVal, hashVal) => {
+  // If empty args, return
+  if (!newVal || !hashVal) return null;
+  //const rawValHash = handleHashVal(rawVal);
+  return bcryptjs.compareSync(newVal, hashVal);
 }; // close fxn

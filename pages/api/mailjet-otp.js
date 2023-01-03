@@ -9,18 +9,25 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     // Get body data
     const reqData = req.body;
-    const toName = reqData?.toName;
-    const toEmail = reqData?.toEmail;
-    const fromName = reqData?.fromName;
-    const fromEmail = reqData?.fromEmail;
     const msg = reqData?.msg;
+    const tempID = reqData?.tempID;
 
     // Define variables
+    const toName = msg?.toName;
+    const toEmail = msg?.toEmail;
+    const fromName = msg?.fromName || "Klincoder";
+    const fromEmail = msg?.fromEmail || "noreply@klincoder.com";
     const otpCode = msg?.otp;
 
     // Debug
-    //console.log("Debug apiBlank: ",);
-    //res.send("Sent!");
+    //console.log("Debug apiOtp: ", reqData);
+    //res.send(reqData);
+
+    // If empty args
+    if (!toName || !toEmail || !tempID || !otpCode) {
+      res.send("Bad request. Check your values.");
+      return;
+    } // close if
 
     // Try catch
     try {
@@ -41,25 +48,26 @@ const handler = async (req, res) => {
                 },
               ], // close to
               //Subject: "Subject",
-              TemplateID: 1,
+              TemplateID: tempID,
               TemplateLanguage: true,
               Variables: {
                 to_name: toName,
                 from_name: fromName,
+                otp_code: otpCode,
               },
             }, // close messages obj
           ], // close messages
         })
-        .then((res) => {
+        .then((apiRes) => {
           // Define resData
-          const resData = res?.body;
+          const resData = apiRes?.body;
           const status = resData?.Messages?.[0]?.Status;
-          //console.log("Debug apiBlank: ", resData);
+          //console.log("Debug apiOtp: ", resData);
           res.send(status);
         });
     } catch (err) {
       res.send(err.message);
-      console.log("Debug apiBlank: ", err.message);
+      console.log("Debug apiOtp: ", err.message);
     } // close try catch
   } else if (req.method === "GET") {
     // HANDLE GET REQUEST
