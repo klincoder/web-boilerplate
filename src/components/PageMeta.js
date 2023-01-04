@@ -13,20 +13,20 @@ const PageMeta = ({ isNormal, pageDetails, pageTitle }) => {
   const { siteInfo } = useAppSettings();
 
   // Define variables
-  const title = isNormal ? pageDetails?.title : pageTitle;
+  const title = pageDetails?.title || pageTitle;
   const description = pageDetails?.description || "";
   const keywords = pageDetails?.keywords || "";
   const screenshot = pageDetails?.screenshot || appImages?.logo;
   const link = isNormal ? `${baseUrl}/${pageDetails?.slug}` : baseUrl;
 
   // Debug
-  //console.log("Debug pageMeta: ",)
+  //console.log("Debug pageMeta: ", { isNormal, title });
 
   // Return component
   return (
     <Head>
       {/** Page title */}
-      <title>{title}</title>
+      <title>{`${title} - ${siteInfo?.name}`}</title>
 
       {/** Favicon */}
       <link rel="icon" href="/favicon.ico" />

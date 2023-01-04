@@ -21,9 +21,9 @@ const CustomAlertMsg = ({
   ...rest
 }) => {
   // Define variables
+  const isSucc = type === "success";
   icon = icon || <AiOutlineInfoCircle {...rest} size={60} />;
-  title = title || "Unathourized access.";
-  const isErr = type === "error";
+  title = title || "Title";
 
   // Debug
   //console.log("Debug customAlertMsg: ",)
@@ -64,13 +64,15 @@ const CustomAlertMsg = ({
       {isIcon && (
         <div className="flex flex-col items-center justify-center">
           {/** Icon */}
-          <div className="mb-0.5">{handleShowIcon()}</div>
+          <div className="mb-2">{handleShowIcon()}</div>
 
           {/** Title */}
-          <h4 className={`mb-2 ${handleTitleColor()}`}>{title}</h4>
+          <h4 className={`text-center ${handleTitleColor()}`}>{title}</h4>
 
           {/** Description */}
-          {description && <div className="text-center">{description}</div>}
+          {description && (
+            <div className="text-center -mt-2 mb-4">{description}</div>
+          )}
 
           {/** Actions */}
           {actions && actions}

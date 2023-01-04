@@ -18,10 +18,10 @@ const Register = ({ currSession, pageDetails }) => {
     <PageContent currSession={currSession} pageDetails={pageDetails}>
       {/** SECTION */}
       <section className="bg-white">
-        {/** CONTAINER */}
-        <div className="container mx-auto flex flex-col items-center px-6 pt-14 pb-24">
+        {/** ROW */}
+        <div className="container mx-auto flex flex-col items-center px-6 py-24">
           {/** COL 1 - FORM */}
-          <div className="flex flex-col p-6 border rounded-lg shadow-lg">
+          <div className="flex flex-col p-6 mb-8 w-full border rounded-lg shadow-lg md:w-1/2">
             {/** Heading */}
             <h3 className="text-left mb-6">{pageDetails?.title}</h3>
             {/** Register form */}

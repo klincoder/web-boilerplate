@@ -9,18 +9,26 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     // Get body data
     const reqData = req.body;
-    const toName = reqData?.toName;
-    const toEmail = reqData?.toEmail;
-    const fromName = reqData?.fromName;
-    const fromEmail = reqData?.fromEmail;
     const msg = reqData?.msg;
+    const tempID = reqData?.tempID;
 
     // Define variables
-    const otpCode = msg?.otp;
+    const toName = msg?.toName;
+    const toEmail = msg?.toEmail;
+    const fromName = msg?.fromName;
+    const fromEmail = msg?.fromEmail;
+    const year = msg?.year;
+    const date = msg?.date;
 
     // Debug
-    //console.log("Debug apiBlank: ",);
-    //res.send("Sent!");
+    //console.log("Debug apiBlank: ", reqData);
+    //res.send(reqData);
+
+    // If empty args
+    if (!toName || !toEmail || !tempID) {
+      res.send("Bad request. Check your values.");
+      return;
+    } // close if
 
     // Try catch
     try {
@@ -41,25 +49,29 @@ const handler = async (req, res) => {
                 },
               ], // close to
               //Subject: "Subject",
-              TemplateID: 1,
+              TemplateID: tempID,
               TemplateLanguage: true,
               Variables: {
-                to_name: toName,
-                from_name: fromName,
+                from_name: fromName, // Default
+                year: year,
+                date: date,
+                to_name: toName, // Custom
+                otp_code: msg?.otp,
+                verify_link: msg?.link,
               },
             }, // close messages obj
           ], // close messages
         })
-        .then((res) => {
+        .then((apiRes) => {
           // Define resData
-          const resData = res?.body;
+          const resData = apiRes?.body;
           const status = resData?.Messages?.[0]?.Status;
           //console.log("Debug apiBlank: ", resData);
           res.send(status);
         });
     } catch (err) {
       res.send(err.message);
-      console.log("Debug apiBlank: ", err.message);
+      //console.log("Debug apiBlank: ", err.message);
     } // close try catch
   } else if (req.method === "GET") {
     // HANDLE GET REQUEST

@@ -18,9 +18,11 @@ const CustomChip = ({ isSolid, title, onClick, styleChip, ...rest }) => {
     <span
       {...rest}
       onClick={onClick}
-      className={`${styleChip} 
-      ${isSolid ? "bg-primary text-white" : "bg-white border-gray-400"} 
-      flex text-sm px-3 py-1 rounded-full border align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease`}
+      className={`
+        ${styleChip} 
+        ${isSolid ? "bg-primary text-white" : "bg-white border-gray-400"} 
+        flex text-sm px-3 py-1 rounded-full border align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease
+      `}
     >
       {title || "Title"}
     </span>

@@ -63,8 +63,8 @@ const PageFooter = ({ isCms, siteInfo }) => {
                         isLink
                         href={item?.link}
                         styleBtn={`
-                          text-white px-1.5 hover:text-primary
-                          ${currPath === item?.link && "!text-primary"}
+                          text-white px-1.5 hover:text-veryLightPrimary
+                          ${currPath === item?.link && "!text-veryLightPrimary"}
                         `}
                       >
                         {item?.title}
@@ -78,7 +78,7 @@ const PageFooter = ({ isCms, siteInfo }) => {
                 <CustomButton
                   isLink
                   href="/"
-                  styleBtn="text-white hover:text-primary"
+                  styleBtn="text-white hover:text-veryLightPrimary"
                 >
                   {siteInfo?.copyrightName}
                 </CustomButton>

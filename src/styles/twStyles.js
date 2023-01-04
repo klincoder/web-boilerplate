@@ -37,7 +37,7 @@ const twStyles = {
   btnText:
     "inline-block no-underline px-3 py-2 bg-gray-100 rounded-full text-sm font-bold uppercase shadow-md hover:bg-gray-50 hover:shadow-lg focus:bg-gray-50 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-100 active:shadow-lg disabled:opacity-60 disabled:pointer-events-none transition duration-150 ease-in-out",
   btnTextPrimary:
-    "inline-block no-underline px-3 py-2 bg-primary rounded-full text-sm font-bold uppercase shadow-md hover:bg-lightPrimary hover:shadow-lg focus:bg-lightPrimary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg disabled:opacity-60 disabled:pointer-events-none transition duration-150 ease-in-out",
+    "inline-block no-underline text-white px-3 py-2 bg-primary rounded-full text-sm font-bold uppercase shadow-md hover:bg-lightPrimary hover:shadow-lg focus:bg-lightPrimary focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-lg disabled:opacity-60 disabled:pointer-events-none transition duration-150 ease-in-out",
 
   badgeColor: "text-xs text-center text-white px-2 py-1 rounded-full ",
 };

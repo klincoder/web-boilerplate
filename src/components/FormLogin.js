@@ -14,8 +14,8 @@ import CustomSpinner from "./CustomSpinner";
 import useAuthState from "../hooks/useAuthState";
 import useAlertState from "../hooks/useAlertState";
 import { alertMsg, apiRoutes } from "../config/data";
-import { fireAuth, signInWithCustomToken } from "../config/firebase";
-import { handleFireAdminAction } from "../config/functions";
+import { fireAuth } from "../config/firebase";
+import { handleCompareHashVal } from "../config/functions";
 
 // Component
 const FormLogin = ({ csrfToken }) => {
@@ -23,8 +23,9 @@ const FormLogin = ({ csrfToken }) => {
   const { siteInfo, todaysDate1, router, routeQuery } = useAppSettings();
 
   // Define state
-  const { handleUserExist, handleLogin } = useAuthState();
   const [showPass, setShowPass] = useState(false);
+  const { handleUserExist, handleLogin, handleSendVerifyEmailLink } =
+    useAuthState();
 
   // Define alert
   const alert = useAlertState();
@@ -50,7 +51,6 @@ const FormLogin = ({ csrfToken }) => {
     control,
     formState: { isValid, isSubmitting },
     handleSubmit,
-    watch,
     reset,
   } = useForm({
     mode: "all",
@@ -59,7 +59,6 @@ const FormLogin = ({ csrfToken }) => {
   }); // close form state
 
   // Define variables
-  const formVal = watch();
   const destUrl = routeQuery?.callbackUrl || "/cms";
 
   // Debug
@@ -72,10 +71,17 @@ const FormLogin = ({ csrfToken }) => {
     const finalEmail = values.emailAddr?.trim()?.toLowerCase();
     const finalPass = values.pass?.trim();
     const userExist = handleUserExist(finalEmail);
+    const userInfo = userExist?.data;
+    const username = userInfo?.username;
+    const userEmail = userInfo?.email_address;
+    const isValidPass = handleCompareHashVal(finalPass, userInfo?.password);
 
     // If !userExist
-    if (!userExist?.valid) {
-      alert.error(alertMsg?.userExistErr);
+    if (!userExist?.isValid) {
+      alert.error(alertMsg?.inValidCred);
+      return;
+    } else if (!isValidPass) {
+      alert.error(alertMsg?.inValidCred);
       return;
     } // close if
 
@@ -84,33 +90,40 @@ const FormLogin = ({ csrfToken }) => {
 
     // Try catch
     try {
-      // Verify and login user
-      const res = await signIn("credentials", {
-        redirect: false,
-        email: finalEmail,
-        password: finalPass,
-        callbackUrl: `${destUrl}`,
-      });
+      // Login to fireAuth and check if email verified
+      await handleLogin(finalEmail, finalPass);
+      const currUser = fireAuth.currentUser;
 
-      // If res err
-      if (res?.error) {
-        alert.error(alertMsg?.loginErr);
+      // If userEmailVerified
+      if (currUser?.emailVerified) {
+        // Login user with next auth
+        const res = await signIn("credentials", {
+          redirect: false,
+          email: finalEmail,
+          password: finalPass,
+          callbackUrl: `${destUrl}`,
+        });
+
+        // If res err
+        if (res?.error) {
+          alert.error(alertMsg?.inValidCred);
+        } else {
+          // Login into firebase auth with custom token
+          await handleLogin(finalEmail, finalPass);
+          // Send email
+          const userEmailMsg = { toName: username, toEmail: userEmail };
+          //await handleLoginEmail(userEmailMsg, apiRoutes?.login);
+          // Alert succ
+          reset();
+          alert.success(alertMsg?.loginSucc);
+          router.push(res?.url);
+        } // close if res error
       } else {
-        // Login into firebase auth with custom token
-        await handleLogin();
-
-        // Send email
-        // await handleLoginEmail(
-        //   userInfo?.username,
-        //   userInfo?.emailAddress,
-        //  todaysDate1
-        // );
-
-        // Alert succ
+        // Resend email verification link
+        await handleSendVerifyEmailLink(username, userEmail);
+        alert.info(alertMsg?.linkSentSucc);
         reset();
-        alert.success(alertMsg?.loginSucc);
-        router.push(res?.url);
-      } // close if res error
+      } // close if
     } catch (err) {
       alert.error(alertMsg?.generalErr);
       //console.log("Debug submitForm: ", err.message);

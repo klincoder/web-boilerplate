@@ -18,7 +18,7 @@ const CmsRoleLinks = ({ data, currPath, onClickCmsLink }) => {
       {data?.length > 0 &&
         data?.map((item, index) => {
           // Define variables
-          const itemID = item?.id;
+          const itemID = `roleLinks${index}`;
           const itemTitle = item?.title;
           const itemLink = item?.link;
           const itemLeftIcon = item?.leftIcon;

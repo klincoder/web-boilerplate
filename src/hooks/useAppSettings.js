@@ -4,19 +4,24 @@ import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
 
 // Import custom files
-import { handleDayJsFormat } from "../config/functions";
-import { generalSettingsAtom } from "../recoil/atoms";
+import { handleDayJsFormat, handleGetInfoById } from "../config/functions";
+import { appSettingsAtom } from "../recoil/atoms";
 
 // Component
 const useAppSettings = () => {
   // Define state
-  const generalSettings = useRecoilValue(generalSettingsAtom);
+  const appSettings = useRecoilValue(appSettingsAtom);
 
   // Define isMounted
   const isMounted = useRef(false);
 
   // Define router
   const router = useRouter();
+
+  // Define settings doc
+  const general = handleGetInfoById(appSettings, "general_settings")?.data;
+  const bank = handleGetInfoById(appSettings, "bank_info")?.data;
+  const socials = handleGetInfoById(appSettings, "social_links")?.data;
 
   // Define variables
   const todaysDate = handleDayJsFormat();
@@ -28,17 +33,18 @@ const useAppSettings = () => {
   const isBlogSlug = currPath === "/blog/[slug]";
   const isRouteQuery = Object?.keys(routeQuery)?.length > 0;
   const siteInfo = {
-    logo: generalSettings?.app_logo,
-    name: generalSettings?.app_name,
-    email: generalSettings?.support_email,
-    phone: generalSettings?.support_phone,
-    noReply: generalSettings?.support_email_reply,
-    copyrightName: generalSettings?.copyright_name,
-    adminName: generalSettings?.admin_name,
-    adminEmail: generalSettings?.admin_email,
-    bank: generalSettings?.bank_info,
-    workingHours: generalSettings?.working_hours,
-    location: generalSettings?.location,
+    logo: general?.app_logo,
+    name: general?.app_name,
+    email: general?.support_email,
+    phone: general?.support_phone,
+    noReply: general?.support_email_reply,
+    copyrightName: general?.copyright_name,
+    adminName: general?.admin_name,
+    adminEmail: general?.admin_email,
+    workingHours: general?.working_hours,
+    location: general?.location,
+    bank,
+    socials,
   };
 
   // FUNCTIONS
@@ -46,6 +52,7 @@ const useAppSettings = () => {
 
   // Return component
   return {
+    appSettings,
     isMounted,
     router,
     todaysDate,

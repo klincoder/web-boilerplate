@@ -1,5 +1,5 @@
 // Import resources
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -7,20 +7,21 @@ import * as Yup from "yup";
 // Import custom files
 import twStyles from "../styles/twStyles";
 import useAppSettings from "../hooks/useAppSettings";
-import useAuthState from "../hooks/useAuthState";
-import useAlertState from "../hooks/useAlertState";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
+import useAuthState from "../hooks/useAuthState";
+import useAlertState from "../hooks/useAlertState";
 import { alertMsg } from "../config/data";
 
 // Component
-const FormPasswordRecovery = () => {
+const FormPasswordReset = ({ actionCode }) => {
   // Define app settings
-  const { isMounted } = useAppSettings();
+  const { router } = useAppSettings();
 
   // Define state
-  const { handleUserExist, handleSendPasswordResetLink } = useAuthState();
+  const { handlePasswordReset } = useAuthState();
+  const [showPass, setShowPass] = useState(false);
 
   // Define alert
   const alert = useAlertState();
@@ -28,12 +29,16 @@ const FormPasswordRecovery = () => {
   // FORM CONFIG
   // Initial values
   const initialValues = {
-    emailAddr: "",
+    newPass: "",
+    repeatNewpass: "",
   };
 
   // Validate
   const validate = Yup.object().shape({
-    emailAddr: Yup.string().required("Required").email("Invalid email address"),
+    newPass: Yup.string().required("Required").min(8, "Too short"),
+    repeatNewPass: Yup.string()
+      .required("Required")
+      .oneOf([Yup.ref("newPass"), null], "Password must match"),
   });
 
   // Form state
@@ -49,37 +54,26 @@ const FormPasswordRecovery = () => {
   }); // close form state
 
   // Debug
-  //console.log("Debug formPassRecovery: ",)
+  //console.log("Debug formPassReset: ",);
 
-  // FUNCTIONS
   // HANDLE SUBMIT FORM
   const handleSubmitForm = async (values) => {
     // Define variables
-    const finalEmail = values?.emailAddr?.trim()?.toLowerCase();
-    const userExist = handleUserExist(finalEmail);
-    const userInfo = userExist?.data;
-    const username = userInfo?.username;
-    const userEmail = userInfo?.email_address;
-
-    // If userExist
-    if (!userExist?.isValid) {
-      alert.error(alertMsg?.inValidCred);
-      return;
-    } // close if
-
+    const finalNewPass = values?.newPass?.trim();
     // Debug
-    //console.log("Debug submitForm: ", userExist);
-
+    //console.log("Debug submitForm: ",);
     // Try catch
     try {
-      // Send password reset link
-      await handleSendPasswordResetLink(username, userEmail);
-      // Alert info
-      alert.info(alertMsg?.linkSentSucc);
+      // Register user
+      await handlePasswordReset(actionCode, finalNewPass);
+      // Alert succ
+      alert.success(alertMsg?.passResetSucc);
       reset();
+      router.replace("/login");
+      //console.log("Debug submitForm: ", emailMsg);
     } catch (err) {
       alert.error(alertMsg?.generalErr);
-      //console.log("Debug submitForm: ", err.message);
+      console.log("Debug submitForm: ", err.message);
     } // close try catch
   }; // close fxn
 
@@ -89,29 +83,33 @@ const FormPasswordRecovery = () => {
       {/** Debug */}
       {/* {console.log("Debug formValues: ",)} */}
 
-      {/** Email address */}
+      {/** New pass */}
       <CustomInput
-        name="emailAddr"
+        name="newPass"
         control={control}
-        type="email"
-        label="Email Address"
+        type="password"
+        label="New Password"
+        showPass={showPass}
+        onShowPass={() => setShowPass(!showPass)}
+      />
+
+      {/** Repeat new pass */}
+      <CustomInput
+        name="repeatNewPass"
+        control={control}
+        type="password"
+        label="Repeat Password"
+        showPass={showPass}
+        onShowPass={() => setShowPass(!showPass)}
       />
 
       {/** Submit */}
       <CustomButton isNormal type="submit" disabled={!isValid || isSubmitting}>
-        Send Reset Link {isSubmitting && <CustomSpinner />}
+        Reset Password {isSubmitting && <CustomSpinner />}
       </CustomButton>
-
-      {/** MORE LINKS */}
-      {/** Login */}
-      <div className="text-center text-sm mt-4">
-        <CustomButton isLink href="/login">
-          Back to Login
-        </CustomButton>
-      </div>
     </form>
   ); // close return
 }; // close component
 
 // Export
-export default FormPasswordRecovery;
+export default FormPasswordReset;

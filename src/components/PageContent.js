@@ -35,7 +35,7 @@ const PageContent = ({
   const isPageAccess = handleVerifyPageAccess(cmsLinks, pageAccess, currPath);
 
   // Debug
-  //console.log("Debug pageContent: ",)
+  //console.log("Debug pageContent: ", title);
 
   // Return component
   return (

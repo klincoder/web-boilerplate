@@ -7,13 +7,12 @@ import twStyles from "../src/styles/twStyles";
 import PageContent from "../src/components/PageContent";
 import CustomDivider from "../src/components/CustomDivider";
 import {
-  handleAppSettings,
+  handleGetPageDetails,
   handleHtmlParser,
-  handleSiteInfo,
 } from "../src/config/functions";
 
 // Component
-const Terms = ({ currSession, pageDetails, siteInfo }) => {
+const Terms = ({ currSession, pageDetails }) => {
   // Define variables
   const pageTitle = pageDetails?.title;
   const pageContent = handleHtmlParser(pageDetails?.content);
@@ -23,16 +22,13 @@ const Terms = ({ currSession, pageDetails, siteInfo }) => {
 
   // Return component
   return (
-    <PageContent
-      currSession={currSession}
-      pageDetails={pageDetails}
-      siteInfo={siteInfo}
-    >
+    <PageContent currSession={currSession} pageDetails={pageDetails}>
       {/** SECTION */}
       <section className="bg-white">
-        <div className="container mx-auto flex flex-col px-6 pt-14 pb-24">
+        {/** ROW */}
+        <div className="container mx-auto flex flex-col px-6 py-24">
           {/** COL 1 */}
-          <div className="flex flex-col p-6 mb-8 rounded shadow-lg">
+          <div className="flex flex-col p-6 mb-8 border rounded-lg shadow-lg">
             {/** Title */}
             <h3>{pageTitle}</h3>
 
@@ -52,20 +48,18 @@ const Terms = ({ currSession, pageDetails, siteInfo }) => {
 export default Terms;
 
 // GET SEVERSIDE PROPS
-// export const getServerSideProps = async (context) => {
-//   // Get session
-//   const session = await getSession(context);
+export const getServerSideProps = async (context) => {
+  // Get session
+  const session = await getSession(context);
 
-//   // Get data
-//   const pageData = await handleAppSettings("page_terms");
-//   const siteInfo = await handleSiteInfo();
+  // Get data
+  const pageData = await handleGetPageDetails("terms");
 
-//   // Return props
-//   return {
-//     props: {
-//       currSession: session || null,
-//       pageDetails: pageData || null,
-//       siteInfo: siteInfo || null,
-//     }, // close props
-//   }; // close return
-// }; // close getServerSide
+  // Return props
+  return {
+    props: {
+      currSession: session?.user || null,
+      pageDetails: pageData || null,
+    }, // close props
+  }; // close return
+}; // close getServerSide

@@ -45,7 +45,7 @@ export const otpDefaultTimer = 59;
 
 // ACTION SETTINGS
 export const actionSettings = {
-  url: `${baseUrl}`,
+  url: `${baseUrl}/login`,
   // iOS: {
   //   bundleId: "com.example.klincoder",
   // },
@@ -76,45 +76,47 @@ export const appRegex = {
 
 // API ROUTES
 export const apiRoutes = {
-  otp: { api: "mailjet-otp", tempID: 4468134 },
-  welcome: { api: "mailjet-welcome", tempID: 1 },
-  login: { api: "mailjet-login", tempID: 1 },
-  passChange: { api: "mailjet-pass-change", tempID: 1 },
-  profileChange: { api: "mailjet-profile-change", tempID: 1 },
-  resetEmail: { api: "mailjet-reset-email", tempID: 1 },
-  newUser: { api: "mailjet-new-user", tempID: 1 },
-  newsletter: { api: "mailjet-broadcast", tempID: 1 },
-  contactForm: { api: "mailjet-contact-form", tempID: 1 },
-  tranx: { api: "mailjet-new-tranx", tempID: 1 },
-  order: { api: "mailjet-new-order", tempID: 1 },
+  otpEmail: { api: "mailjet-email", tempID: 4468134 },
+  verifyEmail: { api: "mailjet-email", tempID: 4469644 },
+  passRecovery: { api: "mailjet-email", tempID: 4470092 },
+  profileChange: { api: "mailjet-email", tempID: 4471756 },
+  welcome: { api: "mailjet-email", tempID: 4471793 },
+  login: { api: "mailjet-email", tempID: 4471814 },
+  newUser: { api: "mailjet-email", tempID: 4471824 },
+
+  contactForm: { api: "mailjet-email", tempID: 1 }, // Empty
+  newsletter: { api: "mailjet-email", tempID: 1 },
+  tranx: { api: "mailjet-email", tempID: 1 },
+  order: { api: "mailjet-email", tempID: 1 },
 };
 
 // ALERT MSG
 export const alertMsg = {
-  isRequiredAll: "All fields are required",
-  generalSucc: "Action successful",
-  generalErr: "internal error. Please contact support.",
+  isRequiredAll: "All fields are required", // General
+  inValidCred: "Invalid credentials",
+  generalSucc: "Action successful", // Success
+  linkSentSucc: "We sent your verification link. Check your inbox or spam.",
+  otpSentSucc: "We sent your OTP code. Check your inbox or spam.",
   loginSucc: "Login successful",
-  loginErr: "Invalid credentials",
   registerSucc: "Account created. Login.",
-  otpSendSucc: "We sent your OTP code. Check your inbox or spam.",
-  otpSendErr: "Failed to send OTP. Try again.",
-  otpVerifyErr: "Invalid code",
   passRecoverySucc: "Password recovery successful",
-  passRecoveryErr: "Failed to recover password",
+  passResetSucc: "Password reset successful. Login.",
   logoutSucc: "Logout successful",
-  linkSentSucc: "We sent your confirmation link. Check your inbox or spam.",
-  verifyEmailSucc: "Your email address was verified.",
-  authErr: "Authentication failed. Please contact support.",
+  verifyEmailSucc: "Email address verified.",
   userExistSucc: "User already exist",
+  generalErr: "internal error. Please contact support.", // Error
+  otpSentErr: "Failed to send OTP. Try again.",
+  otpVerifyErr: "Invalid code",
+  authActionErr: "Authentication failed.",
   userExistErr: "User not found",
 };
 
 // NAV LINKS
 export const navLinks = [
   { id: "123", title: "Home", link: "/" },
-  { id: "456", title: "FAQs", link: "/faqs" },
-  { id: "789", title: "Contact", link: "/contact" },
+  { id: "456", title: "About", link: "/#homeAbout" },
+  { id: "789", title: "FAQs", link: "/#homeFaqs" },
+  { id: "1011", title: "Contact", link: "/#homeContact" },
 ];
 
 // SOCIAL LINKS
@@ -146,7 +148,7 @@ export const faqsCategoryList = ["General", "Covid", "Clinic", "Hometest"];
 export const copyrightLinks = [
   { id: "123", title: "Privacy", link: "/privacy" },
   { id: "456", title: "Terms", link: "/terms" },
-  { id: "789", title: "Contact", link: "/contact" },
+  // { id: "789", title: "Contact", link: "/contact" },
   // { id: "1011", title: "Blog", link: "/blog", isBlog: true },
 ];
 
@@ -155,82 +157,56 @@ export const copyrightLinks = [
 *************************/
 // CMS LINKS
 export const cmsLinks = [
-  {
-    // USER
-    id: "u123",
-    role: "user",
-    title: "My Orders",
-    leftIcon: <AiOutlineShoppingCart className={twStyles?.cmsNavIconLeft} />,
-    status: "active",
-  },
+  // {
+  //   // USER
+  //   title: "My Orders",
+  //   role: "user",
+  //   leftIcon: <AiOutlineShoppingCart className={twStyles?.cmsNavIconLeft} />,
+  //   status: "active",
+  //   linksArr: ["/cms/my-orders", "/cms/my-orders/create"],
+  // },
   {
     // ADMIN
-    id: "a123",
-    role: "admin",
     title: "Library",
+    role: "admin",
     link: "/cms/all-library",
     leftIcon: <BsFolder2Open className={twStyles?.cmsNavIconLeft} />,
     status: "active",
     linksArr: ["/cms/all-library"],
   },
   {
-    id: "a456",
-    role: "admin",
     title: "Pages",
+    role: "admin",
+    link: "/cms/all-pages",
     leftIcon: <AiOutlineFileSearch className={twStyles?.cmsNavIconLeft} />,
     status: "active",
-    isDropdown: true,
-    options: [
-      { title: "Homepage", link: "/cms/all-homepage" },
-      { title: "FAQs", link: "/cms/all-faqs" },
-      { title: "Contact Us", link: "/cms/all-contact" },
-      { title: "Privacy", link: "/cms/all-privacy" },
-      { title: "Terms", link: "/cms/all-terms" },
-    ],
-    linksArr: [
-      "/cms/all-homepage",
-      "/cms/all-faqs",
-      "/cms/all-faqs-create",
-      "/cms/all-contact",
-      "/cms/all-privacy",
-      "/cms/all-terms",
-    ],
+    linksArr: ["/cms/all-pages", "/cms/all-pages/create"],
   },
   {
-    id: "a789",
-    role: "admin",
-    title: "Users",
-    link: "/cms/all-users",
-    leftIcon: <FiUsers className={twStyles?.cmsNavIconLeft} />,
-    linksArr: ["/cms/all-users", "/cms/all-users-view"],
-    status: "active",
-  },
-  {
-    id: "a1011",
-    role: "admin",
     title: "Blog",
+    role: "admin",
     link: "/cms/all-blog",
     leftIcon: <AiOutlineEdit className={twStyles?.cmsNavIconLeft} />,
     status: "active",
-    linksArr: ["/cms/all-blog", "/cms/all-blog-create"],
+    linksArr: ["/cms/all-blog", "/cms/all-blog/create"],
   },
   {
-    id: "a1213",
+    title: "Users",
     role: "admin",
-    title: "Coupons",
-    link: "/cms/all-coupons",
-    leftIcon: <AiOutlineTag className={twStyles?.cmsNavIconLeft} />,
+    link: "/cms/all-users",
+    leftIcon: <FiUsers className={twStyles?.cmsNavIconLeft} />,
     status: "active",
-    linksArr: ["/cms/all-coupons"],
-  },
-  {
-    id: "a1415",
-    role: "admin",
-    title: "Newsletter",
-    link: "/cms/all-newsletter",
-    leftIcon: <AiOutlineMail className={twStyles?.cmsNavIconLeft} />,
-    status: "active",
-    linksArr: ["/cms/all-newsletter"],
+    isDropdown: true,
+    options: [
+      { title: "All Users", link: "/cms/all-users" },
+      { title: "Newsletter", link: "/cms/all-users/newsletter" },
+    ],
+    linksArr: [
+      "/cms/all-users",
+      "/cms/all-users/view",
+      "/cms/all-users/create",
+      "/cms/all-users/newsletter",
+    ],
   },
 ];
 

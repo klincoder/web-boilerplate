@@ -31,12 +31,7 @@ const CustomButton = ({
           {...rest}
           type={type || "button"}
           onClick={onClick}
-          className={
-            styleBtn ||
-            `w-full mt-3 ${
-              isSecondary ? twStyles?.btnSecondary : twStyles?.btnPrimary
-            }`
-          }
+          className={styleBtn || `w-full mt-3 ${twStyles?.btnPrimary}`}
         >
           {children}
         </button>

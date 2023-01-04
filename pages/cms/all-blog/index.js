@@ -1,48 +1,41 @@
 // Import resources
 import React from "react";
 import { getSession } from "next-auth/react";
+import { AiOutlinePlus } from "react-icons/ai";
 
 // Import custom files
-import twStyles from "../../src/styles/twStyles";
-import PageContent from "../../src/components/PageContent";
-import useAppSettings from "../../src/hooks/useAppSettings";
+import twStyles from "../../../src/styles/twStyles";
+import PageContent from "../../../src/components/PageContent";
+import useAppSettings from "../../../src/hooks/useAppSettings";
+import CustomButton from "../../../src/components/CustomButton";
 
 // Component
-const Cms = ({ currSession }) => {
+const AllBlog = ({ currSession }) => {
   // Define app settings
   const { isMounted } = useAppSettings();
 
   // Define variables
-  const pageTitle = "Dashboard";
+  const pageTitle = "Blog Posts";
 
   // Debug
-  //console.log("Debug cms: ", currSession);
+  //console.log("Debug allBlog: ");
 
   // Return component
   return (
     <PageContent isCms currSession={currSession} title={pageTitle}>
       {/** HEADING */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex flex-row items-center justify-between mb-10">
         <h4>{pageTitle}</h4>
+        <CustomButton
+          isLink
+          href="/cms/all-blog/create"
+          styleBtn={twStyles?.btnTextPrimary}
+        >
+          <AiOutlinePlus size={24} />
+        </CustomButton>
       </div>
 
-      {/** SECTION - 1 */}
-      <section className="mb-10">
-        {/** ROW */}
-        <div className="flex flex-col space-x-0 space-y-5 md:flex-row md:space-x-5 md:space-y-0">
-          {/** COL 1 */}
-          <div className="flex flex-col p-6 w-full border shadow rounded-lg bg-white md:w-1/2">
-            <p>Content goes here...</p>
-          </div>
-
-          {/** COL 2 */}
-          <div className="flex flex-col p-6 w-full border shadow rounded-lg bg-white md:w-1/2">
-            <p>Content goes here...</p>
-          </div>
-        </div>
-      </section>
-
-      {/** SECTION - 2 */}
+      {/** SECTION */}
       <section className="bg-white mb-10 border shadow rounded-lg">
         {/** ROW */}
         <div className="flex flex-col space-x-0 space-y-5 md:flex-row md:space-x-5 md:space-y-0">
@@ -62,7 +55,7 @@ const Cms = ({ currSession }) => {
 }; // close component
 
 // Export
-export default Cms;
+export default AllBlog;
 
 // GET SEVERSIDE PROPS
 export const getServerSideProps = async (context) => {

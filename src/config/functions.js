@@ -41,8 +41,10 @@ export const handleSendEmail = async (newMsg, api) => {
     role: "user",
     toName: "",
     toEmail: "",
-    fromName: siteInfo?.name,
-    fromEmail: siteInfo?.noReply,
+    fromName: siteInfo?.name || "Klincoder",
+    fromEmail: siteInfo?.noReply || "noreply@klincoder.com",
+    year: handleDayJsFormat(null, 3),
+    date: handleDayJsFormat(null, 1),
   };
   const finalMsg = { ...defaultMsg, ...newMsg };
   // Return and await response

@@ -39,16 +39,16 @@ const CmsSidebar = ({ userRole }) => {
       case "admin":
         return (
           <CmsRoleLinks
-            data={adminCmsLinks}
             currPath={currPath}
+            data={adminCmsLinks}
             onClickCmsLink={handleCloseSidebar}
           />
         ); // close return
       default:
         return (
           <CmsRoleLinks
-            data={userCmsLinks}
             currPath={currPath}
+            data={userCmsLinks}
             onClickCmsLink={handleCloseSidebar}
           />
         ); // close return

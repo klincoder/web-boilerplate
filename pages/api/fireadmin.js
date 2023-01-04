@@ -45,17 +45,26 @@ const handler = async (req, res) => {
     //console.log("Debug apiBlank: ",);
 
     // FUNCTIONS
-    // HANDLE CUSTOM TOKEN
-    const handleCustomToken = async () => {
+    // HANDLE GET CUSTOM TOKEN
+    const handleGetCustomToken = async () => {
       if (!emailAddr) return "Email is required";
       const getUser = await adminAuth.getUserByEmail(emailAddr);
       return await adminAuth.createCustomToken(getUser?.uid);
     }; // closoe fxn
 
-    // HANDLE VERIFY EMAIL LINK
-    const handleVerifyEmailLink = async () => {
+    // HANDLE GET VERIFY EMAIL LINK
+    const handleGetVerifyEmailLink = async () => {
       if (!emailAddr) return "Email is required";
       return await adminAuth.generateEmailVerificationLink(
+        emailAddr,
+        actionSettings
+      );
+    }; // closoe fxn
+
+    // HANDLE GET PASSWORD RESET LINK
+    const handleGetPassResetLink = async () => {
+      if (!emailAddr) return "Email is required";
+      return await adminAuth.generatePasswordResetLink(
         emailAddr,
         actionSettings
       );
@@ -70,10 +79,13 @@ const handler = async (req, res) => {
         // Switch
         switch (action) {
           case "custom-token":
-            result = await handleCustomToken();
+            result = await handleGetCustomToken();
             break;
-          case "email-link":
-            result = await handleVerifyEmailLink();
+          case "verify-email":
+            result = await handleGetVerifyEmailLink();
+            break;
+          case "pass-reset":
+            result = await handleGetPassResetLink();
             break;
 
           default:

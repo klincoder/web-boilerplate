@@ -5,7 +5,7 @@ import { useSetRecoilState } from "recoil";
 // Import custom files
 import twStyles from "../styles/twStyles";
 import useAppSettings from "../hooks/useAppSettings";
-import { allUsersAtom, generalSettingsAtom } from "../recoil/atoms";
+import { allUsersAtom, appSettingsAtom } from "../recoil/atoms";
 import { collection, doc, fireDB, onSnapshot } from "../config/firebase";
 
 // Component
@@ -15,7 +15,7 @@ const GetDatabaseContent = () => {
 
   // Define state
   const setAllUsers = useSetRecoilState(allUsersAtom);
-  const setGeneralSettings = useSetRecoilState(generalSettingsAtom);
+  const setAppSettings = useSetRecoilState(appSettingsAtom);
 
   // Debug
   //console.log("Debug getDatabaseContent: ",)
@@ -35,18 +35,21 @@ const GetDatabaseContent = () => {
       setAllUsers(data);
     });
 
-    // LISTEN TO GENERAL SETTINGS
-    const generalRef = doc(fireDB, "app_settings", "general_settings");
-    onSnapshot(generalRef, (snapshot) => {
-      const data = snapshot.exists() ? snapshot.data() : null;
-      setGeneralSettings(data);
+    // LISTEN TO APP SETTINGS
+    const appSettingsRef = collection(fireDB, "app_settings");
+    onSnapshot(appSettingsRef, (snapshot) => {
+      // const data = snapshot.exists() ? snapshot.data() : null;
+      const data = snapshot.docs.map((doc) => {
+        return doc.data();
+      });
+      setAppSettings(data);
     });
 
     // Clean up
     return () => {
       isMounted.current = false;
     };
-  }, [isMounted, setAllUsers, setGeneralSettings]);
+  }, [isMounted, setAllUsers, setAppSettings]);
 
   // Return component
   return null;

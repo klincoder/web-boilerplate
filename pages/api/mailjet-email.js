@@ -15,16 +15,17 @@ const handler = async (req, res) => {
     // Define variables
     const toName = msg?.toName;
     const toEmail = msg?.toEmail;
-    const fromName = msg?.fromName || "Klincoder";
-    const fromEmail = msg?.fromEmail || "noreply@klincoder.com";
-    const otpCode = msg?.otp;
+    const fromName = msg?.fromName;
+    const fromEmail = msg?.fromEmail;
+    const year = msg?.year;
+    const date = msg?.date;
 
     // Debug
-    //console.log("Debug apiOtp: ", reqData);
+    //console.log("Debug apiBlank: ", reqData);
     //res.send(reqData);
 
     // If empty args
-    if (!toName || !toEmail || !tempID || !otpCode) {
+    if (!toName || !toEmail || !tempID) {
       res.send("Bad request. Check your values.");
       return;
     } // close if
@@ -51,9 +52,12 @@ const handler = async (req, res) => {
               TemplateID: tempID,
               TemplateLanguage: true,
               Variables: {
-                to_name: toName,
-                from_name: fromName,
-                otp_code: otpCode,
+                from_name: fromName, // Default
+                year: year,
+                date: date,
+                to_name: toName, // Custom
+                otp_code: msg?.otp,
+                verify_link: msg?.link,
               },
             }, // close messages obj
           ], // close messages
@@ -62,12 +66,12 @@ const handler = async (req, res) => {
           // Define resData
           const resData = apiRes?.body;
           const status = resData?.Messages?.[0]?.Status;
-          //console.log("Debug apiOtp: ", resData);
+          //console.log("Debug apiBlank: ", resData);
           res.send(status);
         });
     } catch (err) {
       res.send(err.message);
-      console.log("Debug apiOtp: ", err.message);
+      //console.log("Debug apiBlank: ", err.message);
     } // close try catch
   } else if (req.method === "GET") {
     // HANDLE GET REQUEST
