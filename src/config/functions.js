@@ -468,24 +468,17 @@ export const handleDayJsFormat = (dateVal, num, formatVal) => {
   // Define variables
   dateVal = dateVal || undefined;
   formatVal = formatVal || "YYYY";
-  let result;
   // Switch num
   switch (num) {
     case 1:
-      result = dayjs.utc(dateVal).format("MMM D, YYYY");
-      break;
+      return dayjs.utc(dateVal).format("MMM D, YYYY");
     case 2:
-      result = dayjs.utc(dateVal).format("MMM D, YYYY h:mm A");
-      break;
+      return dayjs.utc(dateVal).format("MMM D, YYYY h:mm A");
     case 3:
-      result = dayjs.utc(dateVal).format(formatVal);
-      break;
+      return dayjs.utc(dateVal).format(formatVal);
     default:
-      result = dayjs.utc(dateVal).format();
-      break;
+      return dayjs.utc(dateVal).format();
   } // close switch
-  // Retuurn
-  return result;
 }; // close fxn
 
 // HANDLE DAYSJS ADD DAYS
@@ -906,6 +899,5 @@ export const handleHashVal = (rawVal) => {
 export const handleCompareHashVal = (newVal, hashVal) => {
   // If empty args, return
   if (!newVal || !hashVal) return null;
-  //const rawValHash = handleHashVal(rawVal);
   return bcryptjs.compareSync(newVal, hashVal);
 }; // close fxn

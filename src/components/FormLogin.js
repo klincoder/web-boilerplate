@@ -94,7 +94,7 @@ const FormLogin = ({ csrfToken }) => {
       await handleLogin(finalEmail, finalPass);
       const currUser = fireAuth.currentUser;
 
-      // If userEmailVerified
+      // If email verified
       if (currUser?.emailVerified) {
         // Login user with next auth
         const res = await signIn("credentials", {

@@ -7,11 +7,12 @@ import { useSession } from "next-auth/react";
 import useAppSettings from "./useAppSettings";
 import useAlertState from "./useAlertState";
 import { allUsersAtom } from "../recoil/atoms";
-import { alertMsg, apiRoutes } from "../config/data";
+import { alertMsg, apiRoutes, appImages } from "../config/data";
 import {
   handleFireAdminAction,
   handleHashVal,
   handleSendEmail,
+  handleSliceString,
 } from "../config/functions";
 import {
   confirmPasswordReset,
@@ -41,9 +42,23 @@ const useAuthState = () => {
   const session = useSession();
 
   // Define variables
-  const user = session?.data?.user;
-  const sessionStatus = session?.status;
-  const sessionExpiry = session?.expiry;
+  const currSession = session?.data?.user;
+  const userID = currSession?.id;
+  const user = useMemo(
+    () => ({
+      id: currSession?.id,
+      name: currSession?.fullName,
+      username: currSession?.username,
+      email: currSession?.email,
+      phone: currSession?.phone,
+      avatar: currSession?.avatar || appImages?.avatar,
+      pushStatus: currSession?.pushStatus,
+      usernameFormat: handleSliceString(currSession?.username, 0, 12),
+      sessionStatu: session?.status,
+      sessionExpiry: session?.expiry,
+    }),
+    []
+  );
 
   // FUNCTIONS
   // HANDLE USER EXIST
@@ -57,15 +72,6 @@ const useAuthState = () => {
     const isValid = filterData?.length > 0;
     const data = filterData?.[0];
     return { isValid, data };
-  }; // close fxn
-
-  // HANDLE LOGIN
-  const handleLogin = async (email, pass) => {
-    // If empty arg, return
-    if (!email || !pass) return;
-    // Login into firebase auth with custom token
-    const token = await handleFireAdminAction(email, "custom-token");
-    return await signInWithCustomToken(fireAuth, token);
   }; // close fxn
 
   // HANDLE SEND VERIFY EMAIL LINK
@@ -85,6 +91,15 @@ const useAuthState = () => {
     const verifyLink = await handleFireAdminAction(email, "pass-reset");
     const emailMsg = { toName: username, toEmail: email, link: verifyLink };
     return await handleSendEmail(emailMsg, apiRoutes?.passRecovery);
+  }; // close fxn
+
+  // HANDLE LOGIN
+  const handleLogin = async (email, pass) => {
+    // If empty arg, return
+    if (!email || !pass) return;
+    // Login into firebase auth with custom token
+    const token = await handleFireAdminAction(email, "custom-token");
+    return await signInWithCustomToken(fireAuth, token);
   }; // close fxn
 
   // HANDLE REGISTER
@@ -162,12 +177,11 @@ const useAuthState = () => {
   // Return component
   return {
     user,
-    sessionStatus,
-    sessionExpiry,
+    userID,
     handleUserExist,
-    handleLogin,
     handleSendVerifyEmailLink,
     handleSendPasswordResetLink,
+    handleLogin,
     handleRegister,
     handlePasswordReset,
     handleLogout,

@@ -12,16 +12,17 @@ const useAppSettings = () => {
   // Define state
   const appSettings = useRecoilValue(appSettingsAtom);
 
-  // Define isMounted
+  // Define ref
   const isMounted = useRef(false);
 
   // Define router
   const router = useRouter();
 
-  // Define settings doc
+  // Define settings
   const general = handleGetInfoById(appSettings, "general_settings")?.data;
   const bank = handleGetInfoById(appSettings, "bank_info")?.data;
   const socials = handleGetInfoById(appSettings, "social_links")?.data;
+  const slides = handleGetInfoById(appSettings, "slides")?.data;
 
   // Define variables
   const todaysDate = handleDayJsFormat();
@@ -43,8 +44,6 @@ const useAppSettings = () => {
     adminEmail: general?.admin_email,
     workingHours: general?.working_hours,
     location: general?.location,
-    bank,
-    socials,
   };
 
   // FUNCTIONS

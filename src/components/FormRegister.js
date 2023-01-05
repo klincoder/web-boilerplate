@@ -39,7 +39,10 @@ const FormRegister = () => {
   // Validate
   const validate = Yup.object().shape({
     username: Yup.string().required("Required").min(2, "Too short"),
-    emailAddr: Yup.string().required("Required").email("Invalid email address"),
+    emailAddr: Yup.string()
+      .required("Required")
+      .email("Invalid email address")
+      .max(150, "Too long"),
     pass: Yup.string().required("Required").min(8, "Too short"),
   });
 

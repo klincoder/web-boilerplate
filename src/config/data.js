@@ -83,7 +83,6 @@ export const apiRoutes = {
   welcome: { api: "mailjet-email", tempID: 4471793 },
   login: { api: "mailjet-email", tempID: 4471814 },
   newUser: { api: "mailjet-email", tempID: 4471824 },
-
   contactForm: { api: "mailjet-email", tempID: 1 }, // Empty
   newsletter: { api: "mailjet-email", tempID: 1 },
   tranx: { api: "mailjet-email", tempID: 1 },
@@ -92,23 +91,25 @@ export const apiRoutes = {
 
 // ALERT MSG
 export const alertMsg = {
-  isRequiredAll: "All fields are required", // General
-  inValidCred: "Invalid credentials",
-  generalSucc: "Action successful", // Success
-  linkSentSucc: "We sent your verification link. Check your inbox or spam.",
-  otpSentSucc: "We sent your OTP code. Check your inbox or spam.",
-  loginSucc: "Login successful",
-  registerSucc: "Account created. Login.",
-  passRecoverySucc: "Password recovery successful",
-  passResetSucc: "Password reset successful. Login.",
-  logoutSucc: "Logout successful",
-  verifyEmailSucc: "Email address verified.",
-  userExistSucc: "User already exist",
-  generalErr: "internal error. Please contact support.", // Error
-  otpSentErr: "Failed to send OTP. Try again.",
-  otpVerifyErr: "Invalid code",
-  authActionErr: "Authentication failed.",
-  userExistErr: "User not found",
+  generalSucc: "Action successful 👍", // Success
+  linkSentSucc: "We sent your verification link. Check your inbox or spam 👍",
+  otpSentSucc: "We sent your OTP code. Check your inbox or spam 👍",
+  loginSucc: "Login successful 👍",
+  registerSucc: "Account created. Login 👍",
+  passRecoverySucc: "Password recovery successful 👍",
+  passResetSucc: "Password reset successful. Login 👍",
+  logoutSucc: "Logout successful 👍",
+  verifyEmailSucc: "Email address verified 👍",
+  userExistSucc: "User already exist 👍",
+  paymentSucc: "Payment successful 👍",
+  generalErr: "internal error. Please contact support 😔", // Error
+  isRequiredAll: "All fields are required 😔",
+  inValidCred: "Invalid credentials 😔",
+  otpSentErr: "Failed to send OTP. Try again 😔",
+  otpVerifyErr: "Invalid code 😔",
+  authActionErr: "Authentication failed 😔",
+  userExistErr: "User not found 😔",
+  paymentErr: "Payment failed 😔",
 };
 
 // NAV LINKS
