@@ -79,37 +79,36 @@ const fireDB = getFirestore(app);
 const fireAuth = getAuth(app);
 const fireStorage = getStorage(app);
 
-// // FUNCTIONS
-// // HANDLE GET DOCS
-// const handleGetDoc = async (docRef, data) => {
-//   // If empty args, return
-//   if (!docRef || !data) return;
-//   const pageRef = doc(fireDB, "app_settings", "page_home");
-//   const pageSnap = await getDoc(pageRef);
-//   const pageData = pageSnap.data();
-//   return await setDoc(docRef, data);
-// }; // close fxn
+// FUNCTIONS
+// HANDLE GET DOCS
+const handleGetDocs = async (docRef) => {
+  // If empty args, return
+  if (!docRef) return;
+  const docSnap = await getDocs(docRef);
+  const docData =
+    docSnap.size > 0
+      ? docSnap.docs.map((doc) => {
+          return doc.data();
+        })
+      : [];
+  return docData;
+}; // close fxn
 
-// // HANDLE SET DOC
-// const handleSetDoc = async (docRef, data) => {
-//   // If empty args, return
-//   if (!docRef || !data) return;
-//   return await setDoc(docRef, data);
-// }; // close fxn
-
-// // HANDLE MERGE DOC
-// const handleMergeDoc = async (docRef, data) => {
-//   // If empty args, return
-//   if (!docRef || !data) return;
-//   return await setDoc(docRef, data, { merge: true });
-// }; // close fxn
+// HANDLE GET DOC
+const handleGetDoc = async (docRef) => {
+  // If empty args, return
+  if (!docRef) return;
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.exists() ? docSnap.data() : null;
+  return docData;
+}; // close fxn
 
 // Export
 export {
-  fireDB,
+  fireDB, // Services
   fireAuth,
   fireStorage,
-  onAuthStateChanged,
+  onAuthStateChanged, // Auth
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithCustomToken,
@@ -121,7 +120,7 @@ export {
   applyActionCode,
   signOut,
   onIdTokenChanged,
-  doc,
+  doc, // Database
   collection,
   collectionGroup,
   onSnapshot,
@@ -137,7 +136,9 @@ export {
   increment,
   arrayUnion,
   serverTimestamp,
-  ref,
+  ref, // Storage
   uploadBytesResumable,
   getDownloadURL,
+  handleGetDocs, // Functions
+  handleGetDoc,
 };

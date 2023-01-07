@@ -1,5 +1,4 @@
 // Import resources
-import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
@@ -45,21 +44,18 @@ const useAuthState = () => {
   // Define variables
   const currSession = session?.data?.user;
   const userID = currSession?.id;
-  const user = useMemo(
-    () => ({
-      id: currSession?.id,
-      name: currSession?.fullName,
-      username: currSession?.username,
-      email: currSession?.email,
-      phone: currSession?.phone,
-      avatar: currSession?.avatar || appImages?.avatar,
-      pushStatus: currSession?.pushStatus,
-      usernameFormat: handleSliceString(currSession?.username, 0, 12),
-      sessionStatu: session?.status,
-      sessionExpiry: session?.expiry,
-    }),
-    []
-  );
+  const user = {
+    id: currSession?.id,
+    name: currSession?.fullName,
+    username: currSession?.username,
+    email: currSession?.email,
+    phone: currSession?.phone,
+    avatar: currSession?.avatar || appImages?.avatar,
+    pushStatus: currSession?.pushStatus,
+    usernameFormat: handleSliceString(currSession?.username, 0, 12),
+    sessionStatu: session?.status,
+    sessionExpiry: session?.expiry,
+  };
 
   // FUNCTIONS
   // HANDLE USER EXIST
@@ -148,7 +144,7 @@ const useAuthState = () => {
             );
             // Send email
             const emailMsg = { toName: username, toEmail: userEmail };
-            //await handleSendEmail(emailMsg, apiRoutes?.profileChange);
+            await handleSendEmail(emailMsg, apiRoutes?.profileChange);
             await signOutToken(fireAuth);
           }
         ); // close confirmPasswordReset
@@ -168,13 +164,6 @@ const useAuthState = () => {
     ); // close return
   }; // close fxn
 
-  // HANDLE IS SUPER ADMIN
-  const handleIsSuperAdmin = (username) => {
-    // If empty args, return
-    if (!username) return;
-    return username?.toLowerCase() === "klincoder";
-  }; // close fxn
-
   // Return component
   return {
     user,
@@ -186,7 +175,6 @@ const useAuthState = () => {
     handleRegister,
     handlePasswordReset,
     handleLogout,
-    handleIsSuperAdmin,
   }; // close return
 }; // close component
 

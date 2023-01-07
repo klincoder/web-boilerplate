@@ -60,12 +60,15 @@ const FormPasswordReset = ({ actionCode }) => {
   const handleSubmitForm = async (values) => {
     // Define variables
     const finalNewPass = values?.newPass?.trim();
+
     // Debug
     //console.log("Debug submitForm: ",);
+
     // Try catch
     try {
       // Register user
       await handlePasswordReset(actionCode, finalNewPass);
+
       // Alert succ
       alert.success(alertMsg?.passResetSucc);
       reset();
@@ -73,7 +76,7 @@ const FormPasswordReset = ({ actionCode }) => {
       //console.log("Debug submitForm: ", emailMsg);
     } catch (err) {
       alert.error(alertMsg?.generalErr);
-      console.log("Debug submitForm: ", err.message);
+      //console.log("Debug submitForm: ", err.message);
     } // close try catch
   }; // close fxn
 

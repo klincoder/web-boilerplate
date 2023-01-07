@@ -84,16 +84,6 @@ const FormRegister = () => {
       // Define variables
       const currUser = fireAuth.currentUser;
       const currUserID = currUser?.uid;
-      const userEmailMsg = {
-        role: "user",
-        toName: finalUsername,
-        toEmail: finalEmail,
-      };
-      const adminEmailMsg = {
-        role: "admin",
-        toName: siteInfo?.adminName,
-        toEmail: siteInfo?.adminEmail,
-      };
 
       // Add user to db
       const newUserRef = doc(fireDB, "users", currUserID);
@@ -112,8 +102,18 @@ const FormRegister = () => {
       });
 
       // Send email
-      // await handleSendEmail(userEmailMsg, apiRoutes?.welcome);
-      // await handleSendEmail(adminEmailMsg, apiRoutes?.newUser);
+      const userEmailMsg = {
+        role: "user",
+        toName: finalUsername,
+        toEmail: finalEmail,
+      };
+      const adminEmailMsg = {
+        role: "admin",
+        toName: siteInfo?.adminName,
+        toEmail: siteInfo?.adminEmail,
+      };
+      await handleSendEmail(userEmailMsg, apiRoutes?.welcome);
+      await handleSendEmail(adminEmailMsg, apiRoutes?.newUser);
 
       // Alert info
       alert.info(alertMsg?.linkSentSucc);

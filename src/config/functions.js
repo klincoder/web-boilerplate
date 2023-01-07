@@ -44,7 +44,7 @@ export const handleSendEmail = async (newMsg, api) => {
     fromName: siteInfo?.name || "Klincoder",
     fromEmail: siteInfo?.noReply || "noreply@klincoder.com",
     year: handleDayJsFormat(null, 3),
-    date: handleDayJsFormat(null, 1),
+    date: handleDayJsFormat(null, 2),
   };
   const finalMsg = { ...defaultMsg, ...newMsg };
   // Return and await response
@@ -900,4 +900,11 @@ export const handleCompareHashVal = (newVal, hashVal) => {
   // If empty args, return
   if (!newVal || !hashVal) return null;
   return bcryptjs.compareSync(newVal, hashVal);
+}; // close fxn
+
+// HANDLE IS SUPER ADMIN
+export const handleIsSuperAdmin = (username) => {
+  // If empty args, return
+  if (!username) return;
+  return username?.toLowerCase() === "klincoder";
 }; // close fxn

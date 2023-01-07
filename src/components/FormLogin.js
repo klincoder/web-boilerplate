@@ -15,7 +15,7 @@ import useAuthState from "../hooks/useAuthState";
 import useAlertState from "../hooks/useAlertState";
 import { alertMsg, apiRoutes } from "../config/data";
 import { fireAuth } from "../config/firebase";
-import { handleCompareHashVal } from "../config/functions";
+import { handleCompareHashVal, handleSendEmail } from "../config/functions";
 
 // Component
 const FormLogin = ({ csrfToken }) => {
@@ -110,9 +110,11 @@ const FormLogin = ({ csrfToken }) => {
         } else {
           // Login into firebase auth with custom token
           await handleLogin(finalEmail, finalPass);
+
           // Send email
           const userEmailMsg = { toName: username, toEmail: userEmail };
-          //await handleLoginEmail(userEmailMsg, apiRoutes?.login);
+          await handleSendEmail(userEmailMsg, apiRoutes?.login);
+
           // Alert succ
           reset();
           alert.success(alertMsg?.loginSucc);

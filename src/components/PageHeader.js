@@ -32,7 +32,6 @@ const PageHeader = ({ isCms, userID, userAvatar }) => {
 
   // HANDLE SHOW NAV LINKS
   const handleShowNavLinks = () => {
-    // Return
     return (
       // Loop data
       navLinks?.length > 0 &&
@@ -79,8 +78,10 @@ const PageHeader = ({ isCms, userID, userAvatar }) => {
         <nav className="sticky top-0 z-10 px-6 py-4 bg-white border-b border-gray-200">
           {/** NAV LINKS CONTAINER */}
           <div className="flex items-center justify-between">
-            {/** Logo icon */}
-            <LogoIcon />
+            {/** COL 1 - LOGO */}
+            <div className="flex items-center">
+              <LogoIcon />
+            </div>
 
             {/** ICONS */}
             <div className="flex items-center relative gap-5">
@@ -105,14 +106,16 @@ const PageHeader = ({ isCms, userID, userAvatar }) => {
         /*************
           NORMAL PAGE
         ***************/
-        <nav className="px-6 py-3 border-b border-gray-200 bg-white sticky top-0 z-50">
+        <nav className="sticky top-0 z-50 px-6 py-3 border-b border-gray-200 bg-white">
           {/** LINK CONTAINER */}
           <div className="flex items-center justify-between">
             {/** COL 1 - LOGO */}
-            <LogoIcon />
+            <div className="flex items-center">
+              <LogoIcon />
+            </div>
 
             {/** COL 2 - LARGE SCREEN LINKS */}
-            <div className="flex items-center space-x-6 text-black">
+            <div className="flex items-center text-black gap-5">
               {/** Nav links */}
               <div className="hidden space-x-6 md:flex">
                 {handleShowNavLinks()}
@@ -132,10 +135,10 @@ const PageHeader = ({ isCms, userID, userAvatar }) => {
                   Login
                 </CustomButton>
               )}
-            </div>
 
-            {/** Toggle menu button */}
-            <ToggleMenuBtn isToggle={toggleMenu} onClick={handleToggleMenu} />
+              {/** Toggle menu button */}
+              <ToggleMenuBtn isToggle={toggleMenu} onClick={handleToggleMenu} />
+            </div>
           </div>
 
           {/** SMALL SCREEN LINKS */}
