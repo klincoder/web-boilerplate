@@ -19,9 +19,9 @@ const useAppSettings = () => {
   const router = useRouter();
 
   // Define settings
-  const general = handleGetInfoById(appSettings, "general_settings")?.data;
-  const bank = handleGetInfoById(appSettings, "bank_info")?.data;
-  const socials = handleGetInfoById(appSettings, "social_links")?.data;
+  const general = handleGetInfoById(appSettings, "general")?.data;
+  const links = handleGetInfoById(appSettings, "links")?.data;
+  const bank = handleGetInfoById(appSettings, "bank")?.data;
   const slides = handleGetInfoById(appSettings, "slides")?.data;
 
   // Define variables
@@ -34,16 +34,20 @@ const useAppSettings = () => {
   const isBlogSlug = currPath === "/blog/[slug]";
   const isRouteQuery = Object?.keys(routeQuery)?.length > 0;
   const siteInfo = {
-    logo: general?.app_logo,
+    logo: general?.app_logo, // General
     name: general?.app_name,
     email: general?.support_email,
     phone: general?.support_phone,
-    noReply: general?.support_email_reply,
+    noReply: general?.noreply_email,
     copyrightName: general?.copyright_name,
     adminName: general?.admin_name,
     adminEmail: general?.admin_email,
-    workingHours: general?.working_hours,
     location: general?.location,
+    android: links?.android, // Links
+    ios: links?.ios,
+    github: links?.github,
+    instagram: links?.instagram,
+    tiktok: links?.tiktok,
   };
 
   // FUNCTIONS
