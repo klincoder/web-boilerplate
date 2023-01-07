@@ -15,7 +15,7 @@ import useAuthState from "../hooks/useAuthState";
 import useAlertState from "../hooks/useAlertState";
 import { alertMsg, apiRoutes } from "../config/data";
 import { fireAuth } from "../config/firebase";
-import { handleCompareHashVal, handleSendEmail } from "../config/functions";
+import { handleSendEmail, handleHashVal } from "../config/functions";
 
 // Component
 const FormLogin = ({ csrfToken }) => {
@@ -74,7 +74,8 @@ const FormLogin = ({ csrfToken }) => {
     const userInfo = userExist?.data;
     const username = userInfo?.username;
     const userEmail = userInfo?.email_address;
-    const isValidPass = handleCompareHashVal(finalPass, userInfo?.password);
+    const userPass = userInfo?.password;
+    const isValidPass = await handleHashVal(finalPass, "compare", userPass);
 
     // If !userExist
     if (!userExist?.isValid) {

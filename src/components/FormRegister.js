@@ -67,7 +67,7 @@ const FormRegister = () => {
     const finalUsername = values?.username?.trim()?.toLowerCase();
     const finalEmail = values?.emailAddr?.trim()?.toLowerCase();
     const finalPass = values?.pass?.trim();
-    const passHash = handleHashVal(finalPass);
+    const passHash = await handleHashVal(finalPass, "hash");
     const userExist = handleUserExist(finalEmail);
 
     // If userExist

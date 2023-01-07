@@ -117,7 +117,7 @@ const useAuthState = () => {
     // If empty args, return
     if (!actionCode || !newPass) return;
     // Hash new pass
-    const newPassHash = handleHashVal(newPass);
+    const newPassHash = await handleHashVal(newPass, "hash");
     // Verify the password reset code is valid
     return await verifyPasswordResetCode(fireAuth, actionCode).then(
       async (email) => {

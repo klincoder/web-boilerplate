@@ -888,23 +888,22 @@ export const handleIsEmail = (val) => {
   return pattern.test(val);
 }; // close fxn
 
-// HANDLE HASH VAL
-export const handleHashVal = (rawVal) => {
-  // If empty args, return
-  if (!rawVal) return null;
-  return bcryptjs.hashSync(rawVal);
-}; // close fxn
-
-// HANDLE COMPARE HASH VAL
-export const handleCompareHashVal = (newVal, hashVal) => {
-  // If empty args, return
-  if (!newVal || !hashVal) return null;
-  return bcryptjs.compareSync(newVal, hashVal);
-}; // close fxn
-
 // HANDLE IS SUPER ADMIN
 export const handleIsSuperAdmin = (username) => {
   // If empty args, return
   if (!username) return;
   return username?.toLowerCase() === "klincoder";
+}; // close fxn
+
+// HANDLE HASH VAL
+export const handleHashVal = async (val, action, hashedVal) => {
+  // If empty args, return
+  if (!val || !action) return null;
+  return await axios({
+    method: "POST",
+    url: `/api/hash-val`,
+    data: { val, action, hashedVal },
+  }).then((res) => {
+    return res?.data;
+  }); // close return
 }; // close fxn
