@@ -1,10 +1,10 @@
 // Import resources
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcryptjs from "bcryptjs";
 
 // Import custom files
 import { isProdEnv } from "../../../src/config/data";
-import { handleCompareHashVal } from "../../../src/config/functions";
 import {
   fireDB,
   collection,
@@ -60,7 +60,7 @@ export default NextAuth({
             })?.[0];
 
             // Verify pass
-            const verifyPass = handleCompareHashVal(
+            const verifyPass = bcryptjs.compareSync(
               credentials.password,
               currUser?.password
             );

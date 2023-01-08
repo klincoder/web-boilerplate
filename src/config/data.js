@@ -76,13 +76,13 @@ export const appRegex = {
 
 // API ROUTES
 export const apiRoutes = {
-  otpEmail: { api: "mailjet-email", tempID: 4468134 },
   verifyEmail: { api: "mailjet-email", tempID: 4469644 },
+  login: { api: "mailjet-email", tempID: 4471814 },
+  welcome: { api: "mailjet-email", tempID: 4471793 },
+  newUser: { api: "mailjet-email", tempID: 4471824 },
   passRecovery: { api: "mailjet-email", tempID: 4470092 },
   profileChange: { api: "mailjet-email", tempID: 4471756 },
-  welcome: { api: "mailjet-email", tempID: 4471793 },
-  login: { api: "mailjet-email", tempID: 4471814 },
-  newUser: { api: "mailjet-email", tempID: 4471824 },
+  otpEmail: { api: "mailjet-email", tempID: 4468134 },
   contactForm: { api: "mailjet-email", tempID: 1 }, // Empty
   newsletter: { api: "mailjet-email", tempID: 1 },
   tranx: { api: "mailjet-email", tempID: 1 },

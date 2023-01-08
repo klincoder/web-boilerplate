@@ -12,7 +12,7 @@ import CustomButton from "./CustomButton";
 import CustomSpinner from "./CustomSpinner";
 import useAuthState from "../hooks/useAuthState";
 import useAlertState from "../hooks/useAlertState";
-import { alertMsg } from "../config/data";
+import { alertMsg, apiRoutes } from "../config/data";
 import { doc, fireAuth, fireDB, setDoc } from "../config/firebase";
 import { handleHashVal } from "../config/functions";
 

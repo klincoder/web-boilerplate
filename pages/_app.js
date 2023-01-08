@@ -24,22 +24,22 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
   // Debug
   //console.log("Debug app: ",)
 
-  // SIDE EFFECTS
-  // GA TRACKING
-  useEffect(() => {
-    // If !isProdEnv return
-    if (!isProdEnv) return;
-    // Handle route change
-    const handleRouteChange = (url) => {
-      gtag.pageView(url);
-    };
-    // Define onChangeComplete
-    router.events.on("routeChangeComplete", handleRouteChange);
-    // Clean up
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    }; // close return
-  }, [router.events]);
+  // // SIDE EFFECTS
+  // // GA TRACKING
+  // useEffect(() => {
+  //   // If !isProdEnv return
+  //   if (!isProdEnv) return;
+  //   // Handle route change
+  //   const handleRouteChange = (url) => {
+  //     gtag.pageView(url);
+  //   };
+  //   // Define onChangeComplete
+  //   router.events.on("routeChangeComplete", handleRouteChange);
+  //   // Clean up
+  //   return () => {
+  //     router.events.off("routeChangeComplete", handleRouteChange);
+  //   }; // close return
+  // }, [router.events]);
 
   // Return component
   return (
@@ -98,7 +98,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
       />
 
       {/** GOOGLE ANALYTICS */}
-      <Script
+      {/* <Script
         id="google-analytics"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
@@ -111,7 +111,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
             });
           `,
         }}
-      />
+      /> */}
     </>
   ); // close return
 }; // close component
