@@ -10,14 +10,18 @@ import { handleSliceString } from "../config/functions";
 
 // Component
 const CustomInput = ({
+  isNormal,
   name,
   control,
   label,
+  value,
+  onChange,
   type,
   placeholder,
   showPass,
   onShowPass,
   helperText,
+  errMsg,
   styleContainer,
   styleInput,
   ...rest
@@ -42,54 +46,100 @@ const CustomInput = ({
         </label>
       )}
 
-      {/** Controller */}
-      <Controller
-        name={name}
-        control={control}
-        render={({
-          field: { value, ref, onChange, onBlur },
-          fieldState: { error },
-        }) => (
-          <>
-            <div className={isPassType ? "flex items-center bg-white" : ""}>
-              {/** Input */}
-              <input
-                {...rest}
-                ref={ref}
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                type={isPassType ? (showPass ? "text" : "password") : type}
-                placeholder={placeholder || `${label}`}
-                className={`
-                  ${styleInput} ${error ? "is-invalid" : ""} 
-                  form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none placeholder:text-gray-400 disabled:opacity-60 disabled:pointer-events-none disabled:bg-gray-50
-                `}
-              />
+      {/** IF IS NORMAL */}
+      {isNormal ? (
+        <>
+          <div className={isPassType ? "flex items-center bg-white" : ""}>
+            {/** Input */}
+            <input
+              {...rest}
+              value={value}
+              onChange={onChange}
+              type={isPassType ? (showPass ? "text" : "password") : type}
+              placeholder={placeholder || `${label}`}
+              className={`
+                ${styleInput} ${errMsg ? "is-invalid" : ""} 
+                form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none placeholder:text-gray-400 disabled:opacity-60 disabled:pointer-events-none disabled:bg-gray-50
+              `}
+            />
 
-              {/** If isPassType */}
-              {isPassType && (
-                <div
-                  className="p-1.5 border border-l-0 border-solid border-gray-300 rounded-r cursor-pointer focus:outline-none"
-                  onClick={onShowPass}
-                >
-                  {showPass ? (
-                    <AiOutlineEyeInvisible size={24} />
-                  ) : (
-                    <AiOutlineEye size={24} />
+            {/** If isPassType */}
+            {isPassType && (
+              <div
+                className="p-1.5 border border-l-0 border-solid border-gray-300 rounded-r cursor-pointer focus:outline-none"
+                onClick={onShowPass}
+              >
+                {showPass ? (
+                  <AiOutlineEyeInvisible size={24} />
+                ) : (
+                  <AiOutlineEye size={24} />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/** Helper text */}
+          <CustomHelperText visible={helperText} title={helperText} />
+
+          {/** Error msg */}
+          <CustomHelperText isError visible={errMsg} title={errMsg} />
+        </>
+      ) : (
+        <>
+          {/** Controller */}
+          <Controller
+            name={name}
+            control={control}
+            render={({
+              field: { value, ref, onChange, onBlur },
+              fieldState: { error },
+            }) => (
+              <>
+                <div className={isPassType ? "flex items-center bg-white" : ""}>
+                  {/** Input */}
+                  <input
+                    {...rest}
+                    ref={ref}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    type={isPassType ? (showPass ? "text" : "password") : type}
+                    placeholder={placeholder || `${label}`}
+                    className={`
+                      ${styleInput} ${error ? "is-invalid" : ""} 
+                      form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-secondary focus:outline-none placeholder:text-gray-400 disabled:opacity-60 disabled:pointer-events-none disabled:bg-gray-50
+                    `}
+                  />
+
+                  {/** If isPassType */}
+                  {isPassType && (
+                    <div
+                      className="p-1.5 border border-l-0 border-solid border-gray-300 rounded-r cursor-pointer focus:outline-none"
+                      onClick={onShowPass}
+                    >
+                      {showPass ? (
+                        <AiOutlineEyeInvisible size={24} />
+                      ) : (
+                        <AiOutlineEye size={24} />
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
 
-            {/** Helper text */}
-            <CustomHelperText visible={helperText} title={helperText} />
+                {/** Helper text */}
+                <CustomHelperText visible={helperText} title={helperText} />
 
-            {/** Error msg */}
-            <CustomHelperText isError visible={error} title={error?.message} />
-          </>
-        )}
-      />
+                {/** Error msg */}
+                <CustomHelperText
+                  isError
+                  visible={error}
+                  title={error?.message}
+                />
+              </>
+            )}
+          />
+        </>
+      )}
     </div>
   ); // close return
 }; // close component

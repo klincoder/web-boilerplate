@@ -883,8 +883,7 @@ export const handleFireAdminAction = async (email, action) => {
 export const handleIsEmail = (val) => {
   // If empty args return
   if (!val) return false;
-  const pattern =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+  const pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return pattern.test(val);
 }; // close fxn
 
