@@ -4,7 +4,6 @@ import { atom, selector, selectorFamily } from "recoil";
 // Import resources
 import { otpDefaultTimer } from "../config/data";
 
-// ATOMS
 /********** 
   ALL 
 ***********/

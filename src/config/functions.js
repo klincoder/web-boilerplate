@@ -10,7 +10,6 @@ import bcryptjs from "bcryptjs";
 import { baseUrl, currSymbol, fileExtensions } from "./data";
 import { doc, fireDB, getDoc } from "./firebase";
 
-// VARIABLES
 // FUNCTIONS
 // HANDLE GET PAGE DETAILS
 export const handleGetPageDetails = async (docID) => {
@@ -326,7 +325,7 @@ export const handleFormSelectItems = (objArr) => {
 // HANDLE GENERATE TRANX REFERENCE
 export const handleGenTranxRef = (prefix) => {
   // Define variables
-  const prefixFinal = prefix || "BA";
+  const prefixFinal = prefix || "KC";
   const randomCode = handleRandomCode(6);
   const randomStr = handleRandomString(6);
   const result = prefixFinal + randomStr.toUpperCase() + randomCode;
@@ -342,31 +341,30 @@ export const handleStatusColor = (status) => {
   // Switch status
   switch (status) {
     case "active":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "success":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "approved":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "paid":
-      color = `bg-[${appColors?.success}]`;
+      color = `bg-success`;
       break;
     case "pending":
-      color = `bg-[${appColors?.warning}]`;
+      color = `bg-warning`;
       break;
     case "processing":
-      color = `bg-[${appColors?.warning}]`;
+      color = `bg-warning`;
       break;
-    case "completed":
-      color = `bg-[${appColors?.black}]`;
+    case "complete":
+      color = `bg-success`;
       break;
     default:
-      color = `bg-[${appColors?.danger}]`;
+      color = `bg-danger`;
       break;
   } // close switch
-  // Return
   return color;
 }; // close fxn
 
@@ -831,14 +829,6 @@ export const handleHtmlParser = (val) => {
   // If empty args, return
   if (!val) return;
   return htmlParser(val);
-}; // close fxn
-
-// HANDLE PRODUCT BOUGHT NAMES
-export const handleProdBoughtNames = (objArr) => {
-  // If empty args, return
-  if (!objArr) return;
-  const result = objArr?.map((i) => i?.prodName)?.join(", ");
-  return result;
 }; // close fxn
 
 // HANDLE IS URL

@@ -82,7 +82,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }) => {
         </SessionProvider>
       </RecoilRoot>
 
-      {/** CUSTOM JS SCRIPTS */}
+      {/** SCRIPTS */}
       {/** TW ELEMENTS */}
       <Script
         async

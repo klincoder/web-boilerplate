@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-// Define default theme
+
+// Import resources
 const defaultTheme = require("tailwindcss/defaultTheme");
 
-// Define exports
+// MODULE EXPORTS
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",

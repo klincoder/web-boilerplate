@@ -16,7 +16,9 @@ import twStyles from "../styles/twStyles";
 import logo from "../assets/logo.png";
 import avatar from "../assets/avatar-default.png";
 
-// VARIABLES
+/**************
+  CONSTANTS
+***************/
 // IS PROD ENV
 export const isProdEnv = process.env.NODE_ENV === "production";
 
